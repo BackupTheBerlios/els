@@ -1,15 +1,14 @@
-unset CDROM
-test -f $ELS_CONF && . $ELS_CONF
-
 case "$1" in
 
     Query)
         Title "Hardware" "CDROM" "Mount and unmount CDROMs"
         Option "Info" "Info on mounted devices"
-        if [ -z "$CDROM" ]; then
+        if [ ! -b "/dev/cdrom" ]; then
             Option "Define" "Define CD-ROM"
         else
-            Option "Define" "Redefine CD-ROM (now $CDROM)"
+	    CDROM=`/bin/ls -l /dev/cdrom | cut -d ">" -f 2`
+	    test "${CDROM#brw}" != "$CDROM" && CDROM=" none"
+            Option "Define" "Redefine CD-ROM  (now$CDROM)"
             if fgrep -q 9660 /etc/mtab; then
                 Option "Unmount" "Unmount CD-ROM"
             else
@@ -21,7 +20,7 @@ case "$1" in
 	#Desc
 	# This menu allows you to define at which physical port your
 	# CDROM is connected. It also allows you to mount and dismount
-	# the CDROM (a CDROM can only be access after it has been mounted).
+	# a CDROM. This is needed to access files on it.
 	#DescEnd
 
 
@@ -97,10 +96,6 @@ case "$1" in
         # make proper link in /dev
         rm -f /dev/cdrom
         ln -s /dev/$CHOICE /dev/cdrom
-
-        SetOpt "CDROM" "/dev/$CHOICE"
-
-        $ELS_DIALOG --msgbox "CD-ROM entry set" 5 40
         ;;
 
 
@@ -110,19 +105,19 @@ case "$1" in
 	#
 	#Item Usage
 	# <OL>
-	# <LI>Insert the CDROM into the drive
+	# <LI>Insert a CDROM into the drive
 	# <LI>The drive needs a short time to recognize your CDROM
-	# disk (usually 2-10 seconds). Wait until your drive is
-	# silent again
+	# disk (usually 2-10 seconds). If in doubt, wait until your drive is
+	# silent again.
 	# <LI>select this option
 	# <LI>Your CDROM is now accessible via <TT>/mnt/cdrom</TT>.
 	# </OL>
 	#
 	#Item Visibility
-	# This menu entry is only visible when the CDROM is defined.
+	# This menu entry is only visible when a CDROM has been defined.
 	#DescEnd
 
-	cls
+	clear
         if mount -o ro /dev/cdrom /mnt/cdrom ; then
 	    $ELS_DIALOG --msgbox "Ok, CD is now mounted." 5 28
 	else
@@ -137,7 +132,7 @@ case "$1" in
 	# CD-ROM drive.
 	#
 	#Item Visibility
-	# This menu entry is only visible when the CDROM is defined.
+	# This menu entry is only visible when a CDROM has been defined.
 	#DescEnd
 	rm -f $ELS_TEMP
         umount /dev/cdrom >/dev/null 2>$ELS_TEMP
