@@ -266,8 +266,8 @@ sub ReadPasswd ()
     open FILE or die "Can't open $FILE";
     while (<FILE>) {
 	chomp;
-	@_ = split ":", $_;
-	$name = shift;
+	@_ = split /:/, $_;
+	$name = shift @_;
 	$users{$name} = [ @_ ];
 	unless ($users{$name}[5]) { $users{$name}[5] = ""; }
     }
