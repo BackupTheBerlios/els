@@ -1,0 +1,37 @@
+Install from the command line
+=============================
+
+Download (see http://developer.berlios.de/project/filelist.php?group_id=204)
+the module <B>els-backup-*.rpm</B> and <B>afio-*.rpm</B> and copy it onto a
+floppy disc.
+
+Log in as root and go into a temporary directory. Then install the RPM:
+
+   server:~# cd /var/tmp
+   server:/var/tmp# mcopy a:els-samba*.rpm .
+   server:/var/tmp# rpm -Uv els-samba*.rpm
+
+Now restart samba. You can do this with
+"sysadm -> Network -> Samba -> Setup -> Restart" (see website/sysadm/sambasetup.html#restart).
+Or do it from the command line:
+
+   server:/var/tmp# service smb restart
+
+
+Users and passwords
+===================
+
+After you installed els-samba, you should add your users via
+"sysadm -> Users -> Add" (see website/sysadm/users.html#add). Whenever
+you set a password for a user now, the password will needed by the user
+even from windows to connect to your server.
+
+If you already had users created before, the re-set the password with
+"sysadm -> Users -> Modify -> Password" (see website/sysadm/usermod.html#password).
+
+
+Setting up the windows workstation
+==================================
+
+At the windows workstations, select the properties of th network. The specify
+"Domain logon to Workgroup" to "ELS".

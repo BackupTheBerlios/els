@@ -1,0 +1,38 @@
+Purpose
+=======
+
+This module turns your Linux server into a windows file server.
+
+From the windows view
+---------------------
+
+With the default configuration, your windows users will see three
+drive letters:
+
+   F:  a place for applications, normal users usually can't write here
+   G:  a place for data with departmental directories
+   H:  the user's home directory: each user has his own data in his H:
+
+
+More on G:
+----------
+In G: you initially have two directories:
+
+  G:\GENERAL     for general info, like the in-house phone list
+  G:\TRANSFER    a place where people can exchange data together
+
+Note that G:\TRANSFER has no restrictions. Anyone can create files,
+anyone can delete them. The directory is not meant for long-term storage
+and data safety, but as quick way to move data from one user to another one.
+
+If you need places for long-term storage, you should do this with ...
+
+
+Departmental directories
+------------------------
+
+Whenever you use "sysadm -> Users -> Groups -> Add" (see website/sysadm/groups.html#add)
+to add a group, you will be asked if the system should create a department directory
+for you. If you say yes, then a directory in G:\ with the same name of the group
+will be created. Only members of the this group can access the files in this directory,
+no other users.

@@ -1,0 +1,16 @@
+Purpose
+=======
+
+This module helps you to automatically back up your whole server in the
+night. You will get an e-mail with a backup report and after the backup
+the tape will automatically ejected. So you basically only have to feed
+a new tape each morning into your server.
+
+Requirements
+------------
+els-backup needs a SCSI tape, e.g. a DDS-3 tape.
+
+els-backup currently needs <B>afio</B> for the actual backup. Afio can
+compress individual files before writing it to the tape, this is an advantage
+over compressing the whole data stream, e.g. when a backup tape has an
+unreadable spot.

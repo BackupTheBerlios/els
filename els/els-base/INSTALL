@@ -8,7 +8,7 @@ Log in as root and go into a temporary directory. Then install the RPM:
 
    [root@server root]# cd /var/tmp
    [root@server tmp]# mcopy a:els-base*.rpm .
-   [root@server tmp]# rpm -Uv els-base.rpm
+   [root@server tmp]# rpm -Uv els-base*.rpm
 
 Now enter "sysadm -> System -> Setup" (see website/sysadm/setup.html) and
 run the installation scripts of your choice. You can also simply
@@ -37,4 +37,4 @@ different:
    server:/var/tmp# rm els-base*.rpm
 
 
-$Id: INSTALL,v 1.1 2001/12/05 14:50:38 holgerschurig Exp $
+$Id: INSTALL,v 1.2 2001/12/06 10:24:06 holgerschurig Exp $

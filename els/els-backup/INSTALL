@@ -1,0 +1,19 @@
+Install from the command line
+=============================
+
+Download (see http://developer.berlios.de/project/filelist.php?group_id=204)
+the module <B>els-backup-*.rpm</B> and <B>afio-*.rpm</B> and copy it onto a
+floppy disc.
+
+Log in as root and go into a temporary directory. Then install the RPM:
+
+   server:~# cd /var/tmp
+   server:/var/tmp# mcopy a:els-backup*.rpm a:afio*.rpm .
+   server:/var/tmp# rpm -Uv afio*.rpm els-base*.rpm
+
+Now enter "sysadm -> Backup -> Automatic" (see website/sysadm/backup.html#automatic)
+and decide at which time in the the night the backup should happen.
+
+You might also want to define your
+"backup sets" (see website/sysadm/sets.html) to exclude or include specific
+areas of your hard disk.
