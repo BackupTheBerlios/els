@@ -1,8 +1,8 @@
 all: rpm
 
-rpm: .rpm q
+rpm: .rpm
 
-.rpm:
+.rpm: q *.pl *.sh *.mnu *.setup *.els-base bell cls els-base.dirs els-base.spec els.conf qrc sysadm
 	rm -f /usr/src/redhat/RPMS/i386/els-base*.rpm
 	rpm -bb els-base.spec && touch .rpm
 
