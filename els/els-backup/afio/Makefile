@@ -14,8 +14,7 @@ ALL = afio.spec afio.patch \
 rpms:: .rpms
 
 install:: .rpms
-	rm -f $(REDHAT_CD)/RedHat/RPMS/afio*.rpm
-	cp -p /usr/src/redhat/RPMS/i386/afio*.rpm $(REDHAT_CD)/RedHat/RPMS
+	cp -v /usr/src/redhat/RPMS/i386/afio*.rpm $(RPM_DEST)
 
 	
 
