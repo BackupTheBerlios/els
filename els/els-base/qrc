@@ -19,7 +19,7 @@
 
  -option	Sets the option
  --option	Clears the option
-
+ 
  -mid		Cursor is recentered when scrolling is necessary
  -marking	Text between ^KB and cursor is highlighted (use with -lightoff)
 -asis		Characters 128 - 255 shown as-is
@@ -230,14 +230,16 @@ mode,"T"	.kI
 delch		.kD
 pgup		.kP
 pgdn            .kN
+bol		^[ [ H
+eol		^[ [ F
+uparw		^[ [ A
 uparw		.ku
-uparw		^] ] A
+dnarw		^[ [ B
 dnarw		.kd
-uparw		^] ] B
+rtarw		^[ [ C
 rtarw		.kr
-uparw		^] ] D
+ltarw		^[ [ D
 ltarw		.kl
-uparw		^] ] C
 
 
 arg		^Q ^Q
