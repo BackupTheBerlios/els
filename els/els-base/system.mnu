@@ -97,7 +97,7 @@ case "$1" in
         # ext2fs (Linux formatted) hard disk.
         #DescEnd
 
-        df -h -t ext2 >$ELS_TEMP
+        df -h -t ext2 -t ext3 >$ELS_TEMP
         $ELS_DIALOG --textbox $ELS_TEMP 23 78
         ;;
 
