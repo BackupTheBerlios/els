@@ -1,0 +1,19 @@
+AFIO
+====
+
+Afio is a backup tool similar to <B>tar</B> and <B>cpio</B>.
+
+It is not included with Red Hat 7.2, so the the directory
+<B>els-backup/afio</B> contains a Makefile that will automatically download
+the source code and create a binary RPM.
+
+
+Why?
+----
+
+Afio has the added benefit of being able to compress files on the fly. It does
+this on a per-file basis.
+
+Tar can compress, too. But tar compresses the whole data stream. If there is
+any problem in the middle, then not only this file but all other files
+behind it would be unreadable.
