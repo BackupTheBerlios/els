@@ -22,7 +22,7 @@ case "$1" in
 
 
 	# the following options make only sense once you have a tape defined
-        if [ ! -z "$TAPE" -a "$TAPE" != "/dev/null" ]; then
+        if [ -e /dev/tape ]; then
             Option "List"     "Display backup sets"
 	    Option "Add"      "Add backup set"
 	    Option "Delete"   "Delete backup set"

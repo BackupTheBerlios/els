@@ -55,7 +55,7 @@ case "$1" in
 
 	# make proper link in /dev.
         rm -f /dev/tape
-        test "$TAPE" = "/dev/null" || ln -s $TAPE /dev/tape
+        test "$CHOICE" = "/dev/null" || ln -s $TAPE /dev/tape
 
 	rm -f $FILELIST
         ;;
