@@ -15,7 +15,7 @@ Do you want to continue?\
 function SelectGroup ()
 {
     echo -n "$ELS_DIALOG --menu \"Select a group $1\" 23 55 15 " >$ELS_TEMP.dialog
-    if sysadm-user.pl --listgroups $2 $3 >>$ELS_TEMP.dialog 2>$ELS_TEMP; then
+    if sysadm-base.pl --listgroups $2 $3 >>$ELS_TEMP.dialog 2>$ELS_TEMP; then
         { . $ELS_TEMP.dialog; } 2>$ELS_TEMP
         CHOICE=`cat $ELS_TEMP`
     else
@@ -29,7 +29,7 @@ case "$1" in
 
     Query)
         Title "internal to Users" "User modification" "Parameters for user '$LOGIN'"
-        sysadm-user.pl -getuserdata $LOGIN >$ELS_TEMP
+        sysadm-base.pl -getuserdata $LOGIN >$ELS_TEMP
         . $ELS_TEMP
 	test "$USER_SHELL" = "/bin/false" && SHELLSTATE="disabled" || SHELLSTATE="enabled"
         Option "Name"     "Set full name            (now $USER_FULLNAME)"
@@ -117,7 +117,7 @@ case "$1" in
 	# This menu option is only visible if you selected a different user but 'root'.
 	#DescEnd
 
-	sysadm-user.pl --all --userintogroups $LOGIN 2>$ELS_TEMP || {
+	sysadm-base.pl --all --userintogroups $LOGIN 2>$ELS_TEMP || {
             $ELS_DIALOG --textbox $ELS_TEMP 10 60
             return
 	}

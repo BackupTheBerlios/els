@@ -1,7 +1,7 @@
 function SelectGroup ()
 {
     echo -n "$ELS_DIALOG --menu \"Select group $1\" 23 55 15 " >$ELS_TEMP.dialog
-    if sysadm-user.pl --listgroups $2 $3 >>$ELS_TEMP.dialog 2>$ELS_TEMP; then
+    if sysadm-base.pl --listgroups $2 $3 >>$ELS_TEMP.dialog 2>$ELS_TEMP; then
         { . $ELS_TEMP.dialog; } 2>$ELS_TEMP
         CHOICE=`cat $ELS_TEMP`
     else
@@ -14,7 +14,7 @@ function SelectGroup ()
 function SelectUser ()
 {
     echo -n "$ELS_DIALOG --menu \"Select user $1\" 23 65 15 " >$ELS_TEMP.dialog
-    sysadm-user.pl --listusers $2 $3 >>$ELS_TEMP.dialog
+    sysadm-base.pl --listusers $2 $3 >>$ELS_TEMP.dialog
     { . $ELS_TEMP.dialog; } 2>$ELS_TEMP
     CHOICE=`cat $ELS_TEMP`
 }
@@ -55,7 +55,7 @@ case "$1" in
 	#Macro Textbox
 	#DescEnd
 
-        sysadm-user.pl --groups >$ELS_TEMP
+        sysadm-base.pl --groups >$ELS_TEMP
 	if [ ! -s $ELS_TEMP ]; then
 	     $ELS_DIALOG --msgbox "There are no groups defined yet." 5 37
 	     return
@@ -175,7 +175,7 @@ case "$1" in
 	fi
         test -z "$CHOICE" && return
 
-	sysadm-user.pl --usersintogroup $CHOICE 2>$ELS_TEMP || {
+	sysadm-base.pl --usersintogroup $CHOICE 2>$ELS_TEMP || {
             $ELS_DIALOG --textbox $ELS_TEMP 10 60
             return
 	}

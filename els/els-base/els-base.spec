@@ -85,7 +85,7 @@ echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment
 
 # SYSADM AND ITS HELPERS
 %attr(0700,root,root) /usr/sbin/sysadm
-%attr(0700,root,root) /usr/sbin/sysadm-user.pl
+%attr(0700,root,root) /usr/sbin/sysadm-base.pl
 %attr(0700,root,root) /usr/lib/els/adduser.els-base
 %attr(0700,root,root) /usr/lib/els/deluser.els-base
 %attr(0700,root,root) /usr/lib/els/pwchange.els-base
