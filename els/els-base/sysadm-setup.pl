@@ -7,7 +7,7 @@
 #
 #########################################################################
 #
-# $Id: sysadm-setup.pl,v 1.4 2001/11/27 09:42:34 holgerschurig Exp $
+# $Id: sysadm-setup.pl,v 1.5 2001/11/29 15:39:55 holgerschurig Exp $
 #
 
 use strict;
@@ -79,7 +79,7 @@ of documentation:
   # Longer description, may include paragraphs seperated by an
   # empty line.
   #DescEnd
-  #Id $Id: sysadm-setup.pl,v 1.4 2001/11/27 09:42:34 holgerschurig Exp $
+  #Id $Id: sysadm-setup.pl,v 1.5 2001/11/29 15:39:55 holgerschurig Exp $
 
   perl code
 
@@ -148,11 +148,19 @@ sub ProcessScript($)
    my $file = shift;
 
    unless (open FILE, $file) {
-      unless (open FILE, "/usr/lib/els/$file") {
-         print "Setup script $file not found.\n";
-         return;
+      unless (open FILE, "$file.setup") {
+         unless (open FILE, "/usr/lib/els/$file") {
+             unless (open FILE, "/usr/lib/els/$file.setup") {
+                 print "Setup script $file not found.\n";
+                 return;
+             }
+         }
       }
    }
+
+   $file =~ s{.setup$}{};
+
+
    undef $/;
    my $script = <FILE>;
    $/ = "\n";
