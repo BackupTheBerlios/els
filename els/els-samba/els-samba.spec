@@ -1,5 +1,5 @@
 %define name els-samba
-%define vers 1.95
+%define vers 1.96
 %define rel  1
 %define withdoc 1
 
@@ -45,7 +45,7 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %post
-/usr/sbin/sysadm-setup.pl smbconfig smbpasswd smbhomedirs
+/usr/sbin/sysadm-setup.pl --quiet smbsave smbconfig smbpasswd smbhomedirs
 
 
 %files
@@ -81,6 +81,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0644,root,root) %config(noreplace) /var/samba/netlogon/logon.bat
 
 # CONFIG FILE CHANGER
+%attr(0600,root,root) /usr/lib/els/smbsave.setup
 %attr(0600,root,root) /usr/lib/els/smbconfig.setup
 %attr(0600,root,root) /usr/lib/els/smbpasswd.setup
 %attr(0600,root,root) /usr/lib/els/smbhomedirs.setup
