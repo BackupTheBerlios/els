@@ -21,7 +21,7 @@ install:: .rpms
 
 .rpms: $(ALL)
 	rm -f /usr/src/redhat/RPMS/noarch/els-base*.rpm
-	ln -s joe q 
+	ln -fs joe q 
 	rpm -bb els-base.spec
 	rm -f q
 	touch .rpms
