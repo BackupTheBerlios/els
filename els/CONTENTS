@@ -2,15 +2,18 @@ The following are the still-in-development modules for Red Hat 7.2:
 
 els-base		base module (system setup, sysadm menu)
 
+els-samba               easy samba setup module
+
 els-backup		(UNTESTED) automatic backup
-els-backup/afio		cpio-like backup tool, can compress on-the-fly
+els-backup/afio		to get the RPM for the cpio-like backup tool afio
 
 els-dialin		(UNFINISHED) support for dial in by modem
 
 els-postfix		(UNFINISHED) support for e-mail
-els-postfix/postfix	SMTP mailer
+els-postfix/postfix	to get the RPM for the postfix SMTP mailer
 
-old			old modules for Red Hat 6.2
+old			old modules for Red Hat 6.2, kept here as
+			a development aid
 
 utilities		various utilities needed to build the site
 utilities/sgml		SGML DTD's for to check website files against
