@@ -9,7 +9,7 @@ Version: %{vers}
 Release: %{rel}
 Copyright: GPL
 Group: Applications/System
-Packager: Holger Schurig <holgerschurig@gmx.de>
+Vendor:       Easy Linux Server
 Requires: afio, mt-st
 BuildRoot: /var/tmp/%{name}-%{vers}-%{rel}
 
