@@ -14,7 +14,7 @@ docs:: .docs
 check:: .docs
 
 clean::
-	rm -f *.html
+	rm -rf html
 
 install:: .rpms
 	rm -f $(REDHAT_CD)/els-backup*.rpm
