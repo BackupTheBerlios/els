@@ -1,6 +1,6 @@
 %define name els-base
 %define vers 1.96
-%define rel  1
+%define rel  2
 %define withdoc 1
 %define withjoe 1
 
@@ -11,13 +11,13 @@ Release: %{rel}
 Copyright: GPL
 Group: System Environment/Base
 Vendor: Easy Linux Server
-BuildArch: noarch
 Requires: redhat-release => 7.2, dialog, findutils, grep, gawk, textutils
 Requires: util-linux, mtools, e2fsprogs, shadow-utils, perl
 %if %{withjoe}
 Requires: joe
 %endif
 Provides: sysadm
+BuildArch: noarch
 BuildRoot: /var/tmp/%{name}-%{vers}-%{rel}
 
 %description 
@@ -109,9 +109,9 @@ echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment
 %attr(0644,root,root) /etc/diralias.d/els-base.dirs
 
 # ENVIRONMENT PROFILES
-%attr(0644,root,root) /etc/profile.d/els-base.sh
+%attr(0755,root,root) /etc/profile.d/els-base.sh
 %if %{withjoe}
-%attr(0644,root,root) /etc/profile.d/els-q.sh
+%attr(0755,root,root) /etc/profile.d/els-q.sh
 %endif
 
 # OTHER FILES
