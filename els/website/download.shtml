@@ -3,22 +3,21 @@
 <!--#include file="admins.inc"-->
 <!--#include file="logos.inc"-->
 
-<H2>Download CVS</H2>
-<P>
-  Currently (Nov 2001) Easy Linux Server 2.x is still in ALPHA stage. So the
-  most preferred method to get the software is by <A TARGET="_new" 
-  HREF="http://developer.berlios.de/cvs/?group_id=204">CVS</A>. You
-  will get the most complete version.
-</P><P>
-  There is an <A HREF="install.shtml">INSTALL</A> file
-  that gives you instructions on how to proceed.
-</P>
-
 <H2>Download RPMs</H2>
 <P>
-  If you really want almost-finished modules, then you also can
-  <A TARGET="_new" HREF="http://developer.berlios.de/project/filelist.php?group_id=204">download</A>
-  pre-packaged RPMs. Currently (Nov 2001) they don't have achieve a good quality.
+  You can download all needed RPMs
+  <A TARGET="_new" HREF="http://developer.berlios.de/project/filelist.php?group_id=204">here</A>.
+</P>
+
+<H2>Get current CVS version</H2>
+<P>
+  Getting the software via CVS from <A TARGET="_new"
+  HREF="http://developer.berlios.de/cvs/?group_id=204">here</A> allows
+  you to participate in the development much easier (by sending in <A
+  HREF="patches.shtml">patches</A> against current CVS). You also get the
+  newest features and bugfixes :-)   ... but also the newest bugs :-(
+</P><P>
+  Read the <A HREF="install.shtml">INSTALL</A> file to get going.
 </P>
 
 <H2>What next?</H2>

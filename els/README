@@ -18,7 +18,7 @@ knowledge before you can enjoy the services above.
 Solution
 --------
 
-But not so when you <A HREF"installation.shtml">install</A> the Easy Linux
+But not so when you install (see website/installation.html) the Easy Linux
 Server modules on top of Red Hat 7.2. Then you can, <B>within 5-15 Minutes</B>,
 all of the above working.
 
@@ -33,6 +33,6 @@ A word of caution ...
 The Easy Linux modules have recently been ported to Red Hat 7.2. Because of
 this, we are not yet that bullet-proof as the older ones for Red Hat 6.2.
 
-Currently we are in Alpha-Stage. Things work pretty well, especially if you
-make your own RPMs from CVS. But don't expect that every bug has been nailed
-down already.
+Currently we are in Beta-Stage (see website/stages.shtml#b). Things work
+pretty well, especially if you make your own RPMs from CVS. But don't expect
+that every bug has been nailed down already.

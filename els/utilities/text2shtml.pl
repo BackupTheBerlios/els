@@ -17,7 +17,8 @@ use strict;
 
 
 my $rel = $ENV{ROOT} || '../';
-$rel = substr($rel, 3) . '/';
+$rel = substr($rel, 3);
+$rel .= '/' if $rel;
 
 sub ProcessFile ($)
 {
