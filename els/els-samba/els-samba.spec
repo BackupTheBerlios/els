@@ -46,7 +46,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /usr/sbin/sysadm-setup.pl --quiet smbsave smbconfig smbpasswd smbhomedirs
-
+killall -HUP smbd nmbd 2>/dev/null
+# Kill the error status if smbd/nmbd weren't running:
+true
 
 %files
 # DIRECTORIES
