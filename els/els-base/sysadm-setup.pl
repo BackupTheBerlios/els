@@ -7,7 +7,7 @@
 #
 #########################################################################
 #
-# $Id: sysadm-setup.pl,v 1.2 2001/11/26 13:09:38 holgerschurig Exp $
+# $Id: sysadm-setup.pl,v 1.3 2001/11/26 14:36:40 holgerschurig Exp $
 #
 
 use strict;
@@ -73,7 +73,7 @@ of documentation:
   # Longer description, may include paragraphs seperated by an
   # empty line.
   #DescEnd
-  #Id $Id: sysadm-setup.pl,v 1.2 2001/11/26 13:09:38 holgerschurig Exp $
+  #Id $Id: sysadm-setup.pl,v 1.3 2001/11/26 14:36:40 holgerschurig Exp $
 
   perl code
 
@@ -102,13 +102,14 @@ unless ($version eq '7.2') {
 }
 my $insideanaconda = !defined $ENV{LOGNAME};
 my $quiet = 0;
-my $verbose = 1;
+my $verbose = 0;
 my $laptop = 0;
 my $server = 0;
 my $all = 0;
 
 use Getopt::Long;
 GetOptions('quiet' => \$quiet,
+           'verbose' => \$verbose,
            'laptop' => \$laptop,
            'server' => \$server,
            'all' => \$all);
@@ -174,14 +175,14 @@ sub ProcessScript($)
 
 # Process all scripts (when --all on cmdline)
 if ($all) {
-   my @files = glob '*.setup' || glob '/usr/lib/els/*.setup';
+   my @files = glob('*.setup') || glob('/usr/lib/els/*.setup');
    foreach (@files) {
       ProcessScript $_;
    }
    exit;
 }
 
-# Re-Process the scripts that have been rerun (when no cmdline)
+# Re-Process the scripts that have been run already (when no cmdline)
 if ($#ARGV == -1) {
    my $scripts = getopt('BASE_SCRIPTS=');
    if (defined $scripts && $scripts) {
