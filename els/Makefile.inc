@@ -20,5 +20,5 @@ install::
 
 upload::
 
-all rpms docs check clean install upload::
+all rpms clean install upload::
 	@for i in $(SUBDIRS) .; do test "$$i" = "." && continue; make -C $$i $@ ROOT=$(ROOT)/.. || exit 1; done
