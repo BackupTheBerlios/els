@@ -1,17 +1,18 @@
-#Title keep boot messages
+#Title keep boot messages on screen
 #Author Holger Schurig
 #Group els-base
 #Group Convenience
 #Desc
 # When Red Hat Linux boots, it will display various boot messages. Then it
-# calls a program ('mingetty') that asks you for the user name and password.
+# calls a program ('mingetty') that asks you for the user name and
+# password. Mingetty unfortunately clears the screen by default, so you
+# can no longer see the boot messages.
 #
-# Mingetty unfortunately clears the screen by default, so you can no longer
-# see the boot messages. This patch makes mingetty on console 1 not to clear
-# the screen. This way possible error messages from the boot process stay
-# visible on the screen.
+# This setup script changes /etc/initab so that mingetty on console 1 not
+# to clear the screen. This way possible error messages from the
+# boot process stay visible on the screen.
 #DescEnd
-#Id $Id: bootmessages.setup,v 1.5 2001/12/04 15:56:06 holgerschurig Exp $
+#Id $Id: bootmessages.setup,v 1.6 2001/12/04 22:35:29 holgerschurig Exp $
 
 
 loadfile '/etc/inittab';

@@ -1,19 +1,21 @@
 #Title syslog output to console 12
 #Author Holger Schurig
 #Group els-base
+#Group Convenience
 #Desc
-# /etc/syslog.conf file defines which error messages, notification or even
-# debug messages should end up in what file. Here I define that console 12
-# (switch to it with Alt-F12) get all notifications or worse.
+# This setup script send (almost) all syslog messages to console 12.
+#
+# With Alt-F12 the sysadm can quickly see that last few syslog events
+# of the system.
 #DescEnd
-#Id $Id: syslog.setup,v 1.4 2001/11/30 16:24:56 holgerschurig Exp $
+#Id $Id: syslog.setup,v 1.5 2001/12/04 22:35:29 holgerschurig Exp $
 
 
 loadfile '/etc/syslog.conf';
 unless (search('tty12')) {
     append '';
     append '# log almost everything on console 12';
-    append '*.notice						/dev/tty12';
+    append '*.info						/dev/tty12';
     writefile;
     system 'killall -HUP syslogd';
     logit "/etc/syslog.conf: output to console 12\n";

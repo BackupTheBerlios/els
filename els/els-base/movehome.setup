@@ -1,15 +1,17 @@
 #Title Move /home to /var/home
-#Author Holger Schurig, J.Marsden
+#Author Holger Schurig
+#Modified Jonathan Marsden
 #Group els-base
+#Group Mandatory
 #Desc
-# Some servers do not have a separate /home partition and so /home would
-# be on the root parition. So move the home directories to /var/home to
-# give users enough disk space.
+# Some servers do not have a separate /home partition.
+# In those cases /home would be on the root parition. If we detect this,
+# we move the home directories to /var/home to give users enough disk space.
 #
 # Note that /root, roots home directory, will not be moved. This makes
 # sure that root can still log in in single-user mode ...
 #DescEnd
-#Id $Id: movehome.setup,v 1.4 2001/11/30 16:24:56 holgerschurig Exp $
+#Id $Id: movehome.setup,v 1.5 2001/12/04 22:35:29 holgerschurig Exp $
 
 
 if (-d '/home' && -f '/etc/fstab' && !-l '/home' && (`mount | grep /home` eq "")) {

@@ -1,15 +1,20 @@
 #Title no bell and history search in bash
 #Author Holger Schurig
 #Group els-base
+#Group Convenience
 #Desc
-# This stops the annoying command-line-completion bells in the shell
-# (and other programs that use the readline library).
+# Some programs, mostly the bash shell, use the readline library which
+# handles line editing and command completion.
 #
-# We also define PgUp/PgDn so that they walk you through the
-# command line history. Try to type some text and the the PgUp
-# key ...
+# The default setup of Red Hat makes the shell beep all the time, e.g.
+# when you press Backspace at the left end of the line or
+# when you use [Tag] for command line completions. This setup script
+# disables the annoying bell.
+#
+# We also define PgUp/PgDn so that they walk you through the command
+# line history. This way you can much quicker recall older commands.
 #DescEnd
-#Id $Id: inputrc.setup,v 1.4 2001/11/30 16:24:56 holgerschurig Exp $
+#Id $Id: inputrc.setup,v 1.5 2001/12/04 22:35:29 holgerschurig Exp $
 
 
 loadfile '/etc/inputrc';

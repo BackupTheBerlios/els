@@ -1,10 +1,16 @@
 #Title nicer colors for ls
 #Author Holger Schurig
 #Group els-base
+#Group Convenience
 #Desc
-# Patch /etc/DIR_COLORS because some colors are nearly unvisible
+# The 'ls' command uses colors to make the identification of files easier.
+# Unfortunately colors like "bright yellow on white background" (e.g. in
+# an Konsole, PuTTY or Teraterm window) aren't that easy to read.
+#
+# This setup scripts changes some of the colors so that they are
+# better readable.
 #DescEnd
-#Id $Id: dircolors.setup,v 1.5 2001/12/04 15:56:28 holgerschurig Exp $
+#Id $Id: dircolors.setup,v 1.6 2001/12/04 22:35:29 holgerschurig Exp $
 
 
 loadfile '/etc/DIR_COLORS';
@@ -12,8 +18,6 @@ if (search 'EXEC 01;32') {
     comment 'LINK';
     comment 'FIFO';
     comment 'SOCK';
-    comment 'BLK';
-    comment 'CHR';
     comment 'ORPHAN';
     comment 'MISSING';
     replace 'EXEC 01;32', 'EXEC 01;31';

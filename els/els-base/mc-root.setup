@@ -1,13 +1,18 @@
 #Title Root's Midnight Commander
 #Author Holger Schurig
 #Group els-base
+#Group Convenience
 #Desc
-# This creates a simply configuration file for the user root.
-# 
-# If a config file already exists, nothing will be changed, created
-# or overwritten. Isn't it nice to be on the safe side?  :-)
+# 'mc' is the Midnight Commander, a Norton-Commander-like shell for Linux.
+#
+# This setup script changes the settings of Midnight Commander to have
+# more display space for files by eliminating the date column. While we're
+# at changing, we also install some default settings.
+#
+# Please note that all changes are only done to User 'root' and then only
+# if no settings for 'mc' already exist.
 #DescEnd
-#Id $Id: mc-root.setup,v 1.4 2001/11/30 16:24:56 holgerschurig Exp $
+#Id $Id: mc-root.setup,v 1.5 2001/12/04 22:35:29 holgerschurig Exp $
 
 
 unless (-f '/root/.mc/ini') {

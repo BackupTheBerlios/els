@@ -1,17 +1,27 @@
 #Title make Ctrl-Alt-Del halt the system
 #Author Holger Schurig
 #Group els-base
+#Group Server
 #Desc
-# If we want to stop workstation, we dont want it to boot again.
+# Red Hat normally shuts down and reboots a system
+# when one presses Ctrl-Alt-Del. This setup script modifies this behavior
+# to a shutdown and halt.
+#
+# Assume you run a server. The only possible reason you want
+# to press Ctrl-Alt-Del is usually not to restart the server
+# immediately, but to bring it to a halt, e.g.
+# to install a network card. Because the shut down takes
+# some time, you can press the key sequence, and go off to the shelf to
+# find the card. And you don't find the server booted up again ...
 #DescEnd
-#Id $Id: ctrlaltdel.setup,v 1.5 2001/11/30 16:24:56 holgerschurig Exp $
+#Id $Id: ctrlaltdel.setup,v 1.6 2001/12/04 22:35:29 holgerschurig Exp $
 
 
 loadfile '/etc/inittab';
-unless ($server || search('-h now')) {
+unless (search('-h now')) {
     replace '-r now', '-h now';
     writefile;
-    logit "/etc/inittab: halt system on C-A-D, don't reboot\n";
+    logit "/etc/inittab: halt system on Ctrl-Alt-Del, don't reboot\n";
 }
 
 

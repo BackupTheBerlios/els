@@ -1,13 +1,16 @@
-#Title drop-in scripts in /etc/rc.d
+#Title allow local startup scripts in /etc/rc.d
 #Author Holger Schurig
 #Group els-base
+#Group Mandatory
 #Desc
-# rc.local is executed automatically after the normal system boot process.
-# We're adding code to it that allows executable files named rc.* to be
-# executed automatically. So if you need special SCSI setup, just
-# place a rc.scsi file in this directory and it gets automatically executed.
+# This setup script replaces /etc/rc.d/rc.local with another version
+# that executes other startup script.
+#
+# Any file in /etc/rc.d that is named rc.[whatever] and has the executable
+# bit set will be sourced at system boot time. Therefore this scripts need
+# to be shell (and not perl or python) scripts.
 #DescEnd
-#Id $Id: rclocal.setup,v 1.4 2001/11/30 16:24:56 holgerschurig Exp $
+#Id $Id: rclocal.setup,v 1.5 2001/12/04 22:35:29 holgerschurig Exp $
 
 
 loadfile '/etc/rc.d/rc.local';

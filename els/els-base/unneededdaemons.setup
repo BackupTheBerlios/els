@@ -1,11 +1,18 @@
 #Title stop unneeded daemons
 #Author Holger Schurig
 #Group els-base
+#Group Server
 #Desc
-# This disables several daemons (background processes) that are not really
-# needed for a file server:
+# This setup script disables several daemons (background processes)
+# that are not really needed for a file server. The processes are not
+# deleted from the system, just disabled. Use 'ntsysv' to re-enable them
+# if they are really needed.
+#
+# Otherwise this script saves memory, keeps the number of services
+# low (less services = less things that can break) and makes sure that
+# nothing can suddenly change the setup.
 #DescEnd
-#Id $Id: unneededdaemons.setup,v 1.4 2001/11/30 16:24:56 holgerschurig Exp $
+#Id $Id: unneededdaemons.setup,v 1.5 2001/12/04 22:35:29 holgerschurig Exp $
 
 
 open CHKCONFIG, "chkconfig --list|";

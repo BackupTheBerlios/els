@@ -1,11 +1,12 @@
 #Title default mount points
 #Author Holger Schurig
 #Group els-base
+#Group Mandatory
 #Desc
-# This script creates mount points for cdrom, floppy, nfs, samba, dos
-# and zip drives/shares/filesystems in the /mnt directory.
+# This setup script creates mount points for cdrom, floppy, nfs,
+# samba, dos and zip drives - shares - filesystems in the /mnt directory.
 #DescEnd
-#Id $Id: mountpoints.setup,v 1.4 2001/11/30 16:24:56 holgerschurig Exp $
+#Id $Id: mountpoints.setup,v 1.5 2001/12/04 22:35:29 holgerschurig Exp $
 
 
 my $madedir=0;

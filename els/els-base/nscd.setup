@@ -1,10 +1,12 @@
 #Title autostart nscd at boot time
 #Author Holger Schurig
 #Group els-base
+#NeedFile /etc/rc.d/init.d/nscd
 #Desc
-# Red Hat 7.2 erraneously doesn't install nscd correctly, this script fixes this.
+# Red Hat 7.2 erraneously doesn't install nscd correctly, this setup
+# script fixes this.
 #DescEnd
-#Id $Id: nscd.setup,v 1.4 2001/11/30 16:24:56 holgerschurig Exp $
+#Id $Id: nscd.setup,v 1.5 2001/12/04 22:35:29 holgerschurig Exp $
 
 
 if (-f '/etc/init.d/nscd') {

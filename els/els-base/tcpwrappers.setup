@@ -1,22 +1,31 @@
 #Title enable tcp_wrappers
 #Author Holger Schurig
 #Group els-base
+#Group Security
 #NeedFile /usr/sbin/tcpd
 #Desc
-# Patch /etc/hosts.allow and /etc/hosts.deny
+#Item Background
+# 'tcp_wrappers' is the name of a program that controls who can connect to
+# TCP-IP services. Red Hat 7.2 comes with tcp_wrappers, but it
+# is not configured in any way, leaving your system wide open.
 #
-# This two files are the configuration for the TCP Wrapper. This is a
-# special program that is called via the initd daemon (see /etc/inetd.conf)
-# and specifies which INCOMING services are allowed. For now, we make our
-# server pretty much secure: any incoming connection from our own subnet is
-# allowd, any incoming connection from outside is denied.
+# If the maintenance of a firewall is too much for you and you want just a
+# simple, ip-based control for TCP/IP based services, then tcp_wrappers is
+# something for you.
 #
-# This security scheme does not work for daemons that are running on their
-# own and not via inetd, e.g. "sendmail" or "lpd". For this services you
-# must ensure security with other tools, e.g. proper configuration in
-# /etc/sendmail.cf or /etc/printcap.
+# Perhaps you have a firewall. If you like to have two levels of security,
+# then you can both enable tcp_wrappers and the firewall.
+#
+#Item What the setup script does
+#
+# - /etc/hosts.deny will get a catch-all entry that denies every
+#   incoming connection.
+# - after this, you can add those connections that you want to allow
+#   manually to /etc/hosts.allow.
+# - Because ssh is assumed to be secure, this script adds an entry
+#   that allows incoming ssh connections from everywhere
 #DescEnd
-#Id $Id: tcpwrappers.setup,v 1.4 2001/11/30 16:24:56 holgerschurig Exp $
+#Id $Id: tcpwrappers.setup,v 1.5 2001/12/04 22:35:29 holgerschurig Exp $
 
 
 loadfile '/etc/hosts.deny';

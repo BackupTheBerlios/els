@@ -2,9 +2,12 @@
 #Author Holger Schurig
 #Group els-base
 #Desc
-# Patch /etc/sysctl.conf
+# This disables TCP timestamps.
+#
+# With TCP timestamps you cannot connect to several brain dead devices,
+# e.g. to 3COM Routers.
 #DescEnd
-#Id $Id: tcptimestamps.setup,v 1.4 2001/11/30 16:24:56 holgerschurig Exp $
+#Id $Id: tcptimestamps.setup,v 1.5 2001/12/04 22:35:29 holgerschurig Exp $
 
 
 loadfile '/etc/sysctl.conf';

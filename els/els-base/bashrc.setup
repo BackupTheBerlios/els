@@ -1,15 +1,42 @@
 #Title prompt, aliases and magic cd
 #Author Holger Schurig
 #Idea Wolf Paul
+#Group els-base
+#Group Convenience
 #Desc
-# /etc/bashrc is executed at startup time of any interactive shell.
-# Therefore, we set aliases that help the (interactive) user. Environment
-# variables belong to /etc/profile, because the profile is sourced by any
-# shell, even by non-interactive ones. Aliases are for users, not for
-# programs, so to define environment variable see /etc/profile or just
-# create your own executable shell script in /etc/profile.d/*.sh.
+#Item Prompt
+# This setup script changes the prompt of the bash shell so
+# that you can see your current directory more easily. It will look like
+#
+#    mnz6:/usr/src$ 
+#
+# where 'mnz6' is the name of the host, '/usr/src' is your current working
+# directory and the '$' becomes a '#' for root-users.
+#
+#Item Aliases
+#
+# The aliases 'copy', 'del', 'dir', 'md', 'rd', 'move' and 'ren' work like
+# their MSDOS counterparts. The aliases 'l', 'll' and 'ls' have slightyl
+# changed behaviour compared to the original 'ls'. 'psg' is a combination
+# of 'ps' and 'grep'. With '..', '...', '....' and '.....' you can
+# ascend directory hierarchies more quickly.
+#
+#Item cd
+#
+# The enhanced 'cd' function look in /etc/diralias.d/*.dirs and in
+# ~/.diralias for lines of the form
+#
+#    local SHORT=PATH
+#
+# e.g.
+#
+#    local log=/var/log
+#
+# When you later enter 'cd log' and the current directory does not
+# have a subdirectory 'log' then you will be put into '/var/log', wherever
+# you have been before.
 #DescEnd
-#Id $Id: bashrc.setup,v 1.4 2001/11/30 16:24:56 holgerschurig Exp $
+#Id $Id: bashrc.setup,v 1.5 2001/12/04 22:35:29 holgerschurig Exp $
 
 
 loadfile '/etc/bashrc';
