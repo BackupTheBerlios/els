@@ -12,7 +12,7 @@
 # low (less services = less things that can break) and makes sure that
 # nothing can suddenly change the setup.
 #DescEnd
-#Id $Id: unneededdaemons.setup,v 1.8 2002/02/15 10:16:41 holgerschurig Exp $
+#Id $Id: unneededdaemons.setup,v 1.9 2002/02/22 11:09:50 holgerschurig Exp $
 
 
 open CHKCONFIG, "chkconfig --list|";
@@ -20,26 +20,26 @@ my @lines = <CHKCONFIG>;
 close CHKCONFIG;
 foreach (@lines) {
   if ($server  && /^kudzu.*on/)    {
-      system 'chkconfig --del kudzu >/dev/null 2>&1';
+      system 'chkconfig --level 123456 kudzu off >/dev/null 2>&1';
       logit "/etc/init.d/kudzu: autostart disabled\n";
   }
   if ($server  && /^harddrake.*on/)    {
-      system 'chkconfig --del harddrake >/dev/null 2>&1';
+      system 'chkconfig --level 123456 harddrake off >/dev/null 2>&1';
       logit "/etc/init.d/harddrake: autostart disabled\n";
   }
   # Server's run 24x7, they don't need anacron
   if ($server  && /^anacron.*on/)    {
-      system 'chkconfig --del anacron >/dev/null 2>&1';
+      system 'chkconfig --level 123456 anacron off >/dev/null 2>&1';
       logit "/etc/init.d/anacron: autostart disabled\n";
   }
   # Server's don't run on battery
   if ($server  && /^apmd.*on/)    {
-      system 'chkconfig --del apmd >/dev/null 2>&1';
+      system 'chkconfig --level 123456 apmd off >/dev/null 2>&1';
       logit "/etc/init.d/apmd: autostart disabled\n";
   }
   # Server's don't run X-Windows
   if ($server  && /^xfs.*on/)    {
-      system 'chkconfig --del xfs >/dev/null 2>&1';
+      system 'chkconfig --level 123456 xfs off >/dev/null 2>&1';
       logit "/etc/init.d/xfs: autostart disabled\n";
   }
 }
