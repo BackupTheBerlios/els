@@ -1,0 +1,41 @@
+ELS a.k.a. Easy Linux Server
+============================
+
+Departmental server
+-------------------
+Linux is often cited as a server. No think --- what jobs would a normal
+departmental file server have to fulfill?  For me the following comes
+to mind:
+
+- file server (for windows workstations)
+- e-mail server
+- caching dns name server
+- backup subsystem
+
+However, most Linux distributions are meant to be general. To use one
+distro and set up a file server needs considerable time and skill.
+
+
+Integration
+-----------
+
+Now suppose you have your fileserver. You add a user to Samba, so
+that the user can connect to it. And now you have to add the user
+a second time to another subsystem so that the user has a POP3 mailbox.
+And yet another entry if you want the user reachable not just by
+peter@somewhere but by peter.schneider@somewhere too.
+
+
+Simplicity
+----------
+
+Ok, you are keen to do all of the steps above. But when you use
+a tool like 'linuxconf' or 'useradd' to add a user, you suddenly have
+to know about things like user id, group id, home directory and shell.
+You simply don't care about technical details, the system has to work.
+
+Solution
+--------
+
+The solution to have a working, integrated and yet easy departmental
+server is the Easy Linux Server (a.k.a. ELS) framework.

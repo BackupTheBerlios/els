@@ -1,0 +1,25 @@
+Installation
+============
+
+When you read this file you seem already have been able to get the CVS.
+Fine.
+
+Getting additional modules
+--------------------------
+ELS depends on some RPM's that are not part of Red Hat 7.2, e.g. on
+postfix. When you do a "make all" or "make rpms" the system will try
+to automatically download this modules.
+
+Installation of the modules
+---------------------------
+If everything goes well, you should have all ELS rpm's (as well as
+/some axiliary rpm's) in usr/src/redhat/RPMS/i386. Install the modules
+/that you like by doing something like
+
+   $ cd /usr/src/redhat/RPMS/i386
+   $ rpm -Uhv els-base*.rpm
+   $ rpm -Uhv els-samba*.rpm
+
+Now you should start the sysadm menu and get used to it:
+
+   $ sysadm
