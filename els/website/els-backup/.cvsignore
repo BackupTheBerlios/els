@@ -1,5 +1,6 @@
 a
 *.html
 .links
+.uploader
 index.*
 install.*

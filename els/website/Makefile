@@ -21,7 +21,7 @@ clean::
 	rm -f $(DST) .docs
 
 upload:: docs
-	$(ROOT)/utilities/uploader.pl *.css *.html */*.html
+	$(ROOT)/utilities/uploader.pl *.css *.html
 
 lint:: .docs
 	$(ROOT)/utilities/linklint -quiet -error /@

@@ -5,9 +5,13 @@ INC = top.inc admins.inc developers.inc logos.inc bottom.inc
 DOCS = index.html install.html
 
 
+
 all:: docs
 
 docs:: .links $(DOCS)
+
+upload:: docs
+	$(ROOT)/utilities/uploader.pl --subdir=els-samba *.html
 
 clean::
 	rm -f *.mnu *.html *.shtml $(INC) .links

@@ -6,7 +6,7 @@ uploader.pl - uploader using sftp for the Easy Linux Server
 
 =head1 SYNOPSIS
 
-B<uploader.pl> files ..
+  B<uploader.pl> [--homedir=dir] [--subdir=dir ] [--login=login] files..
 
 =head1 DESCRIPTION
 
@@ -15,24 +15,36 @@ It does so by B<sftp>(1). In the file B<.uploader> it is keeping track
 of the MD5 digest of files, so that only changed files will make their
 way (independend of the timestamp).
 
+ B<--homedir>  home dir to use, overwrites HTMLBASE environment variable
+
+ B<--subdir>   subdir to use
+
+ B<--login>    username@host use for SSH, overwrites SSHLOGIN
+
 =cut
 
 
 use strict;
 use Digest::MD5;
+use Getopt::Long;
 
-my $debug = 0;
-my $Md5File = ".uploader";
-my $HomeDir = "/home/groups/els/htdocs";
+my $Md5File  = ".uploader";
+my $HomeDir  = $ENV{HTMLBASE} || "/home/groups/els/htdocs";
+my $SubDir   = '';
+my $SshLogin = $ENV{SSHLOGIN} || '';
+my $Debug = 0;
 
-# Parse CVSROOT so that we know how to log in
-$ENV{CVSROOT} =~ /^(.+):(\/.+)$/ or
-   die "CVSROOT not set.\n";
+GetOptions("homedir=s", \$HomeDir,
+	   "subdir=s",  \$SubDir,
+	   "login=s",   \$SshLogin,
+	   "debug",     \$Debug);
 
-my $SshLogin = $1;
-my $CvsRoot  = $2;
+$HomeDir = "$HomeDir/$SubDir" if $SubDir;
+
 my %MD5;
 my @Upload;
+
+$| = 1;		# unbuffered io
 
 # Read list of all known files
 if (open FILE, "<$Md5File") {
@@ -48,10 +60,15 @@ sub MirrorFile ($)
 {
    my $file = shift;
    
+   if ($file =~ m:/:) {
+      die "Please specify only files, not paths: $file\n";
+   }
+   return if $file =~ m:\*:;
+
    my $olddigest = 'none';
 
    unless ($olddigest = $MD5{$file}) {
-      print "$file: will add\n" if $debug > 1;
+      print "$file: will add\n" if $Debug > 1;
       $olddigest  = 'added';
    }
 
@@ -63,10 +80,10 @@ sub MirrorFile ($)
    $_ = $ctx->b64digest;   
    if ($olddigest eq $_) {
       #print $olddigest, "\n", $_, "\n";
-      print "$file: md5 equal\n" if $debug > 1;
+      print "$file: md5 equal\n" if $Debug > 1;
    } else {
       #print $olddigest, "\n", $_, "\n";
-      print "$file: need update\n" if $debug > 1;
+      print "$file: need update\n" if $Debug > 1;
       push @Upload, $file;
       $MD5{$file} = $_;
    }
@@ -82,37 +99,24 @@ foreach (@ARGV) {
 
 # Upload all changed files
 my $first = 1;
-my $dir = '';
-my $newdir = '';
 foreach (sort @Upload) {
    my $file = $_;
    if ($first) {
-      open FILE, ">/dev/stdout" if $debug;
+      open FILE, ">/dev/stdout" if $Debug;
       $_ = "sftp -1 -s /usr/lib/ssh/sftp-server $SshLogin";
       print "$_\n";
-      open FILE, $debug ? ">/dev/stdout" : "|$_ >/dev/null";
+      open FILE, $Debug ? ">/dev/stdout" : "|$_ >/dev/null";
       print FILE "cd $HomeDir\n";
       $first = 0;
    }
 
-   ($newdir,$file) = ($1,$2) if $file =~ m:(.*)/([^/]*)$:;
-   if ($newdir ne $dir) {
-      $_ = $dir;
-      s{[^/\.]+}{..}g;
-      print FILE $_ ? "lcd $_/$newdir\n" : "lcd $newdir\n";
-      print FILE "mkdir $HomeDir/$newdir\n";
-      print FILE "cd $HomeDir/$newdir\n";
-      $dir = $newdir
-   }
-
+   print STDERR "put $file\n";
    print FILE "put $file\n";
 }
-unless ($first) {
-   close FILE;
-}
+close FILE unless $first;
 
 
-exit if $debug;
+exit if $Debug;
 
 # Write MD5s
 open FILE, ">$Md5File";

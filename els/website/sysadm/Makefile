@@ -9,6 +9,9 @@ all:: .docs
 
 docs:: .docs
 
+upload:: docs
+	$(ROOT)/utilities/uploader.pl --subdir=sysadm *.html
+
 clean::
 	rm -f *.mnu *.html *.shtml $(INC) .files .docs
 

@@ -5,9 +5,13 @@ INC = top.inc admins.inc developers.inc logos.inc bottom.inc
 DOCS = index.html install.html usage.html
 
 
+
 all:: docs
 
 docs:: .links $(DOCS)
+
+upload:: docs
+	$(ROOT)/utilities/uploader.pl --subdir=els-base *.html
 
 clean::
 	rm -f *.mnu *.html index.shtml install.shtml $(INC) .links
