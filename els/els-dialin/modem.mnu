@@ -223,7 +223,7 @@ case "$1" in
         # This sets the modem init command. Usually this is just
 	# "<TT>ATZ</TT>" - but this implies that your modem itself is
 	# configured properly and the proper setup is stored into the
-	# modem's nonvolatile memory (usually with "<TT>AT&W</TT>").
+	# modem's nonvolatile memory (usually with "<TT>AT&amp;W</TT>").
 	#
         # Consult your modem handbook to find out how to setup your
 	# modem.  Be sure to always enable hardware flow-control (also
@@ -233,7 +233,7 @@ case "$1" in
 	# Enter the modem command into the mask:
 	#Input ATZ
 	# Define modem init string, e.g.<BR>
-	# ATZ  (now AT&K3)
+	# ATZ  (now AT&amp;K3)
 	#InputEnd
 	#
 	#Item Visibility
@@ -419,8 +419,8 @@ case "$1" in
         #ScreenEnd
         #
         # As you see, after typing AT the modem answered with OK. You can also
-        # view the current modem settings (usual with AT&V), change the
-        # setup and store it (with AT&W). Consult your modem manual before
+        # view the current modem settings (usual with AT&amp;V), change the
+        # setup and store it (with AT&amp;W). Consult your modem manual before
         # doing this.
 	#
 	#Item Visibility
