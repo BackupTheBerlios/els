@@ -28,7 +28,7 @@
 <TR><TD>+unarj</TD><TD>handy if you ever need to uncompress an *.arj file</TD></TR>
 <TR><TD>-rmt</TD><TD>we only use our local tape, not remote ones</TD></TR>
 
-<TR><TD ROWSPAN=3>Applications/Communications</TD><TD>+efax</TD><TD>we don't fax from the server (and if we would do, we would use HylaFax)</TD></TR>
+<TR><TD ROWSPAN=3>Applications/Communications</TD><TD>-efax</TD><TD>we don't fax from the server (and if we would do, we would use HylaFax)</TD></TR>
 <TR><TD>(+mgetty)</TD><TD>only add this package when you want to dial in into your server by modem, e.g. using els-dialin</TD></TR>
 <TR><TD>(+uucp)</TD><TD>only add this package if you exchange your e-mail via UUCP or UUCP-over-TCPIP</TD></TR>
 
