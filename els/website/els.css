@@ -29,3 +29,7 @@ SPAN.maintitlebar { font-size: small; color: #FFFFFF }
 SPAN.titlebar { text-align: center; font-size: small; color: #FFFFFF; font-weight: bold }
 SPAN.center { text-align: center }
 SPAN.boxspace { font-size: 2pt; }
+
+TH { text-align: left; }
+
+TD.small { font-size: smaller; }
