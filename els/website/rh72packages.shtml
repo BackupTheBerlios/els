@@ -1,0 +1,82 @@
+<!--#set var="title" value="Easy Linux Server - Select Individual Packages"-->
+<!--#include file="top.inc"-->
+<!--#include file="admins.inc"-->
+<!--#include file="logos.inc"-->
+
+<P>
+  Please select
+</P><UL>
+<LI>Printing Support
+<LI>Network Support
+<LI>Dialup Support
+<LI>Windows File Server
+<LI>Router / Firewall
+<LI>Utilities
+<LI>Windows Compatibility / Interoperability
+</UL><P>
+  on the "Package Group Selection" screen. The also check the "Select individual
+  packages" check box at the lower end of the screen.
+</P><P>
+  In the following list, the '+' means add this package, '-' means delete this
+  package. Everything is just a suggestion, stuff in parenthesis are weaker
+  suggestions then normal stuff. And here we go:
+</P><TABLE BORDER=1 CELLSPACING=0 CELLPADDING=4>
+<TR><TH>Group</TH><TH>Package</TH><TH>Reason</TH></TR>
+
+<TR><TD ROWSPAN=4>Applications/Archiving</TD><TD>(+cdrecord)</TD><TD>only add this if you want to burn CDs at your server</TD></TR>
+<TR><TD>-dump</TD><TD>dump is a very awkward backup program and not really supported by the Linux kernel</TD></TR>
+<TR><TD>+unarj</TD><TD>handy if you ever need to uncompress an *.arj file</TD></TR>
+<TR><TD>-rmt</TD><TD>we only use our local tape, not remote ones</TD></TR>
+
+<TR><TD ROWSPAN=3>Applications/Communications</TD><TD>+efax</TD><TD>we don't fax from the server (and if we would do, we would use HylaFax)</TD></TR>
+<TR><TD>(+mgetty)</TD><TD>only add this package when you want to dial in into your server by modem, e.g. using els-dialin</TD></TR>
+<TR><TD>(+uucp)</TD><TD>only add this package if you exchange your e-mail via UUCP or UUCP-over-TCPIP</TD></TR>
+
+<TR><TD>Applications/Editors</TD><TD>+joe</TD><TD>as long as we don't find a better editor, we use this as the editor inside sysadm menus</TD></TR>
+
+<TR><TD>Applications/Engineering</TD><TD>-units</TD><TD>who wants to convert inch to centimeter at the server?</TD></TR>
+
+<TR><TD ROWSPAN=6>Applications/Internet</TD><TD>(+fetchmail)</TD><TD>only add this package when you receive your e-mail via POP3 or Multi-POP</TD></TR>
+<TR><TD>+lynx</TD><TD>nice to browse HTML formatted documentation</TD></TR>
+<TR><TD>-micq</TD><TD>we don't chat at the server (and if we do it, we would do it from Windows)</TD></TR>
+<TR><TD>-rsh</TD><TD>the r* protocols are a security nightmare, use ssh instead</TD></TR>
+<TR><TD>-talk</TD><TD>we don't talk at the server</TD></TR>
+<TR><TD>(+tcpdump)</TD><TD>add this program if you want to watch your network traffic, e.g. while configuring a self-crafted firewall. Only something for experts.</TD></TR>
+
+<TR><TD ROWSPAN=8>Applications/System</TD><TD>+dialog</TD><TD>needed for els-base' sysadm</TD></TR>
+<TR><TD>-logwatch</TD><TD>remove unless you want to configure it manually. Unconfigured it will send strange e-mails to you.</TD></TR>
+<TR><TD>(+mkisofs)</TD><TD>only add this package if you want to run CDs at your server</TD></TR>
+<TR><TD>+mt-st</TD><TD>needed for els-backup, can position, rewind and eject DAT tapes</TD></TR>
+<TR><TD>-rdate</TD><TD>the r* protocols are a security nightmare (use xntpd if you want to keep your system-time up to date)</TD></TR>
+<TR><TD>-sudo</TD><TD>we don't work at the server, at least not as users. Therefore we don't need any special software to do specific tasks as superuser</TD></TR>
+<TR><TD>(-sysstat)</TD><TD>'sar', part of sysstat, is a nice statistics tool. However, it writes very minute something to the hard disk, so they will never sleep</TD></TR>
+<TR><TD>-tripwire</TD><TD>remove unless you want to configure it manually. Unconfigured it will send strange e-mails to you.</TD></TR>
+
+<TR><TD ROWSPAN=2>Development/Debuggers</TD><TD>(+lslk)</TD><TD>displays the status of all lock files. Can be useful for bug-hunting</TD></TR>
+<TR><TD>(+strace)</TD><TD>displays what system calls a program is executing. Can be useful for bug-hunting</TD></TR>
+
+<TR><TD>Development/Tools</TD><TD>-xdelta</TD><TD>we don't have a need for this</TD></TR>
+
+<TR><TD>Documentation</TD><TD>+man-pages</TD><TD>Documentation for programs and file-formats can always be handy</TD></TR>
+
+<TR><TD>System Environment/Base</TD><TD>-yp-tools</TD><TD>yp-tools is only needed for YP clients, but we install a server</TD></TR>
+
+<TR><TD ROWSPAN=15>System Environment/Daemons</TD><TD>(-autofs)</TD><TD>we normally mount our file-systems the normal way</TD></TR>
+<TR><TD>(-cipe)</TD><TD>we normally don't create VPNs to other servers</TD></TR>
+<TR><TD>-finger-server</TD><TD>revealing who and when a user is working to outsiders might be a security problems</TD></TR>
+<TR><TD>-pidentd</TD><TD>revealing which user is working to outsiders might be a security problems</TD></TR>
+<TR><TD>-rarpd</TD><TD>we need reverse ARP (and if we would, then we would first look if DHCP could solve the same problem nicer)</TD></TR>
+<TR><TD>-rsh-server</TD><TD>the r* protocols are a security nightmare, use ssh instead</TD></TR>
+<TR><TD>-rusers<BR>-rusers-server</TD><TD>the r* protocols are a security nightmare and revealing who and when a user is working to the outside world might be an additional security problem</TD></TR>
+<TR><TD>-rwall</TD><TD>the r* protocols are a security nightmare and we don't want to receive broadcasts from unknown systems</TD></TR>
+<TR><TD>-rwho</TD><TD>the r* protocols are a security nightmare and revealing who and when a user is working to the outside world might be an additional security problem</TD></TR>
+<TR><TD>-sendmail-cf</TD><TD>we don't configure sendmail, we delete it (and replace it with postfix)</TD></TR>
+<TR><TD>-talk-server</TD><TD>we don't talk at or through the server</TD></TR>
+<TR><TD>-telnet-server</TD><TD>telnet is a security nightmare because it sends password in clear text. Use ssh instead (or, on Windows, PuTTY or Teraterm)</TD></TR>
+<TR><TD>(-wvdial)</TD><TD>only install this package if you want els-dialin or els-dialout support</TD></TR>
+<TR><TD>-ypbind</TD><TD>ypbind is only needed for YP clients, but we install a server</TD></TR>
+<TR><TD>(-ypserv)</TD><TD>to use YP with Easy Linux Server you would have to add adduser/deluser/pwchange scripts to /usr/lib/els manually</TD></TR>
+
+</TABLE>
+
+<!--#include file="bottom.inc"-->

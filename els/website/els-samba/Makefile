@@ -2,7 +2,7 @@ export ROOT = ../..
 include $(ROOT)/Makefile.inc
 
 INC = top.inc admins.inc developers.inc logos.inc bottom.inc
-DOCS = index.html install.html usage.html
+DOCS = index.html install.html
 
 
 all:: docs
@@ -10,23 +10,23 @@ all:: docs
 docs:: .links $(DOCS)
 
 clean::
-	rm -f *.mnu *.html index.shtml install.shtml $(INC) .links
+	rm -f *.mnu *.html *.shtml $(INC) .links
 
 
 
 %.html: %.shtml
 	$(ROOT)/utilities/shtml2html.pl $< >$@
 
-index.shtml: $(ROOT)/els-base/README
-	echo '<!--#set var="title" value="Easy Linux Server - els-base"-->' >$@
+index.shtml: $(ROOT)/els-samba/README
+	echo '<!--#set var="title" value="Easy Linux Server - els-samba"-->' >$@
 	echo '<!--#include file="top.inc"-->' >>$@
 	echo '<!--#include file="admins.inc"-->' >>$@
 	echo '<!--#include file="logos.inc"-->' >>$@
 	$(ROOT)/utilities/text2shtml.pl $< >>$@
 	echo '<!--#include file="bottom.inc"-->' >>$@
 
-install.shtml: $(ROOT)/els-base/INSTALL
-	echo '<!--#set var="title" value="Easy Linux Server - Install els-base"-->' >$@
+install.shtml: $(ROOT)/els-samba/INSTALL
+	echo '<!--#set var="title" value="Easy Linux Server - Install els-samba"-->' >$@
 	echo '<!--#include file="top.inc"-->' >>$@
 	echo '<!--#include file="admins.inc"-->' >>$@
 	echo '<!--#include file="logos.inc"-->' >>$@
@@ -43,4 +43,3 @@ install.shtml: $(ROOT)/els-base/INSTALL
 
 index.html:: index.shtml $(INC)
 install.html:: install.shtml $(INC)
-usage.html:: usage.shtml $(INC)

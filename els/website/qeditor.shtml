@@ -1,0 +1,22 @@
+<!--#set var="title" value="Easy Linux Server - The q editor"-->
+<!--#include file="top.inc"-->
+<!--#include file="admins.inc"-->
+<!--#include file="logos.inc"-->
+
+<H2>Rationale</H2>
+<P>
+  Red Hat Linux normally comes with <B>vi</B> as the main editor. Trial
+  and error has shown that this editor is too complicated for many people
+  coming from a windows background.
+</P><P>
+  Until we find a better editor, we use a variant of <B>joe</B>, dupped
+  <B>q</B> like Quick editor. This editor has similar keystrokes as old
+  DOS/Windows programs like WordStar, Turbo-Pascal and Q-Edit.
+</P>
+
+<H2>Keystroked</H2>
+<P>
+  to be written
+</P>
+
+<!--#include file="bottom.inc"-->
