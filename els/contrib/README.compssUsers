@@ -1,0 +1,12 @@
+compssUsers
+===========
+
+The compssUsers file is normally stored on the first installation CD
+of Mandrake in the directory /Mandrake/base. It contains the choices that
+the User sees in the graphical installer.
+
+The compssUsers file in this directory is a replacement that I'm using
+at work. It shows you how you can create your own user choice.
+
+
+See also README.compssUsers

@@ -1,0 +1,19 @@
+rpmsrate
+========
+
+Mandrake stores the set of packages that get installed in a text file.
+This text file is stored on the Mandrake 8.1 installation CD number 1,
+at /Mandrake/base/rpmsrate.
+
+The rpmsrate file in this directory is a replacement that I'm using
+at work. It shows you how you can create your own package sets, even
+ommitting all the existing ones.
+
+Normally Mandrake defines a 'importantness' between 1 and 5 for each
+RPM. However, the user interface for Mandrake 8.1 does not allow you
+to select one. So I simply used 5 everywhere. This made things simpler,
+because the installer bails out if you by mistake mentioned the same
+RPM with different importantness values.
+
+
+See also README.rpmsrate

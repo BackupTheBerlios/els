@@ -1,0 +1,37 @@
+     # --- Workstation
+
+Workstation [icon=office] [path=Workstation] [descr=Programs for a Workstation]
+	MUNDN_COMMON
+	MUNDN_WS
+
+Laptop [icon=office] [path=Workstation] [descr=Workstation plus laptop software]
+	MUNDN_COMMON
+	MUNDN_WS
+	MUNDN_LAPTOP
+
+     # --- Graphical Environment
+
+X-Windows [icon=kde] [path=Graphical Environment] [descr=Basic X-Windows stuff]
+	MUNDN_COMMON
+	MUNDN_XWIN
+
+     # --- Development
+
+Development [icon=editors] [path=Development] [descr=Stuff needed for development work]
+	MUNDN_COMMON
+        MUNDN_WS
+        MUNDN_DEVEL
+
+Documentation [icon=documentation] [path=Development] [descr=Additional documentations]
+	BOOKS
+
+     # --- Server
+
+Server [icon=networking] [path=Server] [descr=Basic M+N Server]
+	MUNDN_COMMON
+	MUNDN_SERVER
+
+SMP Server [icon=networking] [path=Server] [descr=dito, but for SMP machines]
+	MUNDN_COMMON
+	MUNDN_SMP
+	MUNDN_SERVER

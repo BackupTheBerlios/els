@@ -1,0 +1,66 @@
+MUNDN_COMMON
+  5 adjtimex afio attr bzip2 cpio ed file kbdconfig less lha fdutils
+  5 lslk lsof ltrace mailx nc pciutils psutils python rgrep rsync screen
+  5 strace symlinks tcpdump tftp tree unarj unix2dos unzip vim-common zip
+  5 mc mt-st ncftp man-pages
+  5 joe cdialog els-base els-mundn
+  5 bind-utils ethtool mtr finger iptables lynx tcp_wrappers traceroute wget
+  5 telnet-client-krb5 ftp-client-krb5 xinetd openssh-clients
+  5 binutils dev86 glibc-devel kernel-source ksymoops libncurses5-devel make patch
+  5 drakxtools-newt locales-en lrzsz minicom readline statserial XFree86-libs 
+
+MUNDN_SERVER
+  5 openssh-server jfsprogs reiserfsprogs xfsprogs raidtools slocate scsiadd
+
+MUNDN_SMP
+  5 kernel-smp
+
+MUNDN_WS
+  5 anacron cdrecord detect ldetect fbset gpm usbutils yp-tools
+  5 cups
+  5 gimp-data-extras
+
+MUNDN_LAPTOP
+  5 apm-scripts irda-utils kernel-pcmcia-cs wireless-tools
+
+MUNDN_XWIN
+  5 arts openssh-askpass
+  5 libogg0 libvorbis0 lesstif libglib1.3_13 libqt2
+  5 VMwareWorkstation
+
+MUNDN_DEVEL
+  5 alsa-lib-devel astyle autoconf automake bison byacc cdecl
+  5 console-tools-devel cproto cracklib-devel ctags cvs cvs2cl cxref
+  5 rpmtools rpm-build rpm-devel texinfo tftp-server tmake vim-enhanced
+  5 libtool expat newt
+  5 db2-devel emacs-mode-compile emacs-nox emacs-pcomplete flex gcc-c++ gdb
+  5 gettext-devel gperf indent libdetect0-devel libbzip2_1-devel
+  5 libext2fs2-devel libelf0-devel libgd1-devel libgdbm2-devel
+  5 libglib1.2-devel libgpm1-devel libltdl3
+  5 libnewt0.50-devel libopenssl0-devel libpcap0-devel libpcre0-devel
+  5 libpth14-devel libsafe libtiff3-devel libattr0-devel libutempter0-devel
+  5 libungif4-devel libxml2-devel libxslt1-devel mawk
+  5 pam-devel popt-devel python-devel libexpat1_95-devel readline-devel
+  5 XFree86-devel procps-devel pwdb-devel tcp_wrappers-devel
+  5 libacl1-devel db1-devel
+  MUNDN_XWIN
+    5 imlib
+    5 libdb3.2-devel libgmp3-devel
+    5 fam-devel emacs-X11 libaa1-devel libbmpeg1-devel liblcms1-devel
+    5 libnetpbm9-devel libgtk+1.2-devel libjpeg62-devel libmng1-devel
+    5 libpng2-devel freetype2-devel libaudiofile0-devel
+    5 libcdda0-devel libgimpprint1-devel libimlib1-devel
+    5 libogg0-devel lesstif-devel libglib1.3_13-devel libxml2-utils
+    5 Mesa-common-devel libqt2-devel PyQt-devel
+  MUNDN_WS
+    5 cdrecord-devel libcups1-devel
+
+MUNDN_XWIN
+  5 fam FlashPlayer fonts-ttf-decoratives fonts-ttf-west_european
+  5 ghostscript-module-X mkxauth mozilla XFree86 XFree86-100dpi-fonts
+  5 XFree86-75dpi-fonts XFree86-server vnc vim-X11 x3270 xterm
+
+BOOKS
+  5 bash-doc gawk-doc
+  MUNDN_DEVEL
+    5 kernel-doc
