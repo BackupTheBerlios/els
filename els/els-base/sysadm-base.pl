@@ -460,7 +460,7 @@ sub ScriptInfo
     loadfile "$_/$ScriptInfo.setup" ;
     my $Title  = '<missing>';
     my $Author = '<missing>';
-    my $Group  = 'none';
+    my @Groups = ();
     my $File   = '';
     my $output = 0;
 
@@ -468,14 +468,14 @@ sub ScriptInfo
 	next unless /^#/;
 	if    ( /^#Title\s+(.+)\n/ ) { $Title = $1; }
 	elsif ( /^#Author\s+(.+)\n/ ) { $Author = $1; }
- 	elsif ( /^#Group\s+(.+)\n/ ) { $Group = $1; }
+ 	elsif ( /^#Group\s+(.+)\n/ ) { push @Groups, $1; }
  	elsif ( /^#NeedFile\s+(.+)\n/ ) { $File = $1; }
  	elsif ( /^#DescEnd/ ) { last; }
  	elsif ( /^#Desc/ ) {
 	    $output = 1;
 	    print "Script:    $ScriptInfo.setup\n";
 	    print "Title:     $Title\n";
- 	    print "Group:     $Group\n";
+ 	    print "Group(s):  ", join(", ", @Groups), "\n" if @Groups;
  	    print "Needs:     $File\n" if $File;
 	    print "Author:    $Author\n\n";
         }
