@@ -8,6 +8,9 @@
 
 #defer_transports = smtp
 #relayhost = your.provider.goes.here
+# Or do it this if you won't do DNS lookups:
+#relayhost = [213.165.64.20]
+#disable_dns_lookups = yes
 
 
 
