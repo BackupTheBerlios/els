@@ -14,12 +14,14 @@
 # We also define PgUp/PgDn so that they walk you through the command
 # line history. This way you can much quicker recall older commands.
 #DescEnd
-#Id $Id: inputrc.setup,v 1.6 2002/02/12 09:02:24 holgerschurig Exp $
+#Id $Id: inputrc.setup,v 1.7 2002/02/12 09:46:29 holgerschurig Exp $
 
 
 loadfile '/etc/inputrc';
 unless (search 'history.search.backward') {
-    deleteall 'set bell';
+    deleteline '# Show all if ambig';
+    replace 'ambiguous on', 'ambiguous off';
+    deleteline 'set bell';
     append '';
     append '"\e[5~": history-search-backward';
     append '"\e[6~": history-search-forward';
