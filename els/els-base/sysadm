@@ -7,7 +7,11 @@ export ELS_CONF=${ELS_CONF:-/etc/els.conf}
 export ELS_TEMP=${TMP:-/var/tmp}/sysadm.$$
 export EXPERTMODE=${EXPERTMODE:-no}
 export EDITOR=${EDITOR:-vi}
-export ELS_DIALOG=${ELS_DIALOG:-"/usr/bin/dialog --cr-wrap"}
+if [ -f /etc/mandrake-release ]; then
+  export ELS_DIALOG=${ELS_DIALOG:-"/usr/bin/dialog"}
+else
+  export ELS_DIALOG=${ELS_DIALOG:-"/usr/bin/dialog --cr-wrap"}
+fi
 
 # Pity, whiptail is soooooo ugly!
 # If it were prettier, it would be nice, because the redhat console based
@@ -231,8 +235,8 @@ while [ true ]; do
 	fi
 
 	if [ ! -s $ELS_TEMP.dialog ]; then
-	    sleep 2
-	    $ELS_DIALOG --msgbox "The '$ELS_MENU' menu is empty, it will be populated when you install additional ELS modules." 7 50
+	    sleep 1
+	    $ELS_DIALOG --msgbox "The '$ELS_MENU' menu is empty, it will be populated when you install additional ELS modules." 6 54
 	    ExitMenu
 	else
 

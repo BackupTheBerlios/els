@@ -12,6 +12,9 @@ function SetSource ()
     RedHat-CD)
         SOURCE=${SOURCE-/mnt/cdrom/RedHat/RPMS}
         ;;
+    Mandrake-CD)
+        SOURCE=${SOURCE-/mnt/cdrom/Mandrake/RPMS}
+        ;;
     ZIP)
         SOURCE=${SOURCE-/mnt/zip}
         ;;
@@ -44,7 +47,7 @@ function MountDevice ()
 	modprobe ppa
 	mount /dev/zip /mnt/zip
 	;;
-    CD-ROM|RedHat-CD)
+    CD-ROM|RedHat-CD|Mandrake-CD)
         mount /mnt/cdrom >/dev/null 2>&1
 	# mount may fail if already mounted, which will harm the test at
 	# the caller. So we grep for the all mounted devices to look if
@@ -68,7 +71,7 @@ function UnmountDevice ()
     Floppy)
         umount /mnt/floppy >/dev/null 2>&1
         ;;
-    CD-ROM|RedHat-CD)
+    CD-ROM|RedHat-CD|Mandrake-CD)
         umount /mnt/cdrom >/dev/null 2>&1
         ;;
     ZIP)
@@ -152,7 +155,9 @@ case "$1" in
         Option "Filelist"    "Display list of files contained in a module"
         Option "Source"      "Select source for installation (now $INSTALLFROM)"
 
-        test "$INSTALLFROM" = "Floppy" || test "$INSTALLFROM" = "RedHat-CD" || \
+        test "$INSTALLFROM" = "Floppy" || \
+	test "$INSTALLFROM" = "RedHat-CD" || \
+	test "$INSTALLFROM" = "Mandrake-CD" || \
         Option "Path"        "For experts: source path (now $SOURCE)"
 
         Option "Test"        "Check out if an installation would work"
@@ -277,22 +282,24 @@ case "$1" in
 	# a ZIP drive or from the Internet. Depending on the source of the
 	# RPM, it is usually stored on different locations:
 	#Menu Source Default directory that is searched for RPMs
-	# Floppy    <TT>/mnt/floppy</TT>
-	# CD-ROM    <TT>/mnt/cdrom</TT>
-	# RedHat-CD <TT>/mnt/cdrom/RedHat/RPMS</TT>
-	# ZIP       <TT>/mnt/zip</TT>
-	# TempDir   <TT>/var/tmp</TT>
+	# Floppy      <TT>/mnt/floppy</TT>
+	# CD-ROM      <TT>/mnt/cdrom</TT>
+	# RedHat-CD   <TT>/mnt/cdrom/RedHat/RPMS</TT>
+	# Mandrake-CD <TT>/mnt/cdrom/Mandrake/RPMS</TT>
+	# ZIP         <TT>/mnt/zip</TT>
+	# TempDir     <TT>/var/tmp</TT>
 	#MenuEnd
 	#Item Usage
 	#Macro Menu
 	#DescEnd
 
-        $ELS_DIALOG --menu "Select source for installation of RPMs" 13 50 5 \
-                      "Floppy"    "/mnt/floppy" \
-                      "CD-ROM"    "/mnt/cdrom" \
-                      "RedHat-CD" "/mnt/cdrom/RedHat/RPMS" \
-                      "ZIP"       "/mnt/zip" \
-                      "TempDir"   "/var/tmp" 2>$ELS_TEMP
+        $ELS_DIALOG --menu "Select source for installation of RPMs" 13 50 6 \
+                      "Floppy"      "/mnt/floppy" \
+                      "CD-ROM"      "/mnt/cdrom" \
+                      "RedHat-CD"   "/mnt/cdrom/RedHat/RPMS" \
+                      "Mandrake-CD" "/mnt/cdrom/Mandrake/RPMS" \
+                      "ZIP"         "/mnt/zip" \
+                      "TempDir"     "/var/tmp" 2>$ELS_TEMP
         test $? = 0 || return
         CHOICE=`cat $ELS_TEMP`
         unset SOURCE
@@ -318,7 +325,8 @@ case "$1" in
 	#
 	#Item Visibility
 	# You can change the path only if the current
-	# <A HREF="#source">Source</A> is not set to "Floppy" or "RedHat-CD".
+	# <A HREF="#source">Source</A> is not set to "Floppy",
+        # "RedHat-CD" or "Mandrake-CD".
 	#DescEnd
 
         InputString "Enter path to RPMs"
@@ -417,13 +425,13 @@ case "$1" in
         CHOICE=`cat $ELS_TEMP`
 
 	# Confirmation two
-        Question "\nAre you SURE you want to remove module $CHOICE  ???" || return
+        Question "\nAre you SURE you want to remove module $CHOICE ???" || return
 
 	# ok, now get rid of the module
         $ELS_DIALOG --infobox "Removing $CHOICE ..." 3 60
         rpm -e $CHOICE >$ELS_TEMP 2>&1
         if [ $? = 0 ]; then
-            $ELS_DIALOG --msgbox "$CHOICE removed" 3 60
+            $ELS_DIALOG --msgbox "$CHOICE removed" 5 70
         else
             $ELS_DIALOG --title "Warning: couldn't remove module" --textbox $ELS_TEMP 23 78
         fi
