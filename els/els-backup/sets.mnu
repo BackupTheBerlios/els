@@ -30,16 +30,16 @@ case "$1" in
 	    Option "Files"    "Display which files would be in the backup"
 	    Option "Excluded" "Display which files which don't get backed up"
         else
-	    $ELS_DIALOG --msgbox "Define tape type first." 5 30
+	    $ELS_DIALOG --msgbox "Define tape type first." 5 31
 	    ExitMenu
 	fi
         ;;
 
     list)
 	#Desc
-	# This allows you to see the currently defined lists (every installation
-	# gets some pre-defined backup sets during installation of OM BACKUP).
-	# You first get a question
+	# This allows you to see the currently defined lists
+	# (every installation gets some pre-defined backup sets during
+	# installation of OM BACKUP).  You first get a question
 	#Question
 	# Do you want the verbose list with file count and sizes?
 	#
@@ -54,9 +54,10 @@ case "$1" in
 	# usr
 	# var
 	#TextBoxEnd
-	# But if you asked for the verbose list, then the backup software looks
-	# in each backup set for a list of the files and their overall size. The
-	# output might look like this:
+	# But if you asked for the verbose list, then the backup
+	# software looks in each backup set for a list
+	# of the files and their overall size. The output might look
+	# like this:
 	#TextBox
 	# The following backup sets do exist:
 	#
@@ -74,8 +75,8 @@ case "$1" in
 	# option.
 	#DescEnd
 
-	if Question "Do you want the verbose list with file count and sizes?\n\n(This might take several minutes!)"; then
-		$ELS_DIALOG --infobox "One moment ... looking for files ..." 3 40
+	if Question "Do you want a list with file counts and sizes?\n\n(This might take several minutes!)"; then
+		$ELS_DIALOG --infobox "One moment ... looking for files ..." 3 41
 		nice -1 sysadm-backup.pl --verbose --sets >$ELS_TEMP
 	else
 		sysadm-backup.pl --sets >$ELS_TEMP
@@ -101,7 +102,7 @@ case "$1" in
 	# Then you can enter the starting path of this backup set:
 	#Input
 	# Path that should be backed up, e.g.
-	# /usr/samba
+	# /var/samba
 	#InputEnd
 	# That's all, your backup set has been created. Of course, you could use
 	# <A HREF="#modify">Modify</A> for some fine tunings ...
@@ -112,11 +113,11 @@ case "$1" in
 	export SETNAME="$CHOICE"
 
 	if [ -f "/etc/backup.d/$SETNAME.set" ]; then
-	    $ELS_DIALOG --msgbox "Backup set \"$NAME\" already exist." 5 32
+	    $ELS_DIALOG --msgbox "Backup set \"$NAME\" already exist." 5 33
 	    return
 	fi
 
-	InputString "Path that should be backed up, e.g.\n/usr/samba"
+	InputString "Path that should be backed up, e.g.\n/var/samba"
 	test -z "$CHOICE" && return
 	export SETPATH="$CHOICE"
 
@@ -131,7 +132,7 @@ case "$1" in
 	    echo "# does tells what this line is for:"
 	    echo "#"
 	    echo "#   #             comment"
-	    echo "#   /usr/samba    slashes define paths to be backed up"
+	    echo "#   /var/samba    slashes define paths to be backed up"
 	    echo "#   -*.bak        minus denote files that should not be backed up"
 	    echo "#"
 	    echo
@@ -193,11 +194,11 @@ case "$1" in
 	# # does tells what this line is for:
 	# #
 	# #   #	          comment
-	# #   /usr/samba    slashes define paths to be backed up
+	# #   /var/samba    slashes define paths to be backed up
 	# #   -*.bak        minus denote files that should not be backed up
 	# #
 	# 
-	# /usr/samba/gra
+	# /var/samba/gra
 	# -*.jpg
 	#EditEnd
 	#Macro Editor
@@ -240,7 +241,7 @@ case "$1" in
 
 	SelectSet "to list"
         test -z "$CHOICE" && return
-	$ELS_DIALOG --infobox "One moment ..." 3 18
+	$ELS_DIALOG --infobox "One moment ..." 3 19
 	sysadm-backup.pl --verbose --files "$CHOICE" >$ELS_TEMP
 	$ELS_DIALOG --textbox $ELS_TEMP 23 76
 	;;
@@ -272,7 +273,7 @@ case "$1" in
 
 	SelectSet "to list"
         test -z "$CHOICE" && return
-	$ELS_DIALOG --infobox "One moment ..." 3 18
+	$ELS_DIALOG --infobox "One moment ..." 3 19
 	sysadm-backup.pl --verbose --excluded "$CHOICE" >$ELS_TEMP
 	$ELS_DIALOG --textbox $ELS_TEMP 23 76
 	;;
