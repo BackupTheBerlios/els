@@ -12,7 +12,7 @@
 # low (less services = less things that can break) and makes sure that
 # nothing can suddenly change the setup.
 #DescEnd
-#Id $Id: unneededdaemons.setup,v 1.7 2002/02/12 08:38:30 holgerschurig Exp $
+#Id $Id: unneededdaemons.setup,v 1.8 2002/02/15 10:16:41 holgerschurig Exp $
 
 
 open CHKCONFIG, "chkconfig --list|";
@@ -27,8 +27,19 @@ foreach (@lines) {
       system 'chkconfig --del harddrake >/dev/null 2>&1';
       logit "/etc/init.d/harddrake: autostart disabled\n";
   }
+  # Server's run 24x7, they don't need anacron
+  if ($server  && /^anacron.*on/)    {
+      system 'chkconfig --del anacron >/dev/null 2>&1';
+      logit "/etc/init.d/anacron: autostart disabled\n";
+  }
+  # Server's don't run on battery
+  if ($server  && /^apmd.*on/)    {
+      system 'chkconfig --del apmd >/dev/null 2>&1';
+      logit "/etc/init.d/apmd: autostart disabled\n";
+  }
+  # Server's don't run X-Windows
   if ($server  && /^xfs.*on/)    {
-      system 'chkconfig --xfs gpm >/dev/null 2>&1';
+      system 'chkconfig --del xfs >/dev/null 2>&1';
       logit "/etc/init.d/xfs: autostart disabled\n";
   }
 }
