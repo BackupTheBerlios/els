@@ -1,12 +1,15 @@
 #Title Detect tape drive
-#Author Jonathan Marsden
-#Mandatory
+#Author Jonathan Marsden, Holger Schurig
+#Group els-backup
 #Desc
 # This script detects the SCSI tape name, create a device link and
 # enters this info into /etc/els.conf.
 #DescEnd
-#Id $Id: detecttape.setup,v 1.1 2001/11/26 16:52:01 holgerschurig Exp $
+#Id $Id: detecttape.setup,v 1.2 2001/11/30 15:13:11 holgerschurig Exp $
 
+
+# Load SCSI subsystem if necessary
+system('/sbin/modprobe', 'scsi_hostadapter') unless -d '/proc/scsi';
 
 loadfile '/etc/els.conf';
 if (getopt('TAPE=') eq "\"/dev/null\"") {
@@ -19,5 +22,6 @@ if (getopt('TAPE=') eq "\"/dev/null\"") {
 	logit "/etc/els.conf: set TAPE to /dev/nst0\n";
     }
 }
+
 
 1;
