@@ -135,7 +135,7 @@ case "$1" in
         # This menu option is only visible if you selected a different user but 'root'.
         #DescEnd
  
-        cls
+        clear
         if [ "$SHELLSTATE" = "enabled" ]; then
             chsh -s /bin/false "$LOGIN"
         else
@@ -143,4 +143,5 @@ case "$1" in
         fi
         sleep 1
         ;;
+
 esac
