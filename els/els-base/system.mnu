@@ -116,7 +116,7 @@ case "$1" in
         DELAY="now"
         Question "Delay shutdown ?\n\n(yes=shutdown in 2 minutes, no=shutdown now)" && DELAY="+2"
         if [ "$DELAY" = "+2" ]; then
-            cls
+            clear
             echo "-----------------------------------------------------------"
             echo "Note: to cancel the shutdown for now, just press Ctrl-C ..."
             echo "-----------------------------------------------------------"

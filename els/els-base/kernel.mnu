@@ -40,7 +40,7 @@ case "$1" in
 
         ExpertWarning || return
         cd /usr/src/linux
-        cls
+        clear
 
         # set the kernel parameters
         make menuconfig
@@ -60,7 +60,7 @@ case "$1" in
         $ELS_DIALOG --infobox "Compiling a new kernel will take some minutes ..." 3 60
         sleep 3
         cd /usr/src/linux
-        cls
+        clear
 
         # remove old log if one existed
         rm .compile_log 2>/dev/null
@@ -108,7 +108,7 @@ case "$1" in
 
         ExpertWarning || return
         cd /usr/src/linux
-        cls
+        clear
 
 	# try to load loop driver early, BEFORE we install next modules
 	test -f /etc/sysconfig/rc.modules && modprobe loop >/dev/null 2>&1
