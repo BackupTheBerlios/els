@@ -1,0 +1,44 @@
+#Title Create ini file for Midnight Commander (for user 'root')
+#Author Holger Schurig
+#Desc
+# This creates a simply configuration file for the user root.
+# 
+# If a config file already exists, nothing will be changed, created
+# or overwritten. Isn't it nice to be on the safe side?  :-)
+#DescEnd
+
+unless (-f '/root/.mc/ini') {
+    mkdir '/root/.mc', 0755;
+    open FILE, '>/root/.mc/ini';
+    print FILE <<EOF;
+[Layout]
+permission_mode=0
+filetype_mode=0
+[Midnight-Commander]
+show_backups=1
+show_dot_files=1
+auto_save_setup=1
+use_internal_edit=0
+eight_bit_clean=1
+full_eight_bits=0
+use_8th_bit_as_meta=0
+wrap_mode=0
+have_fast_cpu=1
+num_history_items_recorded=20
+tar_gzipped_memlimit=2097152
+[New Left Panel]
+list_mode=user
+user_format=half type,name,|,size
+user_status3=name
+[New Right Panel]
+list_mode=user
+user_format=half type,name,|,size
+user_status3=name
+EOF
+    close FILE;
+    open FILE, '>/root/.mc/hotlist';
+    close FILE;
+    logit "/root/.mc/ini: initial configuration for mc\n";
+}
+
+1;

@@ -1,0 +1,22 @@
+#Title Dircolors
+#Author Holger Schurig
+#Desc
+# Patch /etc/DIR_COLORS because some colors are nearly unvisible
+#DescEnd
+
+loadfile '/etc/DIR_COLORS';
+if (search 'EXEC 01;32' || $force) {
+    comment 'LINK';
+    comment 'FIFO';
+    comment 'SOCK';
+    comment 'BLK';
+    comment 'CHR';
+    comment 'ORPHAN';
+    comment 'MISSING';
+    replace 'EXEC 01;32', 'EXEC 01;31';
+    comment '\.';
+    writefile;
+    logit "/etc/DIR_COLORS: force readable output\n";
+}
+
+1;

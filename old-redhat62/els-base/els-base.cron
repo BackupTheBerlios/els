@@ -1,0 +1,6 @@
+#!/bin/bash
+
+. /usr/lib/process-watcher
+
+TestProcess inetd inetd
+TestProcess syslogd syslog

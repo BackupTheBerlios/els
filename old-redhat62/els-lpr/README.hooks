@@ -1,0 +1,39 @@
+README.om-lpr
+
+by wnp@doulos.at, 1998-11-13
+
+
+I added hooks into /usr/sbin/sysadm-printer.pl and /usr/lib/sysadm/printfilter
+to support sending setup sequences to a printer both before and after
+a job.
+
+This arose from a situation at the Central European Area office where
+they had a Brother HL-8 laser printer which has both HP-LJ and Epson
+emulation modes.
+
+My modifications add the Printer Name to each printer's general.cfg
+file, so that "printfilter" know this name and can call an
+appropriately called script in /usr/sbin. This script should accept
+both a "pre" and "post" parameter, and should then send the
+appropriate sequences Here is a sample:
+
+_______________
+#!/bin/sh
+
+# Use octal escapes (i.e. \007 for ^G, \033 for ESC, etc) for control codes
+PRESEQUENCE="whatever is required to setup the printer"
+POSTSEQUENCE="whatever is required to reset the printer"
+
+case "$1" in
+pre)	/bin/echo -n "$PRESEQENCE" ;;
+post)	/bin/echo -n "$POSTSEQUENCE" ;;
+*)		/bin/true ;;
+esac
+exit 0
+_________________
+
+
+Since the menu options for Printer Setup are already numerous enough,
+and since this sort of hack is most likely attempted by techies
+anyway, this feature cannot be configured via the sysadm menu, but
+simply by creating and adapting the appropriate script in /usr/sbin.

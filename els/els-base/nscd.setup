@@ -1,0 +1,33 @@
+#Title Enable nscd
+#Author Holger Schurig
+#NeedFile /etc/init.d/nscd
+#Desc
+# Red Hat 7.2 erraneously doesn't install nscd correctly, this script fixes this.
+#DescEnd
+
+
+if (-f '/etc/init.d/nscd') {
+  loadfile '/etc/init.d/nscd';
+  if (searchline 'chkconfig: -') {
+    replace 'chkconfig: -', 'chkconfig: 345';
+    writefile;
+  }
+
+  my $found_nscd = 0;
+  my $nscd_on = 0;
+
+  open CHKCONFIG, "chkconfig --list|";
+  my @lines = <CHKCONFIG>;
+  close CHKCONFIG;
+  foreach (@lines) {
+    $found_nscd = 1 if /^nscd/;
+    $nscd_on = 1 if /^nscd.*on/;
+  }
+
+  if ($found_nscd && !$nscd_on) {
+    system 'chkconfig --add nscd >/dev/null 2>&1';
+    logit "/etc/init.d/nscd: autostart enabled\n";
+  }
+}
+
+1;

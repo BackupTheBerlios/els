@@ -1,0 +1,176 @@
+function SelectPrinter ()
+{
+    unset CHOICE
+    echo -n "dialog --menu \"$1\" 17 73 9 " >$TMPFILE.dialog
+    if ! /usr/sbin/sysadm-printer.pl --listprinters >>$TMPFILE.dialog ; then
+        dialog --msgbox "There are no printers defined" 5 33
+        return
+    fi
+    { . $TMPFILE.dialog } 2>$TMPFILE
+    CHOICE=`cat $TMPFILE`
+}
+
+function DelPrinter ()
+{
+    {
+        echo "Aborting any print jobs ..."
+        /usr/sbin/lpc abort $1
+        echo -e "\nShutting down printer ..."
+        /usr/sbin/lpc down $1
+        echo -e "\nDeleting any orphan files ..."
+        /usr/sbin/lpc clean $1
+        echo -e "\nDeleting the queue directory ..."
+        /usr/sbin/sysadm-printer.pl --delprinter=$1
+        # take care for SAMBA
+        if [ -d /etc/samba.d ]; then
+            rm -rf /etc/samba.d/$1.smb
+            /usr/sbin/sysadm-samba.pl --updateconfig
+        fi
+        rm -rf /var/spool/lpd/$1
+        test $? = 0 && echo -e "\nPrinter \"$1\" removed"
+    } >>$TMPFILE 2>&1
+}
+
+
+
+case "$1" in
+
+    Query)
+        Title "Hardware" "Printer" "Configure local and remote printers"
+
+        #Desc
+        # Some options here are static and others are dynmic. Depending on
+        # your specific installation, some of the following options might
+        # be missing. Or you could have even more options:
+        #DescEnd
+
+        Option "List"    "List defined printers"
+        Option "Add"     "Add a new printer"
+        Option "Modify"  "Modify a printer"
+        Option "Remove"  "Remove a printer"
+        test -z "$FROMSPOOLER" && \
+        Option "Printjobs" "Maintain printer spooler and print jobs"
+        ;;
+
+    list)
+        #Desc
+        # This will give a quick list of all the printers currently known:
+        #Textbox
+        # Printer          Port    Type                                    Aliases
+        # ------------------------------------------------------------------------
+        # kyocera          REMOTE  WINDOWS printer
+        # kyocera-1        REMOTE  UNIX LaserJet4 600x600 dpi with filter
+        # kyocera-2        REMOTE  UNIX LaserJet4 600x600 dpi with filter,
+        #                          2 pages printed on one sheet
+        #TextboxEnd
+        # As you can see, there are currently six printers defined.
+        # "<TT>kyocera</TT>" is a windows printer. This printer will be
+	# announced to Windows workstations using SAMBA. A windows printer
+	# does not change the data sent to the printer in any way, it is
+	# just a transparent channel.
+        #
+        # "<TT>kyocera-1</TT>" is a printer to be used from Unix. It has
+	# to know your printer (LaserJet4) in this case in order to format
+	# man pages, postscript documents and such. It prints one page per
+        # physical sheet of paper, so the trailing "<TT>-1</TT>". The next
+	# printer prints 2 pages per sheet of paper, so he has a trailing
+	# "<TT>-2</TT>". Note that you must supply these numbers by yourself
+	# in order to distinguish the various setups better, this is not
+	# done automatically.
+        #DescEnd
+
+        /usr/sbin/sysadm-printer.pl --printers >$TMPFILE
+        dialog --textbox $TMPFILE 23 76
+        ;;
+
+    add)
+        #Desc
+        # This is used to define a new printer.
+	#
+	#Item Usage
+	# You are asked for the name of the printer:
+	#Input
+	# Enter name of printer, e.g. "ls", "kyocera", "epson850"
+	#InputEnd
+	# After you entered the name, you find yourself in the
+	# <A HREF="printermod.html">Printer setup</A> menu.
+	#
+	#Item Background
+	# There are two main types how you can use a printer. It helps and
+	# makes your system more transparent if you reflect this in the
+	# printer name:
+	#Table Type Usage and naming
+	# Windows&nbsp;printer  This are printers to be used from Windows workstations. Give these printers normal names, e.g. "<TT>laserjet4</TT>".
+	# Unix&nbsp;printer     This are printers to be used from Unix itself. Unlike Windows, Unix programs don't format the output, so the formatting is done by Unix itself. Most people use this to print documentations. The output can be compressed, e.g. two pages onto one sheet of paper. Add the number of pages after the printer name, e.g. "<TT>laserjet4-1</TT>" or "<TT>laserjet4-2</TT>". You see immediately that the first printer prints out uncompressed, the second one compressed.
+	#TableEnd
+	# See also the description of "<A HREF="#list">List</A>".
+        #DescEnd
+
+        InputString "Enter name of printer, e.g. \"ls\", \"kyocera\", \"epson850\""
+        test -z "$CHOICE" && return
+        export PR_NAME=`echo $CHOICE | tr A-Z a-z`
+        $0 printermod
+        ;;
+
+    modify)
+        #Desc
+        # This is used to modify the parameters of an existing printer.
+	#
+	#Item Usage
+	# After selection you are presented with a list of all current
+	# printers:
+	#Menu
+	# kyocera   LOCAL
+	# kyocera-1 LOCAL Laserjet4 600x600dpi
+	# kyocera-2 LOCAL Laserjet4 600x600dpi
+	#MenuEnd
+	#Macro Menu
+	# You will find yourself in the <A HREF="printermod.html">Printer
+	# setup</A> menu. You can also change your mind.
+	#Macro Cancel
+        #DescEnd
+
+        SelectPrinter "Which printer do you want to modify?"
+        test -z "$CHOICE" && return
+        /usr/sbin/sysadm-printer.pl --getprinter=$CHOICE >$TMPFILE
+        . $TMPFILE
+        $0 printermod
+        ;;
+
+    remove)
+        #Desc
+        # This is used to delete a printer entry.
+	#
+	#Item Usage
+	# After selection you are presented with a list of all current
+	# printers:
+	#Menu
+	# kyocera   LOCAL
+	# kyocera-1 LOCAL Laserjet4 600x600dpi
+	# kyocera-2 LOCAL Laserjet4 600x600dpi
+	#MenuEnd
+	#Macro Menu
+	# The selected printer will be deleted.
+	#Macro Cancel
+	# Nothing will be changed.
+        #DescEnd
+
+        SelectPrinter "Which printer do you want to remove?"
+        test -z "$CHOICE" && return
+
+        rm -f $TMPFILE
+        DelPrinter $CHOICE
+        test -s $TMPFILE && dialog --textbox $TMPFILE 15 60
+        ;;
+
+    printjobs)
+        #Desc
+        # See <A HREF="printjobs.html">sysadm -&gt; Hardware -&gt;
+	# Printjobs</A>.
+        #DescEnd
+
+        export FROMPRINTER=YES
+        $0 printjobs
+        ;;
+
+esac

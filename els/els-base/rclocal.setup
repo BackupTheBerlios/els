@@ -1,0 +1,43 @@
+#Title Allow drop-in scripts in /etc/rc.d
+#Author Holger Schurig
+#Desc
+# rc.local is executed automatically after the normal system boot process.
+# We're adding code to it that allows executable files named rc.* to be
+# executed automatically. So if you need special SCSI setup, just
+# place a rc.scsi file in this directory and it gets automatically executed.
+#DescEnd
+
+loadfile '/etc/rc.d/rc.local';
+if (!search('rc.serial') || $force) {
+    deleteall;
+    append '#!/bin/sh';
+    append '#';
+    append '# This script will be executed *after* all the other init scripts.';
+    append '# You can put your own initialization stuff in here if you dont';
+    append '# want to do the full Sys V style init stuff.';
+    append '#!/bin/sh';
+    append '# However, it might be wiser to just place shell scripts named';
+    append '# rc.<whatever> into /etc/rc.d instead. They will be sourced';
+    append '# automatically at the next boot. This allows any RPM to just';
+    append '# drop their init stuff and get it executed --- however, there';
+    append '# is no particular order.';
+    append '';
+    append 'touch /var/lock/subsys/local';
+    append '';
+    append 'cd /etc/rc.d';
+    append 'for i in rc.*; do';
+    append '    if [ $i != rc.local -a $i != rc.serial -a $i != rc.sysinit \\';
+    append '        -a $i = ${i%.sample} \\';
+    append '        -a $i = ${i%.rpmsave} -a $i = ${i%.rpmnew} -a $i = ${i%.rpmorig} \\';
+    append '        -a $i = ${i%\\~} ]; then';
+    append '        test -x $i || continue';
+    append '        echo running $i';
+    append '        . $i';
+    append '    fi';
+    append 'done';
+
+    writefile;
+    logit "/etc/rc.d/rc.local: allow local startup scripts\n";
+}
+
+1;

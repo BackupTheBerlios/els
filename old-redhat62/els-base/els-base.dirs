@@ -1,0 +1,36 @@
+#
+# This file defines "hot" directories for the acd command. "cd" is defined
+# as a shell function in /etc/profile.d/els-base.sh.
+#
+# Note that each user can have his own, private diraliases in ~/.diralias
+#
+
+# often needed for module developers:
+local specs=/usr/src/redhat/SPECS
+local build=/usr/src/redhat/BUILD
+local rpms=/usr/src/redhat/RPMS/i386
+local srpms=/usr/src/redhat/SRPMS
+local sources=/usr/src/redhat/SOURCES
+local sysadm=/usr/lib/sysadm
+
+# often needed for developers
+local linux=/usr/src/linux
+local src=/usr/src
+
+# several other handy directories
+local bin=/usr/bin
+local doc=/usr/doc
+local etc=/etc
+local faq=/usr/doc/FAQ
+local home=/usr/home
+local howto=/usr/doc/HOWTO
+local info=/usr/info
+local lib=/usr/lib
+local log=/var/log
+local man=/usr/man
+local perl5=/usr/lib/perl5
+local sbin=/usr/sbin
+local sc=/etc/sysconfig
+local scn=/etc/sysconfig/network-scripts
+local tmp=/var/tmp
+local usr=/usr

@@ -1,0 +1,158 @@
+function SelectUser ()
+{
+    echo -n "dialog --menu \"Select user $1\" 23 65 15 " >$TMPFILE.dialog
+    sysadm-user.pl --listusers $2 $3 >>$TMPFILE.dialog
+    { . $TMPFILE.dialog } 2>$TMPFILE
+    CHOICE=`cat $TMPFILE`
+}
+
+
+case "$1" in
+
+    Query)
+        Title "Main" "Users" "User maintenance"
+        Option "List"      "List defined users"
+        Option "Add"       "Add a user"
+        Option "Delete"    "Delete a user"
+        Option "Modify"    "Modify a user"
+
+        #include Users sysadm -> Users
+        perl -nw - $MENULIB/*.mnu 2>/dev/null >>$TMPFILE.dialog <<-"EOF"
+	if ( /^\s+Title\s+"Users"\s+"(.*)"\s+"(.*)"/ ) {
+	    print "\"$1\" \"$2\" ";
+	}
+	EOF
+        ;;
+
+
+        #Desc
+        # This allows you to specify the users that have access to this
+        # system. Many other modules get their information from this
+        # module: els-samba e.g. uses this to determine which user has
+        # access, els-email uses this to find to which local users
+        # e-mail can be delivered and so on.
+        #DescEnd
+
+
+    list)
+        #Desc
+        # This will display all currently defined users. Here is an excerpt
+        # of the display:
+        #Textbox
+        #  Id Login name   Real name              Member of groups ...
+        # ---------------------------------------------------------------------
+        # 103 andrea       Andrea Nicholas        users
+        # 121 charlotte    Charlotte Braeker      users
+        # 128 (daniel)     Daniel Rieker          (this account is disabled)
+	# ...
+        #TextboxEnd
+        #DescEnd
+
+        sysadm-user.pl --users >$TMPFILE
+        dialog --textbox $TMPFILE 23 76
+        ;;
+
+    add)
+        #Desc
+        # This let you add a new user. First, you have to enter the login
+        # name. This name is usually written totally in lowercase. It must
+        # not contain any special characters ("/$%#) or spaces.
+        #Input donald
+	# Enter the login name (one word!) using lower case, e.g.<BR>donald
+        #InputEnd
+        # After this prompt, you are asked to enter the full name. Please
+        # use proper capitalisation as well as spaces here:
+        #Input Donald Duck
+	# Enter the real name of the user. Use proper capitalisation, e.g.<BR>Donald Duck
+        #InputEnd
+	# After a press at [Enter], the user account is created with
+	# default properties. You are automatically put into the
+	# "<A HREF="usermod.html">User modifification menu</A>" to allow
+	# you modifications (e.g. set a password).
+        #DescEnd
+
+        # ask questions and check for easy errors
+        InputString "Enter the login name (one word!) using lower case, e.g.\ndonald" || return
+        test -z "$CHOICE" && return
+        export LOGIN="$CHOICE"
+        InputString "Enter real name of user. Use proper capitalisation, e.g.\nDonald Duck" || return;
+        test -z "$CHOICE" && return
+
+        # ask a program to actually enter the user
+        /usr/sbin/useradd -c "$CHOICE" $LOGIN >$TMPFILE 2>&1 || {
+            # bail out if there was an error
+            dialog --textbox $TMPFILE 10 60
+            return
+        }
+
+	# call programs supplied by other modules
+	cls
+	for i in $MENULIB/adduser.*; do $i $LOGIN "$CHOICE" interactive; done
+	sleep 1
+
+	# call the "Modify User" sub-menu
+        $0 usermod
+        ;;
+
+    delete)
+	#Desc
+	# Use this menu to delete a user.
+	#
+	# The user will be deleted, his home directory with all
+	# subdirectories and also all unread e-mail.
+	#
+	#Item Usage
+	# Select the user to be deleted from the list:
+	#Menu Select user to delete
+	# donald   Donald Duck
+	# root     root
+	#MenuEnd
+	#Macro Menu
+	#Macro Cancel
+	#DescEnd
+
+        SelectUser "to delete"
+        test -z "$CHOICE" && return
+	test "$CHOICE" = "root" && {
+            dialog --msgbox "Hey, it's silly to delete the root account. Don't do that!" 6 47
+            return
+	}
+        /usr/sbin/userdel -r $CHOICE 2>$TMPFILE || {
+            dialog --textbox $TMPFILE 10 60
+            return
+        }
+
+	# call programs supplied by other modules
+	cls
+	for i in $MENULIB/deluser.*; do $i $CHOICE interactive; done
+	sleep 1
+	dialog --msgbox "User '$CHOICE' removed" 5 50
+        ;;
+
+    modify)
+	#Desc
+	# Use this menu to modify the properties of a user.
+	#
+	#Item Usage
+	# Select the user to be modified from the list:
+	#Menu Select user to modify
+	# donald   Donald Duck
+	# root     root
+	#MenuEnd
+	# After you pressed [Enter], the see the
+	# "<A HREF="usermod.html">User modifification menu</A>" and
+	# can modify the user.
+	#DescEnd
+
+        SelectUser "to modify"
+        test -z "$CHOICE" && return
+
+        export LOGIN=$CHOICE
+        $0 usermod
+        ;;
+
+    *)
+        $0 $1
+        ;;
+
+esac

@@ -1,0 +1,43 @@
+case "$1" in
+
+    Query)
+        Title "" "Expert" "For the experts only :-)"
+
+	. /etc/sysconfig/rc.sysadm
+	PROCESS_WATCHER=${PROCESS_WATCHER:-no}
+	EXPERTMODE=${EXPERTMODE:-no}
+
+	Option "ExpertMode"     "Toggle expert mode     (now $EXPERTMODE)"
+	Option "ProcessWatcher" "Toggle process watcher (now $PROCESS_WATCHER)" 
+        ;;
+
+     expertmode)
+	#Desc
+	# Toggles the expert mode. In expert mode, you
+	# <UL>
+	# <LI>won't be warned when going into the "For experts only:" menus
+	# <LI>don't get all the time help on how to use the editor
+	# </UL>
+	#DescEnd
+
+	if [ "$EXPERTMODE" = "no" ]; then
+	    SetOpt "EXPERTMODE" "yes"
+	else
+	    SetOpt "EXPERTMODE" "no"
+	fi
+	;;
+
+     processwatcher)
+	#Desc
+	# Toggles the process watcher that checks every hour if all the main
+	# system processes are still running.
+	#DescEnd
+
+	if [ "$PROCESS_WATCHER" = "no" ]; then
+	    SetOpt "PROCESS_WATCHER" "yes"
+	else
+	    SetOpt "PROCESS_WATCHER" "no"
+	fi
+	;;
+
+esac

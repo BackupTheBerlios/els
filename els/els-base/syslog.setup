@@ -1,0 +1,21 @@
+#Title Log output on console 12
+#Author Holger Schurig
+#Desc
+# 
+#
+# /etc/syslog.conf file defines which error messages, notification or even
+# debug messages should end up in what file. Here I define that console 12
+# (switch to it with Alt-F12) get all notifications or worse.
+#DescEnd
+
+loadfile '/etc/syslog.conf';
+unless (search('tty12')) {
+    append '';
+    append '# log almost everything on console 12';
+    append '*.notice						/dev/tty12';
+    writefile;
+    system 'killall -HUP syslogd';
+    logit "/etc/syslog.conf: output to console 12\n";
+}
+
+1;

@@ -1,0 +1,15 @@
+#Title sysctl
+#Author Holger Schurig
+#Desc
+# Patch /etc/sysctl.conf
+#DescEnd
+
+loadfile '/etc/sysctl.conf';
+if ((getopt('net.ipv4.tcp_timestamps = ') ne '0') || $force) {
+    appendonce '# Disable TCP timestamps';
+    setopt 'net.ipv4.tcp_timestamps = ', '0';
+    writefile;
+    logit "/etc/sysctl.conf: disabled tcp timestamps\n";
+}
+
+1;

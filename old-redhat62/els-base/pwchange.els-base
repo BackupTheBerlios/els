@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Enable the login, in case it was previously disabled:
+/usr/sbin/usermod -U "$1"
+
+perl - "$1" "$2" <<"EOF"
+# Author: Jonathan Marsden <jonathan@xc.org>
+
+use strict;
+use Authen::PAM;
+my $pamh;
+my $retval = pam_start("passwd", $ARGV[0], \&pam_conv, $pamh);
+$retval = pam_chauthtok($pamh);
+pam_end($pamh);
+
+sub pam_conv {
+    my @res;
+    my $errors = 0;
+    $\ = "";
+    while ( @_ ) {
+        my $code = shift;
+        my $msg = shift;
+        my $ans = "";
+        if ($code == &PAM_PROMPT_ECHO_OFF ) {
+            $ans = $ARGV[1];	# password given as 2nd command line arg!
+        }
+        elsif ($code == &PAM_ERROR_MSG ) {
+	    $errors++ ;
+	    print STDERR "$msg\n";
+	}
+        push @res, ($errors == 0) ? &PAM_SUCCESS : &PAM_ABORT;
+        push @res, $ans;
+    }
+    push @res, ($errors == 0) ? &PAM_SUCCESS : &PAM_ABORT;
+    return @res;
+}
+EOF

@@ -1,0 +1,180 @@
+function SelectGroup ()
+{
+    echo -n "dialog --menu \"Select group $1\" 23 55 15 " >$TMPFILE.dialog
+    if sysadm-user.pl --listgroups $2 $3 >>$TMPFILE.dialog 2>$TMPFILE; then
+        { . $TMPFILE.dialog } 2>$TMPFILE
+        CHOICE=`cat $TMPFILE`
+    else
+        dialog --textbox $TMPFILE 5 50
+        unset CHOICE
+    fi
+}
+
+
+function SelectUser ()
+{
+    echo -n "dialog --menu \"Select user $1\" 23 65 15 " >$TMPFILE.dialog
+    sysadm-user.pl --listusers $2 $3 >>$TMPFILE.dialog
+    { . $TMPFILE.dialog } 2>$TMPFILE
+    CHOICE=`cat $TMPFILE`
+}
+
+
+
+
+case "$1" in
+
+    Query)
+        Title "Users" "Groups" "Group maintenance"
+        Option "List"    "List defined groups"
+        Option "Add"     "Add a group"
+        Option "Delete"  "Delete a group"
+	Option "Members" "Modify members of a group"
+        ;;
+
+	#Desc
+	# Each user has one private group as his primary group (see
+	# "<A HREF="../upg.htm">User Private Groups</A>" for more
+	# information). Additionally, a user can be in up to 16 secondary
+	# groups, e.g. to control access to data directories.
+	#DescEnd
+
+
+    list)
+        #Desc
+        # Shows you all current groups as well as the members in the group.
+	#TextBox
+	#  Id Group name   Users
+	# 115 finance      jutta,oliver,silke,chris,guenther
+	# 102 leaders      fritz,immanuel
+	# 104 mailroom     sylvia
+	# 111 prinfo       holger,detlef
+	# ...
+	#TextBoxEnd
+	#Item Usage
+	#Macro Textbox
+        #DescEnd
+
+        sysadm-user.pl --groups >$TMPFILE
+        dialog --textbox $TMPFILE 23 76
+        ;;
+
+    add)
+        #Desc
+        # This creates a new, empty group.
+	#
+	#Item Usage
+	# You see a question asking you for the name of the new group:
+	#Input
+	# Enter the name of the new group, e.g.<BR>finance
+	#InputEnd
+	# Use only letters. No digits, no special characters, no spaces!
+	#
+	#Macro Cancel
+        #DescEnd
+
+        # ask questions and check for easy errors
+        InputString "Enter group name. Please use one word, lowercase only, e.g.\nfinance" || return
+        test -z "$CHOICE" && return
+
+        # ask a perl program to actually create the group directory
+        /usr/sbin/groupadd "$CHOICE" >$TMPFILE 2>&1 || {
+            # bail out if there was an error
+            dialog --textbox $TMPFILE 10 60
+            return
+        }
+
+	# check for samba directory
+	if [ -d /usr/samba/dat -a ! -d /usr/samba/dat/$CHOICE ]; then
+	    Question "Should I create a directory I:\\$CHOICE for you?" && {
+		test -d /usr/samba/dat/$CHOICE || mkdir /usr/samba/dat/$CHOICE
+		chgrp $CHOICE /usr/samba/dat/$CHOICE
+		chmod g+rwx,o-rwx /usr/samba/dat/$CHOICE
+		chmod g+s /usr/samba/dat/$CHOICE
+	    }
+	fi
+        ;;
+
+    delete)
+        #Desc
+        # Use this option to delete a group.
+	#
+	#Item Usage
+	# You see a list of all deleteable groups (not every group is
+	# deletable, some are necessary for internal work):
+	#Menu Select group to remove
+	# finance   normal group
+	# personell normal group
+	# mailroom  normal group
+	# campaigns normal group
+	#MenuEnd
+	#Macro Menu
+	#Macro Cancel
+        #DescEnd
+
+	if [ "$EXPERTMODE" = "yes" ] ; then
+	    SelectGroup "to delete" --all
+	else
+	    SelectGroup "to delete"
+	fi
+        test -z "$CHOICE" && return
+        /usr/sbin/groupdel "$CHOICE" 2>$TMPFILE || {
+            dialog --textbox $TMPFILE 10 60
+            return
+        }
+
+	# Test for Samba
+	if [ "$CHOICE" != "users" -a -d /usr/samba/dat/$CHOICE ]; then
+	    Question "Should I delete the directory I:\\$CHOICE for you?" && {
+		dialog --infobox "Please wait ... deleting ..." 3 32
+		rm -rf /usr/samba/dat/$CHOICE
+	    }
+	fi
+	dialog --msgbox "Group '$CHOICE' deleted." 5 40
+        ;;
+
+    members)
+	#Desc
+	# This option allows you to specify which users belong to a group.
+	#
+	#Item Usage
+	# Select first the group you want to modify:
+	#
+	#Menu Select group to modify
+	# finance   normal group
+	# personell normal group
+	# mailroom  normal group
+	# campaigns normal group
+	#MenuEnd
+	#Macro Menu
+	#Macro Cancel
+	#
+	# Then mark each user that should be member of your selected group:
+	#
+	#CheckList Select users for group 'finance'
+	# [X] donald    Donald Duck
+	# [X] holger    Holger Schurig
+	# [ ] root      internal user
+	#CheckListEnd
+	#Macro CheckList
+	#Macro Cancel
+	#
+	# Now 'donald' and 'holger', but no other users, are members of
+	# of your group 'finance' and have access to
+	# <TT>/usr/samba/dat/finance</TT> respective to <TT>I:\FINANCE</TT>.
+	#DescEnd
+
+	if [ "$EXPERTMODE" = "yes" ] ; then
+	    SelectGroup "to modify" --withupg --all
+	else
+	    SelectGroup "to modify" --withupg
+	fi
+        test -z "$CHOICE" && return
+
+	sysadm-user.pl --usersintogroup $CHOICE 2>$TMPFILE || {
+            dialog --textbox $TMPFILE 10 60
+            return
+	}
+	;;
+
+esac

@@ -1,0 +1,13 @@
+####################################################################
+#
+# This file defines which domains may reach the protected e-mail
+# addresses listed in /etc/postfix/protected_destinations
+#
+####################################################################
+#
+# Edit this file via sysadm -> Network -> Postfix or do
+# "postmap hash:/etc/postfix/insiders" after editing.
+#
+####################################################################
+
+mn-logistik.de  OK

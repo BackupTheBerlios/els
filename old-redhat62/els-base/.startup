@@ -1,0 +1,10 @@
+cat <<"EOF"
+
+#############################################################
+##                                                         ##
+##  Note:   to launch the menu based system adminstration  ##
+##          shell, enter "sysadm" at the prompt.           ##
+##                                                         ##
+#############################################################
+
+EOF

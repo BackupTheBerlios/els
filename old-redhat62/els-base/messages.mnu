@@ -1,0 +1,323 @@
+case "$1" in
+
+    Query)
+        Title "System" "Messages" "Display system messages"
+        Option "System"  "Display general system messages"
+        Option "Kernel"    "Display kernel startup messages"
+        Option "Cron"      "Display log of cron task scheduler"
+        Option "Security"  "Display all security warning messages"
+
+	test -s /var/log/boot.log &&
+	Option "Boot" "Display boot time and service restart messages"
+
+	test -s /var/log/errors.httpd &&
+	Option "Apache" "Display errors noticed by the APACHE web server"
+
+	MYMODEM=${MODEM:-/dev/null}
+	MYMODEM=${MYMODEM##/dev/}
+	test -s /var/log/log_mg.$MYMODEM &&
+	Option "Modem"     "Display modem access log"
+
+	test -s /var/log/maillog &&
+	Option "EMail"     "Display e-mail transfer log"
+
+	test -s /var/log/samba/log.smb &&
+	Option "Samba"     "Display SAMBA file server messages"
+	test -s /var/log/samba/log.nmb &&
+	Option "Netbios"   "Display SAMBA netbios messages"
+        ;;
+
+	#Desc
+	# Your Linux server logs various activities. Normally, they are
+	# of no special interest, but occassionally it might be interesting
+	# to find out what was going on.
+	#DescEnd
+
+
+    system)
+	#Desc
+ 	# Displays the general log file <TT>/var/log/messages</TT>.
+	# This log file is used by all applications that don't have their
+	# own log files.
+	#
+	# Here is a sample:
+	#Textbox
+	# Nov  2 17:47:10 omd kernel: loading device 'eth0'...
+	# Nov  2 17:47:10 omd kernel: eth0: 3c509 at 0x300 tag 1, 10baseT port
+	# Nov  2 17:47:10 omd kernel: address  00 a0 24 d0 02 29, IRQ 10.
+	# Nov  2 17:47:25 omd PAM_pwdb[168]: (login) session opened for user root by root(uid=0) 
+	# Nov  2 17:47:25 omd syslog: ROOT LOGIN ON tty1
+	# Nov  2 18:26:59 omd kernel: hdc: media changed
+	# Nov  2 18:27:01 omd kernel: ISO9660 Extensions: RRIP_1991A
+	# ...
+	#TextboxEnd
+	#Item Usage
+	#Macro Textbox
+	#DescEnd
+
+        dialog --textbox /var/log/messages 23 78
+        ;;
+
+    kernel)
+	#Desc
+	# Shows the kernel log file <TT>/var/log/dmesg</TT>. This file
+	# contains all the messages that the Linux kernel emitted during
+	# boot time.
+	#
+	# Here is a sample:
+	#Textbox
+	# Console: 16 point font, 400 scans
+	# Console: colour VGA+ 80x25, 1 virtual console (max 63)
+	# pcibios_init : BIOS32 Service Directory structure at 0x000fad70
+	# pcibios_init : BIOS32 Service Directory entry at 0xfb200
+	# pcibios_init : PCI BIOS revision 2.10 entry at 0xfb230
+	# Probing PCI hardware.
+	# Calibrating delay loop.. ok - 53.04 BogoMIPS
+	# Memory: 14860k/16384k available (668k kernel code, 384k reserved, 472k data)
+	# Swansea University Computer Society NET3.035 for Linux 2.0
+	# NET3: Unix domain sockets 0.13 for Linux NET3.035.
+	# ...
+	#TextboxEnd
+	#Item Usage
+	#Macro Textbox
+	#DescEnd
+
+        dialog --textbox /var/log/dmesg 23 78
+        ;;
+
+    cron)
+ 	#Desc
+ 	# Displays the log file <TT>/var/log/cron</TT>, the log file for
+	# the "<TT>cron</TT>" background process. "<TT>cron</TT>"
+	# periodically starts other background processes, e.g. the
+	# dialout of ELS-EMAIL, the backup, the automatic truncation of
+	# the logfiles etc.
+	#
+	# Here is a sample:
+	#Textbox
+	# CRON (10/21-19:32:34-148) STARTUP (fork ok)
+	# root (10/21-20:01:00-6657) CMD (run-parts /etc/cron.hourly)
+	# root (10/21-21:01:00-6794) CMD (run-parts /etc/cron.hourly)
+	# root (10/21-22:01:00-6898) CMD (run-parts /etc/cron.hourly)
+	# root (10/21-23:01:00-6946) CMD (run-parts /etc/cron.hourly)
+	# root (10/21-00:01:00-7024) CMD (run-parts /etc/cron.hourly)
+	# root (10/21-01:01:00-7024) CMD (run-parts /etc/cron.hourly)
+	# root (10/21-02:01:00-21368) CMD (run-parts /etc/cron.hourly)
+	# root (10/21-02:39:00-21537) CMD (/usr/sbin/tmpwatch 240 /var/catman/cat?)
+	# root (10/21-02:41:00-21557) CMD (/usr/sbin/tmpwatch 240 /tmp /var/tmp)
+	# root (10/21-03:01:00-23032) CMD (run-parts /etc/cron.hourly)
+	#TextboxEnd
+	#Item Usage
+	#Macro Textbox
+	#DescEnd
+
+	dialog --textbox /var/log/cron 23 78
+        ;;
+
+    security)
+ 	#Desc
+ 	# Displays the security log file <TT>/var/log/secure</TT>.
+	# This file is supposed to contain security alerts. In reality,
+	# this file is often useless: it contains every failed login
+	# attempt, even when the user just mistyped the password and
+	# got the correct password the second try. 
+	#
+	#TextBox
+	# Aug 11 10:47:43 d login: FAILED LOGIN 1 FROM pc-27.company.de FOR ursula, Authentication failure
+	# Aug 11 11:11:02 d in.telnetd[7799]: connect from 192.168.1.32
+	# Aug 11 12:18:57 d in.telnetd[8966]: connect from 192.168.1.34
+	#TextBoxEnd
+	#Item Usage
+	#Macro Textbox
+	#DescEnd
+
+	test -s /var/log/secure || {
+	    dialog --msgbox "No security problems found.  But don't trust an automated message like this too much ..." 6 50
+	    return
+	}
+	dialog --textbox /var/log/secure 23 78
+        ;;
+
+    boot)
+ 	#Desc
+ 	# Displays the log file <TT>/var/log/boot.log</TT>.
+	# This file is contains messages from the kernel and various system
+	# daemons as they start up.
+	#
+	#TextBox
+	# Mar 18 09:56:44 jm1 syslog: syslogd startup succeeded
+	# Mar 18 09:56:44 jm1 syslog: klogd startup succeeded
+	# Mar 18 09:56:45 jm1 atd: atd startup succeeded
+	# Mar 18 09:56:45 jm1 crond: crond startup succeeded
+	# Mar 18 09:56:16 jm1 rc.sysinit: Mounting proc filesystem succeeded 
+	# Mar 18 09:56:16 jm1 rc.sysinit: Turning off Magic SysRq key succeeded 
+	# Mar 18 09:56:16 jm1 date: Sat Mar 18 09:56:14 GMT 2000 
+	# Mar 18 09:56:16 jm1 rc.sysinit: Setting clock  (utc): Sat Mar 18 09:56:14 GMT 2000 succeeded 
+	# Mar 18 09:56:16 jm1 rc.sysinit: Loading default keymap succeeded 
+	# Mar 18 09:56:16 jm1 rc.sysinit: Activating swap partitions succeeded 
+	# Mar 18 09:56:16 jm1 rc.sysinit: Setting hostname jm1.uk.maf.net succeeded 
+	# Mar 18 09:56:16 jm1 fsck: /: clean, 123357/1224000 files, 2159706/2443880 blocks 
+	# Mar 18 09:56:16 jm1 rc.sysinit: Checking root filesystem succeeded 
+	#TextBoxEnd
+	#Item Usage
+	#Macro Textbox
+	#DescEnd
+
+	dialog --textbox /var/log/boot.log 23 78
+        ;;
+
+    apache)
+	#Desc
+	# Displays any errors detected by the APACHE web server.
+	#
+	#Item Visibility
+	# This menu entry is only visible after you've installed the
+	# <b>els-apache</b> module.
+	#
+	#TextBox
+	# [Tue Aug  4 10:48:28 1998] [notice] Apache/1.3.1 (Unix) PHP/3.0.2a configured -- resuming normal operations
+	# [Tue Aug  4 14:18:41 1998] [error] File does not exist: /usr/apache/htdocs/phpower.jpg
+	# [Tue Aug  4 14:18:41 1998] [error] File does not exist: /usr/apache/htdocs/mysqlpower.gif
+	# [Tue Aug  4 14:40:04 1998] [error] request failed for 127.0.0.1: error reading the headers
+	# [Tue Aug  4 22:31:21 1998] [notice] httpd: caught SIGTERM, shutting down
+	#TextBoxEnd
+	#Item Usage
+	#Macro Textbox
+	#DescEnd
+
+	dialog --textbox /var/log/errors.httpd 23 78
+	;;
+
+    modem)
+	#Desc
+	# Displays what happened to your modem (e.g. incoming calls,
+	# outgoing calls, modem initialisation and so on).
+	#
+	#Item Visibility
+	# This menu entry is only visible once you specified your
+	# modem port in
+	# <A HREF="modem.html#port">sysadm -&gt; Hardware -&gt; Modem
+	# -&gt; Port</A>.
+	#
+	#TextBox
+	# 08/14 18:07:02 yS2  mgetty: experimental test release 1.1.9-Aug17
+	# 08/14 18:07:02 yS2  check for lockfiles
+	# 08/14 18:07:02 yS2  locking the line
+	# 08/14 18:07:03 yS2  lowering DTR to reset Modem
+	# 08/14 18:07:04 yS2  send: ATZ[0d]
+	# 08/14 18:07:04 yS2  waiting for ``OK'' ** found **
+	# 08/14 18:07:04 yS2  mdm_send: 'ATI'
+	# 08/14 18:07:04 yS2  Generic Rockwell modem (249)
+	# 08/14 18:07:04 yS2  mdm_send: 'ATI3'
+	# 08/14 18:07:05 yS2  mdm_send: 'ATI4'
+	# 08/14 18:07:05 yS2  additional info: ''
+	# 08/14 18:07:05 yS2  mdm_send: 'AT+FCLASS=2' -> OK
+	# 08/14 18:07:05 yS2  mdm_send: 'AT+FCLASS=0' -> OK
+	# 08/14 18:07:05 yS2  mdm_send: 'AT+FAA=1;+FCR=1' -> OK
+	# 08/14 18:07:05 yS2  mdm_send: 'AT+FBOR=0' -> OK
+	# 08/14 18:07:06 yS2  mdm_send: 'AT+FLID="49 89 xxxxxxxx"' -> OK
+	# 08/14 18:07:06 yS2  mdm_send: 'AT+FDCC=1,5,0,2,0,0,0,0' -> OK
+	# 08/14 18:07:06 yS2  waiting...
+	# 08/14 19:07:06 yS2  checking if modem is still alive
+	# 08/14 19:07:06 yS2  mdm_send: 'AT' -> OK
+	# 08/14 19:07:07 yS2  waiting...
+	# 08/14 20:07:07 yS2  checking if modem is still alive
+	# 08/14 20:07:07 yS2  mdm_send: 'AT' -> OK
+	# 08/14 20:07:07 yS2  waiting...
+	#TextBoxEnd
+	#Item Usage
+	#Macro Textbox
+	#DescEnd
+
+	dialog --textbox /var/log/log_mg.$MYMODEM 23 78
+	;;
+
+    email)
+	#Desc
+	# Display all e-mails transfered by the SENDMAIL e-mail transfer
+	# process today.
+	#
+	#Item Visibility
+	# This menu entry is only visible after you've installed the
+	# <b>els-email</b> module.
+	#
+	#TextBox
+	# Aug 14 16:27:32 d sendmail[28680]: QAA28638: to=&lt;eileen@tp.company.de&gt;, ctladdr=&lt;tobias@d.company.de&gt; (108/100), delay=00:22:09, xdelay=00:00:00, mailer=smtpdial, relay=mailhost, stat=Deferred: Network is unreachable
+	# Aug 14 16:28:21 d sendmail[28684]: QAA28684: from=&lt;johns@ships.company.de&gt;, size=919, class=0, pri=30919, nrcpts=1, msgid=&lt;199808141428.QAA28684@d.company.de&gt;, proto=ESMTP, relay=ships.company.de [192.168.1.203]
+	# Aug 14 16:28:21 d sendmail[28684]: QAA28684: to=&lt;xxx@xxx.nl&gt;, delay=00:00:00, mailer=smtpdial, stat=queued
+	# Aug 14 16:37:16 d sendmail[28726]: QAA28726: from=&lt;johns@ships.company.de&gt;, size=1275, class=0, pri=31275, nrcpts=1, msgid=&lt;199808141437.QAA28726@d.company.de&gt;, proto=ESMTP, relay=ships.company.de [192.168.1.203]
+	# Aug 14 16:37:16 d sendmail[28726]: QAA28726: to=&lt;xxx@xxx.nl&gt;, delay=00:00:01, mailer=smtpdial, stat=queued
+	# Aug 14 16:43:12 d sendmail[28738]: QAA28738: from=&lt;mark@ships.company.de&gt;, size=1638, class=0, pri=31638, nrcpts=1, msgid=&lt;247335217FE@ships.company.de&gt;, proto=ESMTP, relay=ships.company.de [192.168.1.203]
+	# Aug 14 16:43:12 d sendmail[28738]: QAA28738: to=&lt;om-hun@magnet.hu&gt;, delay=00:00:00, mailer=smtpdial, stat=queued
+	# Aug 14 16:45:35 d sendmail[28744]: QAA28744: from=&lt;guest@d.company.de&gt;, size=911, class=0, pri=30911, nrcpts=1, msgid=&lt;199808141445.QAA28744@d.company.de&gt;, proto=SMTP, relay=omd-27.d.company.de [192.168.1.27]
+	# Aug 14 16:45:35 d sendmail[28744]: QAA28744: to=&lt;xxx@xxx.dwe.co.kr&gt;, delay=00:00:01, mailer=smtpdial, stat=queued
+	#TextBoxEnd
+	#Item Usage
+	#Macro Textbox
+	#DescEnd
+
+	dialog --textbox /var/log/maillog 23 78
+	;;
+
+    samba)
+	#Desc
+	# Displays the log file of the SAMBA file server process.
+	#
+	#Item Visibility
+	# This menu entry is only visible after you've installed the
+	# <b>els-samba</b> module.
+	#
+	#TextBox
+	# 1998/08/14 14:17:26 test (192.168.1.99) connect to service netlogon as user holger (uid=100,gid=101) (pid 1190)
+	# 1998/08/14 14:21:11 test (192.168.1.99) closed connection to service netlogon
+	# 1998/08/14 14:27:31 test (192.168.1.99) closed connection to service app
+	# 1998/08/14 14:27:31 test (192.168.1.99) closed connection to service holger
+	# 1998/08/14 14:27:31 test (192.168.1.99) closed connection to service dat
+	# 1998/08/14 15:55:40 test (192.168.1.99) connect to service cdrom as user holger (uid=100,gid=101) (pid 2142)
+	#TextBoxEnd
+	#Item Usage
+	#Macro Textbox
+	#DescEnd
+
+	dialog --textbox /var/log/samba/log.smb 23 78
+	;;
+
+    netbios)
+	#Desc
+	# Displays the name bios resolving actions of your SAMBA file
+	# server.
+	#
+	#Item Visibility
+	# This menu entry is only visible after you've installed the
+	# <b>els-samba</b> module.
+	#
+	#TextBox
+	# 1998/08/14 14:14:58 netbios nameserver version 1.9.18p8 started
+	# Copyright Andrew Tridgell 1994-1997
+	# add_domain_logon_names: At time 1998/08/14 14:14:58 attempting to become logon server for workgroup WORKGROUP on subnet 192.168.1.31
+	# add_domain_logon_names: At time 1998/08/14 14:14:58 attempting to become logon server for workgroup WORKGROUP on subnet UNICAST_SUBNET
+	# 1998/08/14 14:14:58 become_domain_master_browser_wins: attempting to become domain master browser on workgroup WORKGROUP, subnet UNICAST_SUBNET.
+	# become_domain_master_browser_wins: querying WINS server at IP 192.168.1.31 for domain master browser name WORKGROUP<1b> on workgroup WORKGROUP
+	# become_logon_server_success: Samba is now a logon server for workgroup WORKGROUP on subnet UNICAST_SUBNET
+	# 
+	# 1998/08/14 14:14:58 ***** Samba server LINUX is now a domain master browser for workgroup WORKGROUP on subnet UNICAST_SUBNET *****
+	# 
+	# become_domain_master_browser_bcast: At time 1998/08/14 14:14:58 attempting to become domain master browser on workgroup WORKGROUP on subnet 192.168.1.31
+	# become_domain_master_browser_bcast: querying subnet 192.168.1.31 for domain master browser on workgroup WORKGROUP
+	# become_logon_server_success: Samba is now a logon server for workgroup WORKGROUP on subnet 192.168.1.31
+	# 
+	# 1998/08/14 14:15:06 ***** Samba server LINUX is now a domain master browser for workgroup WORKGROUP on subnet 192.168.1.31 *****
+	# 
+	# 1998/08/14 14:15:10 *****   Samba name server LINUX is now a local master browser for workgroup WORKGROUP on subnet 192.168.1.31 *****
+	# 
+	# process_logon_packet: Logon from 192.168.1.99: code = 0
+	# process_logon_packet: Logon from 192.168.1.99: code = 7
+	#TextBoxEnd
+	#Item Usage
+	#Macro Textbox
+	#DescEnd
+
+	dialog --textbox /var/log/samba/log.nmb 23 78
+	;;
+
+esac

@@ -1,0 +1,141 @@
+function SelectPrinter ()
+{
+    unset CHOICE
+    echo -n "dialog --menu \"$1\" 17 73 9 " >$TMPFILE.dialog
+    if ! /usr/sbin/sysadm-printer.pl --listprinters >>$TMPFILE.dialog ; then
+        dialog --msgbox "There are no printers defined" 5 33
+        return
+    fi
+    { . $TMPFILE.dialog } 2>$TMPFILE
+    CHOICE=`cat $TMPFILE`
+}
+
+function RemoveJob ()
+{
+    # remove might take a long time if a remote printer doesn't answer immediate
+    dialog --infobox "Just a moment ... " 3 30
+
+    lprm -P$1 $2 >$TMPFILE 2>&1
+    test -s $TMPFILE && dialog --textbox $TMPFILE 8 40
+}
+
+
+
+case "$1" in
+
+    Query)
+        Title "System"  "Printjobs" "Maintain printer spooler and print jobs"
+        Option "List"   "List printer and jobs"
+        Option "Remove" "Remove a print job"
+        Option "Start"  "Start printer"
+        Option "Stop"   "Stop printer"
+        if [ "$UID" = "0" ]; then
+            Option "Restart" "Restart printer spooler"
+            test -z "$FROMPRINTER" && Option "Printer" "configure local and remote printer"
+        fi
+        ;;
+
+    list)
+        #Desc
+        # This displays you all the printjobs. Here is a sample of the
+        # output:
+        #
+        #Textbox
+        # Printer          User             Filename                   Length (kB)
+        # ------------------------------------------------------------------------
+        # kyocera          (0 jobs)
+        #
+        # kyocera-1        root             stdin                              0.7
+        #                  holger           uucp.ps                          472.3
+        #                  (1 jobs)
+        #
+        # kyocera-2        (0 jobs)
+        #TextboxEnd
+        #
+        # As you can see in the example, we have two printers. The
+        # "kyocera" is used by SAMBA, "kyocera-1" and "kyocera-2" are used
+        # directly from Linux, they print one or two pages on one sheet of
+        # paper. The various entries for the "ls" printers all denote
+        # different forms. As you can see, only the print queue for the
+        # standard forms is active, the other ones are stopped.
+        #DescEnd
+
+        /usr/sbin/sysadm-printer.pl --jobs >$TMPFILE
+        dialog --textbox $TMPFILE 23 76
+        ;;
+
+    remove)
+        #Desc
+        # This allows you to delete a print job. You are presented with a
+        # list of all current unserved print jobs:
+        #
+        #Menu Delete which print job?
+        # kyocera-1&nbsp;012Aa03519  stdin from root (0.7 kB)
+        # kyocera-1&nbsp;012Aa04583  uucp.ps from holger (472.3 kB)
+        #MenuEnd
+        #
+        # Once you selected one and press OK, the print job get deleted.
+        #DescEnd
+
+        dialog --infobox "Looking for printjobs ..." 3 29
+        unset CHOICE
+        echo -n "dialog --menu \"Remove which print job?\" 17 73 9 " >$TMPFILE.dialog
+        if ! /usr/sbin/sysadm-printer.pl --listjobs >>$TMPFILE.dialog ; then
+            dialog --msgbox "There are no print jobs defined" 5 33
+            return
+        fi
+        { . $TMPFILE.dialog } 2>$TMPFILE
+        CHOICE=`cat $TMPFILE`
+        test -z "$CHOICE" && return
+        RemoveJob $CHOICE
+        ;;
+
+    start)
+        #Desc
+        # This starts a stopped print queue again. Pending printouts will
+        # then be served.
+        #DescEnd
+
+        SelectPrinter "Select printer to start"
+        test -z "$CHOICE" && return
+
+        rm -f $TMPFILE
+
+        /usr/sbin/lpc start $CHOICE >>$TMPFILE 2>&1
+        test -s $TMPFILE && dialog --textbox $TMPFILE 10 40
+        ;;
+
+    stop)
+        #Desc
+        # This prevents the selected print queue from beeing served. Print jobs are stored and printed as soon as
+        # you start the queue again.
+        #DescEnd
+
+        SelectPrinter "Select printer to stop"
+        test -z "$CHOICE" && return
+        /usr/sbin/lpc stop $CHOICE >$TMPFILE 2>&1
+        test -s $TMPFILE && dialog --textbox $TMPFILE 8 40
+        ;;
+
+    restart)
+        #Desc
+        # This restarts the whole print spool subsystem in case of an anomaly.
+        #DescEnd
+
+        dialog --infobox "Restarting spooler ..." 3 40
+        killall lpd >/dev/null 2>&1
+        sleep 3
+        lpd
+        ;;
+
+    printer)
+        #Desc
+        # This is a short cut to <A HREF="printer.htm">sysadm -&gt; Hardware
+	# -&gt; Printer</A>.
+        #DescEnd
+
+        export FROMSPOOLER=YES
+        $0 printer
+        ;;
+
+esac

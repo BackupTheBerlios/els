@@ -1,0 +1,21 @@
+#Title Detect tape drive
+#Author Jonathan Marsden
+#Mandatory
+#Desc
+# This script detects the SCSI tape name, create a device link and
+# enters this info into /etc/sysadm.
+#DescEnd
+
+loadfile '/etc/sysconfig/sysadm';
+if (getopt('TAPE=') eq "\"/dev/null\"") {
+    my $tape=`grep -s "Sequential" /proc/scsi/scsi`;
+    if ($tape ne "") {
+	setopt 'TAPE=', "\"/dev/nst0\"";
+ 	unlink "/dev/tape";
+ 	symlink "/dev/nst0", "/dev/tape";
+	writefile;
+	logit "/etc/sysconfig/sysadm: set TAPE to /dev/nst0\n";
+    }
+}
+
+1;

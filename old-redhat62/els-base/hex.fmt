@@ -1,0 +1,10 @@
+#
+# This file is a format file for /usr/bin/hex, that simply uses this
+# format file to create a DOS-style hex dump of the form:
+# 
+#  000000 23 0a 23 20 54 68 69 73 20 66 69 6c 65 20 69 73    #.# This file is
+#  offset hexadecimal bytes                                  ascii bytes
+#
+"%06.6_ax "  16/1 "%02x "
+"    " "%_p"
+"\n"

@@ -1,0 +1,102 @@
+Section "Files"
+    RgbPath	"/usr/X11R6/lib/X11/rgb"
+    ModulePath  "/usr/X11R6/lib/modules"
+
+    FontPath "/usr/X11R6/lib/X11/fonts/100dpi:unscaled"
+    FontPath "/usr/X11R6/lib/X11/fonts/75dpi:unscaled"
+    FontPath "/usr/X11R6/lib/X11/fonts/misc:unscaled"
+    #FontPath "/usr/X11R6/lib/X11/fonts/100dpi"
+    #FontPath "/usr/X11R6/lib/X11/fonts/75dpi"
+    #FontPath "/usr/X11R6/lib/X11/fonts/misc"
+    FontPath "/usr/X11R6/lib/X11/fonts/PEX"
+    FontPath "/usr/X11R6/lib/X11/fonts/CID"
+    FontPath "/usr/X11R6/lib/X11/fonts/Speedo"
+    FontPath "/usr/X11R6/lib/X11/fonts/Type1"
+    FontPath "/usr/share/fonts/default/Type1"
+    FontPath "/usr/share/fonts/default/TrueType"
+    FontPath "/usr/share/fonts/default/Windows"
+    FontPath "/usr/X11R6/lib/X11/fonts/cyrillic"
+
+    #FontPath   "unix/:7100"
+EndSection
+
+
+Section "Module"
+    Load  "extmod"
+    Load  "pex5"
+    #Load "glx"
+    #Load "dri"
+    #Load "GLcore"
+    Load  "dbe"
+
+    #Load "record"
+    Load  "ddc"
+    Load  "freetype"
+    Load  "speedo"
+    Load  "type1"
+EndSection
+
+
+Section "InputDevice"
+    Identifier "My Keyboard"
+    Driver "keyboard"
+    Option "AutoRepeat" "250 30"
+    Option "XkbModel" "pc104"
+    Option "XkbLayout" "de"
+    Option "XkbVariant" "nodeadkeys"
+EndSection
+
+
+Section "InputDevice"
+    Identifier "My Mouse"
+    Driver "mouse"
+    Option "Protocol" "IMPS/2"
+    Option "Device" "/dev/psaux"
+    Option "ZAxisMapping" "4 5"
+EndSection
+
+
+Section "Monitor"
+    Identifier "My Monitor"
+    HorizSync 30-70
+    VertRefresh 50-120
+EndSection
+
+
+Section "Device"
+    Identifier "My VGA"
+    Driver     "ati"
+    ChipSet    "ati"
+EndSection
+
+
+Section "Screen"
+    Identifier "My Screen"
+    Device "My VGA"
+    Monitor "My Monitor"
+    DefaultDepth 16
+    SubSection "Display"
+       Depth 15
+       Modes "1024x768" "640x480" "800x600"
+    EndSubSection
+    SubSection "Display"
+       Depth 16
+       Modes "1024x768" "640x480" "800x600"
+    EndSubSection
+    SubSection "Display"
+       Depth 24
+       Modes "1024x768" "640x480" "800x600"
+    EndSubSection
+EndSection
+
+
+Section "DRI"
+EndSection
+
+
+Section "ServerLayout"
+    Identifier "My Layout"
+    Screen "My Screen"
+    InputDevice "My Keyboard" "CoreKeyboard"
+    InputDevice "My Mouse"    "CorePointer"
+EndSection

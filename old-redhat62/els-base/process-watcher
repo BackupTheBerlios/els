@@ -1,0 +1,31 @@
+function TestProcess ()
+{
+    # check if we should check for processes at all
+    . /etc/sysconfig/rc.sysadm
+    test "$PROCESS_WATCHER" = "no" && return
+
+    # check if (on RH 5.1) the process was disabled at will
+    test -x /sbin/chkconfig && /sbin/chkconfig $2 || return
+
+    # check if the process is running
+    if ! ps ahcx | grep -v grep | grep -q $1; then
+
+	{
+	    /etc/rc.d/init.d/$2 stop
+	    sleep 3
+	    /etc/rc.d/init.d/$2 stop
+	    sleep 3
+	    /etc/rc.d/init.d/$2 start
+	} >/dev/null 2>&1
+
+	{
+	    echo "Please note that the background process '$1' has been restarted."
+	    echo "If this happens once in a while, everything is ok. However, if you"
+	    echo "get this kind of messages daily, then something is wrong with your"
+	    echo "system or setup. Please check with a technician."
+	    echo
+	    ps ax
+	} | mail -s "Problem with $1" operator
+
+    fi
+}

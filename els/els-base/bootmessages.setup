@@ -1,0 +1,16 @@
+#Desc Keep boot messsages
+#Author Holger Schurig
+#Desc
+# This patch makes mgetty on console 1 not to clear the screen before asking
+# the user for the username. This way possible error messages from the
+# boot process stay visible on the screen.
+#DescEnd
+
+loadfile '/etc/inittab';
+if (!search('noclear') || $force) {
+    replace 'mingetty tty1$', 'mingetty --noclear tty1';
+    writefile;
+    logit "/etc/inittab: keep console 1 contents after booting\n";
+}
+
+1;

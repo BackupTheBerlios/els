@@ -1,0 +1,13 @@
+#Title Make Ctrl-Alt-Del halt the system
+#Author Holger Schurig
+#Desc
+# If we want to stop workstation, we dont want it to boot again.
+#DescEnd
+
+if (!$server && (!search('-h now') || $force)) {
+    replace '-r now', '-h now';
+    writefile;
+    logit "/etc/inittab: halt system on C-A-D, don't reboot\n";
+}
+
+1;

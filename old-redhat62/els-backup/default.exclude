@@ -1,0 +1,62 @@
+############################################################################
+# /etc/sysconfig/default.exclude
+############################################################################
+#
+# Use this file to exclude directories or single files from your backup. You
+# usually do this when the file is volatile by nature or get's recreated
+# very easily.
+#
+############################################################################
+#
+# Tip: if you exclude a whole subdirectory tree, e.g. with
+#
+#     /mnt/samba/*
+#
+# in this file, then this setting can be overruled by a line
+#
+#     /mnt/samba
+#
+# in one of your backup sets.
+#
+
+#######################################################################
+# Directories that we don't want
+#######################################################################
+
+# temp files don't contain things to keep (by definition, :-)
+/tmp/*
+/var/tmp/*
+# formatted man pages in this directory will be reformatted on the fly
+/var/catman/*
+# all your various printer spool files
+/var/log/*
+# files that say which service is running and pid files are no longer valid
+# when you reboot, so there is no point in keeping them
+/var/lock/subsys/*
+/var/run/*
+# Compiled sources (like from /usr/src/linux) can be recompiled quite easily
+/usr/src/*.o
+/usr/src/*.a
+# This are special files created by the fsck program
+lost+found
+# files on mounted volumes are not candidates
+/mnt/cdrom/*
+/mnt/dos/*
+/mnt/floppy/*
+/mnt/nfs/*
+/mnt/samba/*
+/mnt/zip/*
+# This files are totally static. If they ever go away, you can re-install them
+# using RPM. And your server runs perfect without them.
+/usr/doc/*
+/usr/info/*
+# You don't want to have those thrash files on your backup
+Netscape/Cache/*
+
+#######################################################################
+# Files that we don't want
+#######################################################################
+*.bak
+*~
+DEADJOE
+TMPFILE

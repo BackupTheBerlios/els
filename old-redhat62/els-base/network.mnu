@@ -1,0 +1,24 @@
+case "$1" in
+
+    Query)
+        Title "Main" "Network" "Configure local network and/or internet access"
+
+        #include Network sysadm -> Network
+        perl -nw - $MENULIB/*.mnu 2>/dev/null >>$TMPFILE.dialog <<-"EOF"
+	if ( /^\s+Title\s+"Network"\s+"(.*)"\s+"(.*)"/ ) {
+	    print "\"$1\" \"$2\" ";
+	}
+	EOF
+        ;;
+
+        #Desc
+	# This menu contains all sorts of modules that connect your OM
+	# Standard Linux Server to the outside world.
+        #DescEnd
+
+
+    *)
+        $0 $1
+        ;;
+
+esac

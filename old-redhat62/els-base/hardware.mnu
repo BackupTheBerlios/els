@@ -1,0 +1,40 @@
+case "$1" in
+
+    Query)
+        Title "Main" "Hardware" "Define and configure your hardware"
+        Option "Space"   "Hard disk space report"
+        #Include Hardware sysadm -> Hardware
+        perl -nw - $MENULIB/*.mnu 2>/dev/null >>$TMPFILE.dialog <<-"EOF"
+        if ( /^\s+Title\s+"Hardware"\s+"(.*)"\s+"(.*)"/ ) {
+            print "\"$1\" \"$2\" ";
+        }
+	EOF
+        ;;
+
+
+    space)
+        #Desc
+        # This gives you a brief report on how congested your hard disk(s)
+        # are. All numbers are shown in Megabytes, like in the following
+        # example:
+        #
+        #Textbox
+        # Filesystem            Size  Used  Avail  Capacity Mounted on
+        # /dev/hda6             342M   16M   308M      5%   /
+        # /dev/hda7             972M  749M   172M     81%   /usr
+        # /dev/hda8             1.4G  208M   1.1G     15%   /usr/src
+        #TextboxEnd
+        #
+        # Note: this option intentionally shows you only the space report of
+        # ext2fs (Linux formatted) hard disk.
+        #DescEnd
+
+        df -h -t ext2 >$TMPFILE
+        dialog --textbox $TMPFILE 23 78
+        ;;
+
+    *)
+        $0 $1
+        ;;
+
+esac

@@ -1,0 +1,36 @@
+#Title Enable tcp_wrappers
+#Author Holger Schurig
+#Desc
+# Patch /etc/hosts.allow and /etc/hosts.deny
+#
+# This two files are the configuration for the TCP Wrapper. This is a
+# special program that is called via the initd daemon (see /etc/inetd.conf)
+# and specifies which INCOMING services are allowed. For now, we make our
+# server pretty much secure: any incoming connection from our own subnet is
+# allowd, any incoming connection from outside is denied.
+#
+# This security scheme does not work for daemons that are running on their
+# own and not via inetd, e.g. "sendmail" or "lpd". For this services you
+# must ensure security with other tools, e.g. proper configuration in
+# /etc/sendmail.cf or /etc/printcap.
+#DescEnd
+
+loadfile '/etc/hosts.deny';
+if (!search('ALL') || $force) {
+    setopt 'ALL: ', 'ALL';
+    deleteline '# The portmap';
+    deleteline '# the new secure';
+    deleteline '# you should know';
+    writefile;
+    logit "/etc/hosts.deny: initialized tcp_wrappers\n";
+}
+
+loadfile '/etc/hosts.allow';
+if (!search('ALL') || $force) {
+    setopt 'ALL: ', '127.0.0.1';
+    setopt 'sshd: ', 'ALL';
+    writefile;
+    logit "/etc/hosts.allow: initialized tcp_wrappers\n";
+}
+
+1;

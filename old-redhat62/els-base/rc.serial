@@ -1,0 +1,7 @@
+#
+# /etc/rc.d/rc.serial
+#
+# This file can be used to define special attributes for serial devices.
+# For more information, use 'man setserial'.
+#
+#setserial /dev/ttyS2 port 0x3e8 irq 5

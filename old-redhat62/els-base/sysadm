@@ -1,0 +1,264 @@
+#!/bin/bash
+
+# set defaults
+export MENU=main
+export MENULIB=/usr/lib/sysadm
+export RCFILE=/etc/sysconfig/rc.sysadm
+export TMPFILE=${TMP:-/var/tmp}/sysadm.$$
+export EDITOR=${EDITOR:-vi}
+export EXPERTMODE=${EXPERTMODE:-no}
+export DIALOGRC=/etc/dialogrc
+
+
+# remember if we are the first instance of sysadm
+if [ -z "$SYSADM_INSTANCE" ]; then
+    export SYSADM_INSTANCE=1
+else
+    SYSADM_INSTANCE=$[SYSADM_INSTANCE+1]
+fi
+
+
+# Stores the title of this menu for later use. $1 is not used here, we
+# use it for some nice GREPing in dynamic menus
+function Title ()
+{
+    MENUNAME=$3
+}
+
+
+# emit option and description in a form that is nice for sysadm
+function Option ()
+{
+    echo -n "\"$1\" \"$2\" " >>$TMPFILE.dialog
+}
+
+# exit from menu and delete any leftover temporary files
+function ExitMenu ()
+{
+    rm -f $TMPFILE*
+    if [ "$SYSADM_INSTANCE" = "1" ]; then
+	echo
+	echo
+    fi
+    exit 0
+}
+
+
+# ask user a yes/no question, result can be tested via || and &&, e.g.
+# Question "What?" || action
+function Question ()
+{
+    dialog --yesno "$1" 7 70
+}
+
+
+# ask user for a string to be entered
+function InputString ()
+{
+    dialog --inputbox "$1" 9 70 2>$TMPFILE
+    local result=$?
+    CHOICE=`cat $TMPFILE`
+    return $result
+}
+
+
+# ask user for a string to be entered. Almost the same as above, but here
+# the user can also select cancel to bail out.
+function InputYesNo ()
+{
+    dialog --menu "$1" 10 70 2 \
+                "yes" "" \
+                "no"  "" \
+        2>$TMPFILE
+    local result=$?
+    CHOICE=`cat $TMPFILE`
+    return $result
+}
+
+
+# Displays the specified file
+function ShowFile ()
+{
+    dialog --textbox "$1" 23 76
+}
+
+
+# get all users except root
+function GetUsers ()
+{
+    USERS=`who | awk '{ print $1 '} | fgrep -v root | tr \\\n \\\040`
+    USERCNT=`echo $USERS | wc --words`
+}
+
+
+# edit a file
+function EditFile ()
+{
+    local FILE=$2
+    test -z "$FILE" && FILE=$1
+
+    # silently copy the sample if the main file doesn't exist
+    test -f ${FILE}.sample -a ! -f $FILE && cp ${FILE}.sample $FILE
+
+    # ask if we should copy the newer sample
+    test -f $FILE -a -f $1 -a ${FILE}.sample -nt $FILE && {
+	Question "'${FILE}.sample' is newer than\n'$FILE'. Do you want to use the newer file?" && {
+	    cp ${FILE}.sample $FILE
+	}
+    }
+    test -z "$EXPORTMODE" && test "$EXPERTMODE" != "yes" && EditorHints
+    $EDITOR $1
+}
+
+
+
+# try hard to mount a floppy: first, try it with vfat, then in ext2 format
+function MountFloppy () 
+{
+    # is something mounted, does the mount point exists and is it reachable?
+    umount /mnt/floppy 2>/dev/null
+    mkdir /mnt/floppy 2>/dev/null
+    chmod 0700 /mnt/floppy
+    # ask user for disk
+    until false; do
+        mount -t vfat /dev/fd0 /mnt/floppy 2>/dev/null && return 0
+        mount -t ext2 /dev/fd0 /mnt/floppy 2>/dev/null && return 0
+	Question "Sorry, the disk was unreadable.\n\nDo you want to try again with another disk?" || return 1
+    done
+    return 0
+}
+
+
+# set an option in /etc/sysconfig/rc.sysadm
+#
+# Option 1:  variable
+# Option 2:  new contents
+# Option 3:  file where to store
+# Option 4:  don't embed contents in " " if present
+#
+function SetOpt {
+    local FILE=${3-$RCFILE}
+
+    test ! -f $FILE && cp --preserve $FILE.sample $FILE
+    test ! -f $FILE && touch $FILE
+    if [ ! -w $FILE ]; then
+	dialog --msgbox "You cannot change system parameters" 5 50
+	return	
+    fi
+
+    # delete old value
+    fgrep -s -v $1= $FILE >$TMPFILE
+    mv -f $TMPFILE $FILE
+    # now add the new value
+    if [ -z "$4" ]; then
+	echo "$1=\"$2\"" >>$FILE
+    else
+	echo "$1=$2" >>$FILE
+    fi
+    # and source the result to update my variables
+    . $FILE
+}
+
+
+function ExpertWarning
+{
+    test "$EXPERTMODE" = "yes" && return
+    dialog --yesno "\
+\
+WARNING:\n\
+\n\
+Any option marked with 'for experts' can greatly influence your server\n\
+and even make the server not working. Never use this options without\n\
+reading AND understanding the documentation BEFORE you try what might\n\
+happen. Otherwise you might crash your system, making it useless.\n\
+\n\
+Do you want to continue?\
+" 12 78
+}
+
+
+function EditorHints
+{
+    case "$EDITOR" in
+
+    q)  dialog --msgbox "\
+\
+Hints to use the editor:\n\
+\n\
+Alt Q      quit editor without saving\n\
+Alt X      to exit and save\
+\
+" 9 41
+	;;
+
+    vi)  dialog --msgbox "\
+\
+Hints to use the editor:\n\
+\n\
+i          go into insert mode\n\
+ESC        back into command mode\n\n\
+: q !      leave editor without save\n\
+: x        to exit and save\
+\
+" 12 41
+	;;
+
+    esac
+}
+
+
+
+# load all settings into environment variables
+test -r $RCFILE && . $RCFILE
+
+# look into what menu we want to go, default is "main"
+MENU=${1-main}
+
+
+cd $MENULIB
+while [ true ]; do
+
+    if [ -f $MENU.mnu ]; then
+	# put all menu options into $TMPFILE.dialog
+	rm -f $TMPFILE.dialog 2>/dev/null
+	if [ -z "$2" ]; then
+	    . $MENU.mnu Query
+	else
+	    . $MENU.mnu $2
+	    rm -f $TMPFILE*
+	    exit 0
+	fi
+
+	# Add Help item at bottom of menu, if suitable help file exists
+	HELPFILE=`find /usr/doc/els-* -name "$MENU.txt"`
+        [ "$MENU" = "main" ] && HELPFILE=`find /usr/doc/els-base* -name "index.txt"`
+	[ -n "$HELPFILE" ] && echo -n '"Help" "Help for $MENU menu"'>>$TMPFILE.dialog  
+
+	# prepend this with the dialog command
+	echo -n "dialog --menu \"$MENUNAME\" 21 76 13 " >$TMPFILE.exec
+	test -f $TMPFILE.dialog || break
+	cat $TMPFILE.dialog >>$TMPFILE.exec
+
+	# execute the created script
+	. $TMPFILE.exec 2>$TMPFILE
+
+	# test for cancel error and exit immediately
+	test ! $? = 0 && ExitMenu
+
+	# Test for help request and display it. 
+	# Then relaunch same menu, by pretending that 'option' Query was chosen
+	ANSWER=`cat $TMPFILE`
+	if [ "$ANSWER" = "Help" ];then
+	    lynx -child $HELPFILE
+	    . $MENU.mnu Query
+	else    
+	    # translate the result into lower case and call the menu file with the
+  	    # selected option
+	    . $MENU.mnu `cat $TMPFILE | tr A-Z a-z | tr -d " "`
+	fi
+    else
+	dialog --msgbox " Sorry, there is no menu file \"$MENULIB/$MENU.mnu\"." 6 40
+	ExitMenu
+    fi
+
+done

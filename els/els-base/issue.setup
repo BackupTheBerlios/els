@@ -1,0 +1,40 @@
+#Title Patch /etc/issue
+#Author Holger Schurig
+#Desc
+# This file contains a text that is displayed before the user enters his
+# username/password at the console.
+#DescEnd
+
+chomp(my $hostname = `/bin/hostname`);
+loadfile '/etc/issue';
+if (!$insideanaconda &&
+    (!search($hostname) || $force)) {
+    deleteall;
+    append '';
+    append 'Easy Linux Server at ' . $hostname;
+    append 'Authorized use only!';
+    append '';
+    writefile;
+    logit "/etc/issue: changed\n";
+}
+
+
+#
+# Patch /etc/issue.net
+#
+# This file contains a text that is displayed before the user enters his
+# username/password from the network, e.g. via telnet.
+#
+loadfile '/etc/issue.net';
+if (!$insideanaconda &&
+    (!search($hostname) || $force)) {
+    deleteall;
+    append '';
+    append 'Easy Linux Server at ' . $hostname;
+    append 'Authorized use only!';
+    append '';
+    writefile;
+    logit "/etc/issue.net: changed\n";
+}
+
+1;

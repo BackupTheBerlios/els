@@ -1,0 +1,5 @@
+#! /bin/bash
+
+tput reset 
+tput clear
+stty sane

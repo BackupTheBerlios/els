@@ -1,0 +1,16 @@
+####################################################################
+#
+# This file specifies which local e-mail addresses can only be
+# reached from domains listed in /etc/postfix/insiders, but not
+# from the outside.
+#
+####################################################################
+#
+# Edit this file via sysadm -> Network -> Postfix or do
+# "postmap hash:/etc/postfix/protected_destinations" after editing.
+#
+####################################################################
+
+all@mn-logistik.de      insiders_only
+all                     insiders_only
+test                    insiders_only

@@ -1,0 +1,36 @@
+#Title Detect modem
+#Author Jonathan Marsden
+#Mandatory
+#NeedFile /usr/bin/wvdialconf
+#Desc
+# This script uses wvdialconf to detect a modem. It will then create
+# a /dev/modem link and an entry in /etc/sysadm. A correct modem
+# entry is necessary for the for modem-dial-in support.
+#DescEnd
+
+if ( -x '/usr/bin/wvdialconf' && (! -f '/etc/wvdial.conf')) {
+    loadfile '/etc/sysconfig/sysadm';
+    if (getopt('MODEM=') eq '"/dev/null"') {
+	if (-l '/dev/mouse') { # Move out the way if necessary to see ttyS0
+	    open FILE, '/bin/ls -l /dev/mouse|';
+	    $_ = <FILE>;
+	    if (defined($_)) {
+		/\s(\S+)$/; 
+		rename '/dev/mouse', '/dev/mouse.orig' if ($1 eq "/dev/ttyS0");
+	    }
+	}
+	system('/usr/bin/wvdialconf /etc/wvdial.conf 2>>/tmp/wvdialconf.out');
+	rename '/dev/mouse.orig', '/dev/mouse' if (-l '/dev/mouse.orig');
+	chomp(my $modem=`grep -s "^Modem =" /etc/wvdial.conf | head -1 | sed -e 's/Modem = *//'`);
+	if ($modem ne "") {
+	    setopt 'MODEM=', "\"$modem\"";
+ 	    my ($login,$pass,$uid,$gid) = getpwnam("uucp"); 
+ 	    chown $uid, $gid, $modem;
+ 	    chmod 0660, $modem;
+	    writefile;
+	    logit "/etc/sysconfig/sysadm: set MODEM to $modem\n";
+	}
+    }
+}
+
+1;

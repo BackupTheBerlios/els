@@ -1,0 +1,153 @@
+unset CDROM
+test -f /etc/sysconfig/rc.sysadm && . /etc/sysconfig/rc.sysadm
+
+case "$1" in
+
+    Query)
+        Title "Hardware" "CDROM" "Mount and unmount CDROMs"
+        Option "Info" "Info on mounted devices"
+        if [ -z "$CDROM" ]; then
+            Option "Define" "Define CD-ROM"
+        else
+            Option "Define" "Redefine CD-ROM (now $CDROM)"
+            if fgrep -q 9660 /etc/mtab; then
+                Option "Unmount" "Unmount CD-ROM"
+            else
+                Option "Mount" "Mount CD-ROM"
+            fi
+        fi
+        ;;
+
+	#Desc
+	# This menu allows you to define at which physical port your
+	# CDROM is connected. It also allows you to mount and dismount
+	# the CDROM (a CDROM can only be access after it has been mounted).
+	#DescEnd
+
+
+    info)
+	#Desc
+	# This shows you all mounted devices. Use it to find
+	# out if a CDROM is already mounted. You will see a screen
+	# similar to the following:
+	#TextBox
+	# Device       Mounted to directory         File system   Flags
+	# -------------------------------------------------------------
+	# /dev/root    /                            ext2          rw 0
+	# /proc        /proc                        proc          rw 0
+	# /dev/hda3    /usr                         ext2          rw 0
+	# /dev/hda5    /var                         ext2          rw 0
+	# /dev/cdrom   /mnt/cdrom                   iso9660       ro 0
+	#TextBoxEnd
+	# The last line contains <TT>/mnt/cdrom</TT>, so a CDROM is
+	# currently mounted.
+	# 
+	#Item Usage
+	#Macro Textbox
+	#DescEnd
+
+	perl -nw - /proc/mounts >$TMPFILE <<-"EOF"
+
+	format STDOUT_TOP =
+	Device       Mounted to directory         File system   Flags
+	-------------------------------------------------------------
+	.
+	format STDOUT =
+	@<<<<<<<<<<< @<<<<<<<<<<<<<<<<<<<<<<<<<<< @<<<<<<<<<<<< @<<<<
+	$1,          $2,                          $3,           $4
+	.
+
+	/^(\S+)\s+(\S+)\s+(\S+)\s+(.+)/;
+	#print "$1 -- $2 -- $3 -- $4\n";
+	write;
+
+	EOF
+        dialog --textbox $TMPFILE 23 78
+        ;;
+
+
+    define)
+	#Desc
+	# Before using a CDROM, you must define it's type and port.
+	#
+	#Item Usage
+	# Select the proper entry from
+	#Menu Select port of CD-ROM
+	# none no CD-ROM drive attached
+	# hda  first IDE controller, first drive
+	# hdb  first IDE controller, second  drive
+	# hdc  second IDE controller, first drive
+	# hdd  second IDE controller, second  drive
+	# scd0 CD-ROM drive on a SCSI controller 
+	#MenuEnd
+	#Macro Menu
+	#Macro Cancel
+	#DescEnd
+
+        dialog --menu "Select port of CD-ROM" 18 70 10 \
+                "none" "no CD-ROM drive attached" \
+                "hda" "first IDE controller, first drive" \
+                "hdb" "first IDE controller, second  drive" \
+                "hdc" "second IDE controller, first drive" \
+                "hdd" "second IDE controller, second  drive" \
+                "scd0" "CD-ROM drive on a SCSI controller" 2>$TMPFILE
+        test $? = 0 || return
+        CHOICE=`cat $TMPFILE`
+
+        # make proper link in /dev
+        rm -f /dev/cdrom
+        ln -s /dev/$CHOICE /dev/cdrom
+
+        SetOpt "CDROM" "/dev/$CHOICE"
+
+        dialog --msgbox "CD-ROM entry set" 5 40
+        ;;
+
+
+    mount)
+	#Desc
+	# A CDROM must be mounted before it can be accessed.
+	#
+	#Item Usage
+	# <OL>
+	# <LI>Insert the CDROM into the drive
+	# <LI>The drive needs a short time to recognize your CDROM
+	# disk (usually 2-10 seconds). Wait until your drive is
+	# silent again
+	# <LI>select this option
+	# <LI>Your CDROM is now accessible via <TT>/mnt/cdrom</TT>.
+	# </OL>
+	#
+	#Item Visibility
+	# This menu entry is only visible when the CDROM is defined.
+	#DescEnd
+
+	cls
+        if mount -o ro /dev/cdrom /mnt/cdrom ; then
+	    dialog --msgbox "Ok, CD is now mounted." 5 28
+	else
+	    dialog --msgbox "Sorry, the CD was not readable." 5 36
+	fi
+        ;;
+
+
+    unmount)
+	#Desc
+	# A CD-ROM must be unmounted before it can be taken out of the
+	# CD-ROM drive.
+	#
+	#Item Visibility
+	# This menu entry is only visible when the CDROM is defined.
+	#DescEnd
+	rm -f $TMPFILE
+        umount /dev/cdrom >/dev/null 2>$TMPFILE
+	if [ -s $TMPFILE ]; then
+	    echo -e "Could not unmount the CD-ROM:\n" >$TMPFILE.dialog
+	    cat $TMPFILE >>$TMPFILE.dialog
+	    echo -e "\n\nTip: make sure that no user is in a directory\non that drive." >>$TMPFILE.dialog
+
+	    dialog --textbox $TMPFILE.dialog 12 50
+	fi
+        ;;
+
+esac

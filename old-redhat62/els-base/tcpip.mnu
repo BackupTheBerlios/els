@@ -1,0 +1,146 @@
+. /etc/sysconfig/network
+
+case "$1" in
+
+    Query)
+	Title "Network" "TCPIP" "Setup TCPIP options"
+	Option "Name"     "Set name of this computer (now $HOSTNAME)"
+	#Option "Address" "Set server IP address (now $IPADDR)"
+	Option "Hosts"    "Edit list of known computers"
+	Option "Usage"    "Display network usage"
+	;;
+
+    name)
+	#Desc
+	# Enables you to change your hostname.
+	#
+	#Item Background
+	# The host name of the main server should be your domain. Let's
+        # assume that your domain is "company.de". In this case, name
+        # your server just "company.de", not something like "linux.company.de"
+        # or "server.company.de". The latter will backfire and make things
+        # somewhat more complicated when you're installing e-mail services.
+	#
+	# Additional servers (e.g. for testing or learning) should be
+	# below the main name. For example "test.company.de". Do not
+        # name them "test.de". That's because you have no naming authority
+        # for the domain "de", but full naming authority for the domain
+        # "company.de".
+	#
+	#Item Usage
+	# After selection of this option you can enter the new name into
+	# an input mask:
+	#Input
+	# Enter new hostname, e.g.<BR>
+	# test.company.de
+	#InputEnd
+	# Enter the new name and press [Enter].
+	#Macro Cancel
+ 	# You should also restart your server.
+	#DescEnd
+
+	InputString "Enter new hostname, e.g.\ntest.company.de"
+	test -z "$CHOICE" && return
+	SetOpt "HOSTNAME" "$CHOICE" "/etc/sysconfig/network" "normal"
+	hostname $CHOICE
+
+	# the following set's the login "issue" text
+	els-base.pl
+	;;
+
+
+    address\
+	)
+	#Desc
+	# Enables you to change the IP number that is used on your
+	# local ethernet.
+	#
+	#Item Background
+	# Use an IP number in the form <TT>192.168.x.y</TT>. The number
+	# <TT>x</TT> can be between 0 and 255. <TT>y</TT> should be
+	# between 200 and 254 (including). If you use lower numbers for
+	# <TT>y</TT> the <b>els-dhcp</b> module won't work.
+	#
+	#Item Usage
+	# After selection of this option you can enter the new address into
+	# an input mask:
+	#Input
+	# Enter new IP address, e.g.<BR>
+	# 192.168.1.200
+	#InputEnd
+	# Enter the new name and press [Enter].
+	#Macro Cancel
+ 	# You should also restart your server.
+	#DescEnd
+
+	InputString "Enter new IP address, e.g.\n192.168.1.200"
+	test -z "$CHOICE" && return
+	SetOpt "IPADDR" "$CHOICE" "/etc/sysconfig/network-scripts/ifcfg-eth0" "normal"
+
+ 	dialog --msgbox "Now you must shutdown and re-start your server. You can do this from the \"System\" menu." 7 40
+	$0 system
+	;;
+
+    hosts)
+	#Desc
+	# Sometimes it is hard for humans to remember that
+	# <TT>192.168.1.32</TT> is the IP address for Fritz' computer. So
+	# you can enter all this numbers in the file <TT>/etc/hosts</TT>
+	# and later use the convenient names.
+	#
+	# Here is an example:
+	#Edit
+	# 127.0.0.1      localhost localhost.localdomain
+	# 192.168.1.200  company.de company
+	# 192.168.1.1    tobias.company.de tobias
+	# 192.168.1.32   fritz.company.de fritz
+	#EditEnd
+	#Macro Editor
+	#
+	#Item Important
+	# At the left, you see the IP address. On the right side, you
+	# see all names for this address. The leftmost name of this
+	# names is the primary name. Always use fully qualified names
+	# here. That means: use "fritz.company.de" and not "fritz" or
+	# "scrumpy" or whatever.
+	#
+	# The reason is that this names might find their way to computers
+	# in the outside. These computers don't know "fritz" or "scrumpy"
+	# and can't send e-mail to them. But because of our special ELS-DNS
+	# setup any e-mail for "fritz.company.de" would be sent to
+	# "company.de". Or, more exactly, to the provider of "company.de".
+	#DescEnd
+
+	EditFile /etc/hosts
+
+        # When els-named is installed, recompile hosts into the DNS lookup tables
+	test -x /usr/sbin/els-dns.pl && /usr/sbin/els-dns.pl
+	;;
+
+    usage)
+	#Desc
+	# "Usage" shows a rather detailed usage report of the TCP/IP
+	# network. It covers interfaces, routing entries, TCP connections,
+	# UDP ports and RAW ports. This is only for technicians (and
+	# curious people), so don't bother if you don't understand what
+	# this all means. :-)
+	#
+	#Item Usage
+	# The usage statistics are presented in a normal text box.
+	#Macro Textbox
+	#DescEnd
+
+	rm -f $TMPFILE
+
+	netstat -eva --interfaces	>>$TMPFILE 2>/dev/null && echo -e "\n" >>$TMPFILE
+	netstat -eva --netlink   	>>$TMPFILE 2>/dev/null && echo -e "\n" >>$TMPFILE
+	netstat -eva --route		>>$TMPFILE 2>/dev/null && echo -e "\n" >>$TMPFILE
+	netstat -eva --masquerade	>>$TMPFILE 2>/dev/null && echo -e "\n" >>$TMPFILE
+	netstat -eva --tcp		>>$TMPFILE 2>/dev/null && echo -e "\n" >>$TMPFILE
+	netstat -eva --udp		>>$TMPFILE 2>/dev/null && echo -e "\n" >>$TMPFILE
+	netstat -eva --raw		>>$TMPFILE 2>/dev/null && echo -e "\n" >>$TMPFILE
+
+	dialog --textbox $TMPFILE 23 76
+	;;
+
+esac

@@ -1,0 +1,17 @@
+#Title sysctl
+#Author Holger Schurig
+#Desc
+# Patch /etc/sysctl.conf
+#DescEnd
+
+loadfile '/etc/sysctl.conf';
+if ((getopt('kernel.sysrq = ') eq '0') || $force) {
+    replace 'Disables the magic', 'Enables the magic';
+    setopt 'kernel.sysrq = ', '1';
+    writefile;
+    logit "/etc/sysctl.conf: allowed sysrq key\n";
+}
+
+1;
+
+

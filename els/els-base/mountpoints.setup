@@ -1,0 +1,18 @@
+#Title Create default mount points
+#Author Holger Schurig
+#Mandatory
+#Desc
+# This script creates mount points for cdrom, floppy, nfs, samba, dos
+# and zip drives/shares/filesystems in the /mnt directory.
+#DescEnd
+
+my $madedir=0;
+unless (-d '/mnt/cdrom')  { mkdir '/mnt/cdrom', 0755;  $madedir++; }
+unless (-d '/mnt/dos')    { mkdir '/mnt/dos', 0755;    $madedir++; }
+unless (-d '/mnt/floppy') { mkdir '/mnt/floppy', 0755; $madedir++; }
+unless (-d '/mnt/nfs')    { mkdir '/mnt/nfs', 0755;    $madedir++; }
+unless (-d '/mnt/samba')  { mkdir '/mnt/samba', 0755;  $madedir++; }
+unless (-d '/mnt/zip')    { mkdir '/mnt/zip', 0755;    $madedir++; }
+logit "/etc/mnt/*: created default mount points\n" if $madedir;
+
+1;

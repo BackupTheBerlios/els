@@ -1,0 +1,8 @@
+#!/bin/bash
+#
+# hex
+#
+# Run od as a hexdump with a nice output format (similar to hexdump
+# programs you might know from MSDOS)
+#
+hexdump -f /usr/lib/hex.fmt $@

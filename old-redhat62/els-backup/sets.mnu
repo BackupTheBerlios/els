@@ -1,0 +1,279 @@
+function SelectSet ()
+{
+    echo -n "dialog --menu \"Select backup set $1\" 23 65 15 " >$TMPFILE.dialog
+    sysadm-backup.pl --listsets $2 $3 >>$TMPFILE.dialog
+    { . $TMPFILE.dialog } 2>$TMPFILE
+    CHOICE=`cat $TMPFILE`
+}
+
+
+case "$1" in
+
+    Query)
+        Title "Backup" "Sets" "For experts: Define backup sets"
+
+	#Desc
+	# The backup procedure is heavily based on "backup sets". This option
+	# allows you to create a backup set. Now, what is such a set?  It's simply
+	# a data format that allows us to store where in the directory the
+	# backup program should start gathering the files, where it should end and
+	# which files to skip.
+	#DescEnd
+
+
+        # the following options make only sense once you have a tape defined
+        if [ ! -z "$TAPE" -a "$TAPE" != "/dev/null" ]; then
+            Option "List"     "Display backup sets"
+	    Option "Add"      "Add backup set"
+	    Option "Delete"   "Delete backup set"
+	    Option "Modify"   "Modify backup set"
+	    Option "Files"    "Display which files would be in the backup"
+	    Option "Excluded" "Display which files which don't get backed up"
+        else
+	    dialog --msgbox "Define tape type first." 5 30
+	fi
+        ;;
+
+    list)
+	#Desc
+	# This allows you to see the currently defined lists (every installation
+	# gets some pre-defined backup sets during installation of OM BACKUP).
+	# You first get a question
+	#Question
+	# Do you want the verbose list with file count and sizes?
+	#
+	# (This might take several minutes!)
+	#QuestionEnd
+	# Suppose you selected "No". Then you might see something like this:
+	#
+	#TextBox
+	# The following backup sets do exist:
+	#
+	# root
+	# usr
+	# var
+	#TextBoxEnd
+	# But if you asked for the verbose list, then the backup software looks
+	# in each backup set for a list of the files and their overall size. The
+	# output might look like this:
+	#TextBox
+	# The following backup sets do exist:
+	#
+	# Backup set            Files    Size in KB
+	# -----------------------------------------
+	# root                   2379         17923
+	# usr                   19256        537720
+	# var                    5919         42372
+	# -----------------------------------------
+	# Total                 27554        598015
+	#TextboxEnd
+	#Item Hint
+	# To find out which files are included in a specific
+	# backup set, you could also use the <A HREF="#files">Files</A>
+	# option.
+	#DescEnd
+
+	if Question "Do you want the verbose list with file count and sizes?\n\n(This might take several minutes!)"; then
+		dialog --infobox "One moment ... looking for files ..." 3 40
+		nice -1 sysadm-backup.pl --verbose --sets >$TMPFILE
+	else
+		sysadm-backup.pl --sets >$TMPFILE
+	fi
+	dialog --textbox $TMPFILE 23 76
+	;;
+
+    add)
+	#Desc
+	# This allows you define a new backup set.
+	#
+	#Item Warning
+	# You would very seldom want to use
+	# this feature, because at installation time of OM BACKUP you got already a
+	# list of default backup sets.
+	#
+	#Item Usage
+	# FIrst you are asked for the name of the new backup set:
+	#Input
+	# Name of backup set, e.g.
+	# samba
+	#InputEnd
+	# Then you can enter the starting path of this backup set:
+	#Input
+	# Path that should be backed up, e.g.
+	# /usr/samba
+	#InputEnd
+	# That's all, your backup set has been created. Of course, you could use
+	# <A HREF="#modify">Modify</A> for some fine tunings ...
+	#DescEnd
+
+	InputString "Name of backup set, e.g.\nsamba"
+	test -z "$CHOICE" && return
+	export SETNAME="$CHOICE"
+
+	if [ -f "/etc/backup.d/$SETNAME.set" ]; then
+	    dialog --msgbox "Backup set \"$NAME\" already exist." 5 32
+	    return
+	fi
+
+	InputString "Path that should be backed up, e.g.\n/usr/samba"
+	test -z "$CHOICE" && return
+	export SETPATH="$CHOICE"
+
+	{
+	    # Note: this should be the same text as in /usr/sbin/els-backup.pl
+	    echo "#"
+	    echo "# Backup set definition file, used by sysadm -> backup"
+	    echo "#"
+	    echo "# Format"
+	    echo "# ------"
+	    echo "# This file may contain many line. The starting character of each line"
+	    echo "# does tells what this line is for:"
+	    echo "#"
+	    echo "#   #             comment"
+	    echo "#   /usr/samba    slashes define paths to be backed up"
+	    echo "#   -*.bak        minus denote files that should not be backed up"
+	    echo "#"
+	    echo
+	    echo "$SETPATH"
+	} >"/etc/backup.d/$SETNAME.set"
+
+	;;
+
+    delete)
+	#Desc
+	# Use this option to delete a backup set.
+	#
+	#Item Warning
+	# You should really know what you do. If you delete a backup set
+	# then the files specified by this backup won't be backed up on your
+	# tape. If then your hard disk crashes ... at least you can't say that
+	# you haven't been warned :-)
+	#
+	#Item Usage
+	# Simple select the backup set you want to get rid of:
+	#Menu Select backup set to delete
+	# root
+	# usr
+	# var
+	#MenuEnd
+	#Macro Menu
+	#DescEnd
+
+	SelectSet "to delete"
+        test -z "$CHOICE" && return
+	rm -f "/etc/backup.d/$CHOICE.set"
+	;;
+
+    modify)
+	#Desc
+	# This allows you to fine-tune your backup sets.
+	#
+	#Item Warning
+	# This option is something for <B><FONT COLOR="red">experts</FONT></B>. It allows
+	# you to fine-tune this backup sets.
+	#
+	#Item Usage
+	# After selecting the backup set you want to modify ...
+	#Menu Select backup set to modify
+	# root
+	# usr
+	# var
+	#MenuEnd
+	# ... you can edit the file. Your screen should look similar to this:
+	#Edit
+	# # /etc/backup.d/gra.set
+	# #
+	# # Backup set definition file, used by sysadm -> backup
+	# #
+	# #
+	# # Format
+	# # ------
+	# # This file may contain many line. The starting character of each line
+	# # does tells what this line is for:
+	# #
+	# #   #	          comment
+	# #   /usr/samba    slashes define paths to be backed up
+	# #   -*.bak        minus denote files that should not be backed up
+	# #
+	# 
+	# /usr/samba/gra
+	# -*.jpg
+	#EditEnd
+	#Macro Editor
+	#DescEnd
+
+	SelectSet "to modify"
+        test -z "$CHOICE" && return
+	EditFile "/etc/backup.d/$CHOICE.set"
+	;;
+
+    files)
+	#Desc
+	# After you created (or modified) a backup set, you might be curious if
+	# all files are indeed included in the backup. Simple use this option to
+	# find out prematurely what files will end up on your backup tape.
+	#
+	#Item Usage
+	# Simple select the backup set you want:
+	#Menu Select backup set to list
+	# root
+	# usr
+	# var
+	#MenuEnd
+	# Then you see a text box similar to this that contains all the files
+	# of this backup set:
+	#TextBox
+	# Files in backup set 'root':
+	#
+	# /
+	# /tmp
+	# /usr
+	# /var
+	# /dev
+	# /dev/log
+	# /dev/null
+	# ...
+	#TextBoxEnd
+	#Macro TextBox
+	#DescEnd
+
+	SelectSet "to list"
+        test -z "$CHOICE" && return
+	dialog --infobox "One moment ..." 3 18
+	sysadm-backup.pl --verbose --files "$CHOICE" >$TMPFILE
+	dialog --textbox $TMPFILE 23 76
+	;;
+
+    excluded)
+	#Desc
+	# This is just the opposite of the previous option. It displays all
+	# files that would normally be in the backup set, but have been
+	# excluded because of global or per-backup-set file exclusion.
+	#
+	#Item Usage
+	# Simple select the backup set you want:
+	#Menu Select backup set to list
+	# root
+	# usr
+	# var
+	#MenuEnd
+	# Then you see a text box similar to this that contains all the files
+	# of this backup set:
+	#TextBox
+	# Files not in backup set 'var':
+	#
+	# /var/sysadm.1224
+	# /var/sysadm.dialog
+	# ...
+	#TextBoxEnd
+	#Macro TextBox
+	#DescEnd
+
+	SelectSet "to list"
+        test -z "$CHOICE" && return
+	dialog --infobox "One moment ..." 3 18
+	sysadm-backup.pl --verbose --excluded "$CHOICE" >$TMPFILE
+	dialog --textbox $TMPFILE 23 76
+	;;
+
+esac

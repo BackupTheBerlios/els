@@ -1,0 +1,21 @@
+#Title Patch /etc/profile
+#Author Holger Schurig
+#Desc
+#DescEnd
+
+loadfile '/etc/profile';
+unless (search('LESS')) {
+    append '';
+    append '# several handy paths';
+    append 'export TEMP=/var/tmp';
+    append 'export TMP=/var/tmp';
+    append 'export TMPDIR=/var/tmp';
+    append '';
+    append '# vars for BASH and LESS';
+    append 'export IGNOREEOF=0';
+    append 'export HISTCONTROL=ignoreboth';
+    append 'export FIGNORE=.a:.o';
+    append 'export LESS="-MSisch4"';
+    writefile;
+    logit "/etc/profile: tmp directory, bash and less enhancements\n";
+}

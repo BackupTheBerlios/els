@@ -1,0 +1,118 @@
+. /etc/sysconfig/network
+
+case "$1" in
+
+    Query)
+	Title "Network" "DNS" "Setup caching name server"
+
+	#Desc
+	# DNS is the "Domain name server". This is an internet service
+	# that can translate human readable names like www.om.org into
+	# machine readable addresses like 132.12.22.48 and vice verca.
+	#DescEnd
+
+	Option "Forward"    "Enter your DNS provider ($DNS_SERVER)"
+	Option "Query"      "For experts: Query the DNS"
+	Option "Restart"    "Restart the background name server process"
+	Option "Statistics" "For experts: Display name server statistics"
+	;;
+
+    forward)
+	#Desc
+	# Your system caches DNS entries, but it has to ask somewhere for
+	# addresses if the answer to a DNS is not in the cache. Therefore,
+	# you have to enter the DNS address of your provider.
+	#
+	#Item Usage
+	# Just enter the <B>IP address</B> and press [Enter].
+	#DescEnd
+
+	InputString "Enter the name server IP address of your provider, e.g.\n199.108.119.2  (or 0.0.0.0 to disable this feature)"
+	test -z "$CHOICE" && return
+	SetOpt "DNS_SERVER" "$CHOICE"
+
+	# the makes a new /etc/named.conf --- beside other things
+	cls
+	/etc/rc.d/init.d/named stop
+	els-dns.pl
+	/etc/rc.d/init.d/named start
+	;;
+
+
+    query)
+	#Desc
+	# Allows you to ask questions to the DNS.
+	#
+	#Item Usage
+	# After you enter your query ...
+	#Input mail.isynet.de
+	# Enter a hostname, e.g. 'localhost' or a reversed IP address,<BR>e.g. '200.1.168.192.in-addr.arpa'
+	#InputEnd
+	# ... you will see the answer ...
+	#TextBox
+	# ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 4899
+	# ;; flags: qr aa rd ra; Ques: 1, Ans: 3, Auth: 1, Addit: 1
+	# ;; QUESTIONS:
+	# ;; omd-31.d.om.org, type = ANY, class = IN
+	# 
+	# ;; ANSWERS:
+	# omd-31.d.om.org. 86400 IN SOA omd-31.d.om.org. postmaster.omd-31.d.om.org. (
+	#                  3562972614 ; serial
+	#                  43200 ; refresh (12 hours)
+	#                  3600 ; retry (1 hour)
+	#                  3600000 ; expire (41 days 16 hours)
+	#                  86400 ) ; minimum (1 day)
+	# omd-31.d.om.org. 86400 IN A 192.168.1.31
+	# omd-31.d.om.org. 86400 IN NS omd-31.d.om.org.
+	# 
+	# ;; AUTHORITY RECORDS:
+	# omd-31.d.om.org. 86400 IN NS omd-31.d.om.org.
+	# 
+	# ;; ADDITIONAL RECORDS:
+	# omd-31.d.om.org. 86400 IN A 192.168.1.31
+	#TextBoxEnd
+	#DescEnd
+
+	InputString "Enter a hostname, e.g. 'localhost' or a reversed IP address,\ne.g. '200.1.168.192.in-addr.arpa'"
+	test -z "$CHOICE" && return
+	
+	echo -n "Query may take up to one minute ..."
+	dnsquery "$CHOICE." 2>&1 >$TMPFILE
+	if [ -s $TMPFILE ]; then
+	    dialog --textbox $TMPFILE 23 76
+	else
+	    dialog --msgbox "Sorry, I've got no answer for query $QUERY." 5 50
+	fi
+	;;
+
+
+     restart)
+	#Desc
+	# This restarts your caching name server. You can use this to empty
+	# it's cache forcefully. Usually, this is rarely needed.
+	#DescEnd
+
+	cls
+	/etc/rc.d/init.d/named restart
+	;;
+
+
+     statistics)
+	#Desc
+	# Displays various statistics.
+	#DescEnd
+
+	rm -f /var/tmp/named.stats
+	killall -ILL named
+	{
+	    echo "Note:"
+	    echo
+	    echo "This is an internal statistics file. It is used to solve subtle network"
+	    echo "problems. Everything is ok if you don't understand everything :-)"
+	    echo
+	    cat /var/tmp/named.stats
+	} >$TMPFILE
+	dialog --textbox $TMPFILE 23 76
+	;;
+
+esac

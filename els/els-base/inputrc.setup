@@ -1,0 +1,23 @@
+#Title Patch /etc/inputrc
+#Author Holger Schurig
+#MinRedHat 7.2
+#Desc
+# This stops the annoying command-line-completion bells in the shell
+# (and other programs that use the readline library).
+#
+# We also define PgUp/PgDn so that they walk you through the
+# command line history. Try to type some text and the the PgUp
+# key ...
+#DescEnd
+
+loadfile '/etc/inputrc';
+unless (search 'history.search.backward') {
+    uncomment 'set bell';
+    append '';
+    append '"\e[5~": history-search-backward';
+    append '"\e[6~": history-search-forward';
+    logit "/etc/inputrc: history search for the readline library\n";
+    writefile;
+}
+
+1;

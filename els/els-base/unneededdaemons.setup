@@ -1,0 +1,22 @@
+#Title Stop unneeded daemons
+#Author Holger Schurig
+#Desc
+# This disables several daemons (background processes) that are not really
+# needed for a file server:
+#DescEnd
+
+open CHKCONFIG, "chkconfig --list|";
+my @lines = <CHKCONFIG>;
+close CHKCONFIG;
+foreach (@lines) {
+  if ($server  && /^gpm.*on/)    {
+      system 'chkconfig --del gpm >/dev/null 2>&1';
+      logit "/etc/init.d/gpm: autostart disabled\n";
+  }
+  if ($server  && /^kudzu.*on/)    {
+      system 'chkconfig --del kudzu >/dev/null 2>&1';
+      logit "/etc/init.d/kudzu: autostart disabled\n";
+  }
+}
+
+1;

@@ -1,0 +1,281 @@
+#!/usr/bin/tic
+#
+# $Id: teraterm.ti,v 1.1 2001/11/22 09:14:26 holgerschurig Exp $
+#
+# This is the TERMINFO file for "TeraTerm 2.3", a free Telnet client
+# for 32 bit Windows.
+#
+# This file have been created by looking at the source code of TeraTerm
+# to gather all the ESC sequences. I tested it with a couple of programs
+# and it seems to work very well (e.g. with mc, joe, vi, less etc).
+#
+# I used the standard Linux sequences for the function keys. Sometimes
+# applicates (like "mc" or "joe" have the escape sequences hardcoded
+# into them. So I guess it is better that I use the keyboard sequences
+# of the Linux "console" driver in all applications as well as in the
+# telnet package. Therefore, you might have to create a proper
+# "keyboard.cnf" file for TeraTerm.
+#
+# Just a tip: TeraTerm is not very fast in scrolling. So I if you set
+# an alias to call "less" with the parameters "-h4" to scroll 4 lines
+# at maximum (and use complete redraws in all other cases), you will
+# have a faster screen update.
+#
+# And another tip: if you modify the TERATERM.INI file so that in
+# it reads "AnswerBack=teraterm" and "TermType=teraterm", than your
+# telnet daemon (in.telnetd) will automatically set the environment
+# "TERM=teraterm" before invoking the login.
+#
+#
+#
+#
+# REVISION HISTORY:
+#
+# 11-Apr-1997  holger@d.om.org      created
+# 30-Apr-1997  holger@d.om.org      modified so that both "mc" and "dialog"
+#                                   do work as expected, still there is no
+#                                   background color, so play with "sgr"
+#                                   and send me the result back
+# 29-Jun-2000  holgerschurig@gmx.de adapted to TeraTerm 2.3
+# 30-Aug-2000  holgerschurig@gmx.de more fixes, especially with colors
+#
+#
+#
+# TeraTerm can be fetched from
+#
+#  http://www.vector.co.jp/authors/VA002416/teraterm.html
+#
+teraterm|mn320|Tterm 2.3 in VT382 mode,
+#
+# Flags
+#
+#	am	automatic margins
+#	eo	can erase overstrike with space
+#	mir	safe to move while in insert mode
+#	msgr	safe to move while in standout mode
+#	xenl	newline ignored after 80 columns
+#	xon	terminal uses xon/xoff protocol
+  am, eo, mir, msgr, xenl, xon,
+#
+#
+# Numbers
+#
+#	it	initialize tabs at every #nth position
+#	colors	maximum number of colors on screen
+#	pairs	maximum number of color pairs on screen
+#	ncv	bit mask of video attributes that can't be used with colors
+  it#8,
+  colors#8,
+  pairs#128,
+  ncv#32,
+#
+# ncv is a bit field: these are the values:
+#       A_STANDOUT     0     1
+#       A_UNDERLINE    1     2
+#       A_REVERSE      2     4
+#       A_BLINK        3     8
+#       A_DIM          4     16
+#       A_BOLD         5     32
+#       A_INVIS        6     64
+#       A_PROTECT      7     128
+#       A_ALTCHARSET   8     256
+#
+#
+# Attributes
+#
+#	blink	turn on blinking
+#	bold	turn on bold 
+#	rev	turn on reverse video mode
+#	smul	start underline mode
+#	rmul	exit underline mode
+#	smso	start standout mode
+#	rmso	exit standout mode
+#	op	set default pair to its original value
+#	setaf	set ansi foreground color
+#	setab	set ansi background color
+#	sgr     define video attributes 1..9
+#	sgr0	turn off all attributes
+  blink=\E[1m, 
+  bold=\E[5m,
+  rev=\E[7m,
+  smul=\E[4m,
+  rmul=\E[24m,
+  smso=\E[7m,
+  rmso=\E[27m,
+# op=\E[30;47m,
+  op=\E[m,
+  setaf=\E[3%p1%dm,
+  setab=\E[4%p1%dm,
+#
+# Meaning of the % variables in sgr:
+#       %p1 Standout
+#       %p2 underline
+#       %p3 reverse
+#       %p4 blink
+#       %p5 dim
+#       %p6 bold
+#       %p7 invis
+#       %p8 protect
+#       %p9 altcharset
+#       %? if
+#       %t then
+#       %e else
+#       %; endif
+#       %| stack based "or" function: pop two variables, or them, push result
+  sgr=\E[m\E[0%?%p1%p3%|%t;7%;%?%p2%t;4%;%?%p4%t;1%;%?%p6%t;5%;m%?%p9%t^N%e^O%;,
+  sgr0=\E[m,
+#
+#
+# Character set
+#
+#	acsc	graphics charset pairs
+#	enacs	enable alternate characters set (1:1 stolen from vt100)
+#	smacs	start alternate character set
+#	smpch	enter PC character set
+#	rmacs	exit alternate character set
+#	rmpch	exit PC character set
+  acsc=``aaffggjjkkllmmnnooppqqrrssttuuvvwwxxyyzz{{||}}~~,
+  smacs=^N,
+  rmacs=^O,
+#
+#
+# Move the Cursor (normal)
+#
+#	cub	move left (backwards)
+#	cuf	move right (forward)
+#	cuu	move up
+#	cud	move down
+#	nel	new line
+#	ri	cursor up with scroll
+#	cr	carriage return
+#	ht	tab to next 8-space hardware tab stop
+#	ind	scroll text up
+  cub=\E[%p1%dD, 
+  cub1=\b, 
+  cuf=\E[%p1%dC, 
+  cuf1=\E[C,
+  cuu=\E[%p1%dA,
+  cuu1=\E[A,
+  cud=\E[%p1%dB, 
+  cud1=\n,
+  nel=^M^J,
+  ri=\EM,
+  cr=\r, 
+  ht=\t,
+  ind=\ED,
+#
+#
+# Move the Cursor (advanced)
+#
+#	home	home cursor
+#	cup	move cursor to row # column #
+#	hpa	horizontal absolute position
+#	vpa	vertical absolute position
+#	sc	save cursor position
+#	rc	restore cursor position
+#	tbc	clear all tab stops
+#	hts	set a tab in current column
+#	civis	cursor invisible
+#	cnorm	cursor normal
+  home=\E[H, 
+  cup=\E[%i%p1%d;%p2%dH,
+  hpa=\E[%i%p1%dG,
+  vpa=\E[%i%p1%dd,
+  sc=\E7,
+  rc=\E8,
+  tbc=\E[3g,
+  hts=\EH,
+  civis=\E[?25l,
+  cnorm=\E[?25h,
+#
+#
+# Clear, Insert and Delete
+#
+#	clear	clear screen and home cursor
+#	ed	clear to end of screen
+#	el	clear to end of line
+#	el1	clear to beginning of line
+#	il1	insert one line
+#	dl	delete lines
+#	ich	insert characters
+#	dch	delete characters
+#	ech	erase characters
+#	smir	set insert mode
+#	rmir	exit insert mode
+  clear=\E[H\E[2J,
+  ed=\E[J,
+  el=\E[K,
+  el1=\E[1K,
+  il=\E[%p1%dL,
+  il1=\E[L,
+  dl=\E[%p1%dM,
+  dl1=\E[M,
+  ich=\E[%p1%d@,
+  ich1=\E[@,
+  dch=\E[%p1%dP,
+  dch1=\E[P,
+  ech=\E[%p1%dX,
+#smir/rmir with ich/ich1 gives a warning with 'tic -v':
+#  smir=\E[4h,
+#  rmir=\E[4l,
+#
+#
+# Miscellaneous
+#
+#	csr	set scroll region to line #-#
+#	u7	user string 7: cursor position report
+#	u9	user string 9: answer terminal type
+#	rs1	reset string 1
+#	bel	audible bell
+  nel=^M^J,
+  csr=\E[%i%p1%d;%p2%dr,
+  u7=\E[6n,
+  u9=\E[c,
+  rs1=\Ec\E]R,
+# is2=\E[1;24r\E[24;1H,
+  bel=^G,
+#
+#
+# Funktion keys
+#
+#	kbs	backspace key
+#	kcub1	cursor left key (backwards)
+#	kcuf1	cursor forward key
+#	kcuu1	cursor up key
+#	kcud1	cursor down key
+#	kich1	insert key
+#	kdch1	delete key
+#	khome	home key
+#	kend	end key
+#	kpp	previous page key
+#	knp	next page key
+#	kb2	center of keypad key
+#	kcbt	back-tab key
+#	kspd	suspend key
+#	kf__	function keys (1-12 normal, 13-20 shifted)
+  kbs=^H,
+  kcub1=\E[D,
+  kcuf1=\E[C,
+  kcuu1=\E[A,
+  kcud1=\E[B,
+  kich1=\E[1~,
+  kdch1=\E[4~,
+  khome=\E[2~,
+  kend=\E[5~,
+  kpp=\E[3~,
+  knp=\E[6~,
+  kspd=^Z,
+  kf1=\E[11~,
+  kf2=\E[12~,
+  kf3=\E[13~,
+  kf4=\E[14~,
+  kf5=\E[15~,
+  kf6=\E[17~,
+  kf7=\E[18~,
+  kf8=\E[19~,
+  kf9=\E[20~,
+  kf10=\E[21~,
+  kf11=\E[23~,
+  kf12=\E[24~,
+#
+# TODO: tn5250 (for AS/400) need way more function keys!

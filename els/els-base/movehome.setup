@@ -1,0 +1,32 @@
+#Title Move /home to /var/home if not on a separate partition
+#Author Holger Schurig, J.Marsden
+#Mandatory
+#Desc
+# Some servers do not have a separate /home partition and so /home would
+# be on the root parition. So move the home directories to /var/home to
+# give users enough disk space.
+#
+# Note that /root, roots home directory, will not be moved. This makes
+# sure that root can still log in in single-user mode ...
+#DescEnd
+
+if (-d '/home' && -f '/etc/fstab' && !-l '/home' && (`mount | grep /home` eq "")) {
+    #my @lines;
+    #loadfile '/etc/passwd';
+    #@lines = grep { s|:/home/(.+):|:/var/home/$1|g } @lines;
+    #writefile;
+
+    # can't mv here, because it might be on a different file system
+    system 'cp', '-a', '/home', '/usr';
+    system 'rm', '-rf', '/home';
+}
+if (! -l '/home' && -f '/etc/fstab' && (`mount | grep /home` eq "")) {
+    mkdir '/var/home', 0755 unless ( -d '/var/home');
+    system 'ln', '-s', '/var/home', '/home';
+
+    # Set default for new users
+    #system '/usr/sbin/useradd', '-D', '-b', '/var/home';
+    logit "/home moved to /var/home\n";
+}
+
+1;

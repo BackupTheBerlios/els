@@ -1,0 +1,476 @@
+function Count ()
+{
+    CHOICE=$1
+    return $#
+}
+
+case "$1" in
+
+    Query)
+        export PR_PORT=${PR_PORT:--not-defined-}
+        export PR_HOST=${PR_HOST:--not-defined-}
+        export PR_QUEUE=${PR_QUEUE:--not-defined-}
+        #export PR_DESC="${PR_DESC:--not-defined-}"
+        export PR_USER=${PR_USER:--not-defined-}
+        export PR_PASSWORD=${PR_PASSWORD:--not-defined-}
+        export PR_USAGE=${PR_USAGE:--not-defined-}
+        export PR_MODEL=${PR_MODEL:--not-defined-}
+        export PR_SIZE=${PR_SIZE:-a4}
+        export PR_PAGES=${PR_PAGES:-2}
+        export PR_RESOLUTION=${PR_RESOLUTION:--not-defined-}
+        export PR_BPS=${PR_BPS:--not-defined-}
+        export PR_FAST=${PR_FAST:-YES}
+        export PR_CHARSET=${PR_CHARSET:-ascii}
+        export PR_FIXSTAIR=${PR_FIXSTAIR:-NO}
+        export PR_FORMFEED=${PR_FORMFEED:-YES}
+        OK=yes
+
+        Title "Printer" "Printer setup" "Setup printer '$PR_NAME'"
+	
+	#Desc
+	# This is a complete outline of all options. In reality, you
+	# see (and can change) the options that makes sense under
+	# the current circumstances.
+	#DescEnd
+
+        Option "Usage"     "Define usage            (now $PR_USAGE)"
+        test "$PR_USAGE" = "-not-defined-" && OK=no
+        Option "Port" "Define printer port     (now $PR_PORT)"
+        test "$PR_PORT" = "-not-defined-" && OK=no
+
+        if [ "$PR_PORT" = "REMOTE" ]; then
+            Option "Host"  "Define remote host      (now $PR_HOST)"
+            Option "Queue" "Define remote queue     (now $PR_QUEUE)"
+            test "$PR_HOST" = "-not-defined-" && OK=no
+            test "$PR_QUEUE" = "-not-defined-" && OK=no
+        fi
+
+        if [ "$PR_USAGE" = "UNIX" ]; then
+            Option "Model" "Define printer model    (now $PR_MODEL)"
+            Option "Size"  "Define paper size       (now $PR_SIZE)"
+            Option "Pages" "Pages per sheet         (now $PR_PAGES)"
+            test "$PR_MODEL" = "-not-defined-" && OK=no
+            test "$PR_SIZE" = "-not-defined-" && OK=no
+
+            if [ ! -z "$RESOLUTIONS" -a "$RESOLUTIONS" != "NAxNA" ]; then
+                Option "Resolution" "Print resolution        (now $PR_RESOLUTION)"
+                test "$PR_RESOLUTION" = "-not-defined-" && OK=no
+            fi
+            if [ ! -z "$BPS" ]; then
+                Option "BPS" "Bits per pixel          (now $PR_BPS)"
+                test "$PR_BPS" = "-not-defined-" && OK=no
+            fi
+
+            if [ "$PR_MODEL" != "PostScript" -a "$PR_PAGES" = "1" ]; then
+                Option "Fast"  "Send ascii files direct (now $PR_FAST)"
+                if [ "$PR_FAST" = "YES" ]; then
+                    Option "Translation" "ascii: char translation (now $PR_CHARSET)"
+                    if [ "$PR_CHARSET" = "IBM-PC" ]; then
+                        PR_FIXSTAIR=NO
+                    else
+                        Option "FixStairs"  "ascii: fix 'staircases' (now $PR_FIXSTAIR)"
+                    fi
+                    Option "Formfeed"   "ascii: send FF at end   (now $PR_FORMFEED)"
+                fi
+            fi
+        fi
+
+        test "$OK" = "no" && return
+        Option "Update" "Update printer configuration files"
+        ;;
+
+    port)
+	#Desc
+	# Defines at which port the printer is. Choose one of
+	#Menu Where is the printer connected?
+	# /dev/lp0   parallel printer port 0 (LPT1:)
+	# /dev/lp1   parallel printer port 1 (LPT2:)
+	# /dev/lp2   parallel printer port 2 (LPT3:)
+	# /dev/ttyS0 serial port 0 (COM1:)
+	# /dev/ttyS1 serial port 1 (COM2:)
+	# /dev/ttyS2 serial port 2 (COM3:)
+	# /dev/ttyS3 serial port 3 (COM4:)
+	# REMOTE     remote printer using Unix LPR protocol
+	#MenuEnd
+	#Macro Menu
+	#DescEnd
+
+        echo -n "dialog --menu \"Where is the printer connected?\" 18 73 10 \
+               \"/dev/lp0\"   \"parallel printer port 0 (LPT1:)\" \
+               \"/dev/lp1\"   \"parallel printer port 1 (LPT2:)\" \
+               \"/dev/lp2\"   \"parallel printer port 2 (LPT3:)\" \
+               \"/dev/ttyS0\" \"serial port 0 (COM1:)\" \
+               \"/dev/ttyS1\" \"serial port 1 (COM2:)\" \
+               \"/dev/ttyS2\" \"serial port 2 (COM3:)\" \
+               \"/dev/ttyS3\" \"serial port 3 (COM4:)\" \
+               \"REMOTE\"     \"remote printer using Unix LPR protocol\" " >$TMPFILE.dialog
+        { . $TMPFILE.dialog } 2>$TMPFILE
+        CHOICE=`cat $TMPFILE`
+        test -z "$CHOICE" && return
+        PR_PORT=$CHOICE
+        ;;
+
+    host)
+	#Desc
+	# Used to enter the computer name where the printer is attached.
+	#
+	#Item Usage
+	# Enter the host name into the input mask:
+	#Input
+	# Computer name where printer is attached, e.g.<BR>OMD31
+	#InputEnd
+	# Host names for remote Windows printers are usually in uppercase.
+	# If you can access the printer from a workstations as
+	# "<TT>\\DONKY\LASERJET</TT>" enter "<TT>DONKY</TT>" here.
+	#
+	# Host names for remote LPR printers are usually lowercase and
+	# are defined in the <TT>/etc/hosts</TT> file (see
+	# <A HREF="tcpip.html#hosts">sysadm -&gt; Network -&gt; TCPIP -&gt;
+	# Hosts</A>). You can also enter the IP address directly, e.g.
+	# <TT>192.168.0.202</TT>.
+	#
+	#Item Visibility
+	# This option is only present if you selected "REMOTE"
+	# at "<A HREF="#port">Port</A>".
+	#DescEnd
+
+        if [ "$PR_PORT" = "REMOTE" ]; then
+            InputString "Host name or IP number of printer or print server, e.g.\nmnz31 or \"192.168.1.202\""
+            test -z "$CHOICE" && return
+            PR_HOST=`echo $CHOICE | tr A-Z a-z`
+        fi
+        ;;
+
+    queue)
+	#Desc
+	# Used to enter the printer name at the remote printer.
+	#
+	#Item Usage
+	# Enter the queue name into the input mask:
+	#Input
+	# Name of shared printer at remote system, e.g.<BR>LASERJET4
+	#InputEnd
+	# Queue names for remote Windows printers are usually in uppercase.
+	# If you can access the printer from a workstations as
+	# "\\DONKY\LASERJET" enter "LASERJET" here.
+	#
+	# Queue names for remote LPR printers are usually in lowercase.
+	#
+	#Item Visibility
+	# This option is only present if you selected "REMOTE"
+	# at "<A HREF="#port">Port</A>".
+	#DescEnd
+
+        if [ "$PR_PORT" = "REMOTE" ]; then
+            InputString "Queue name of remote printer at remote system, e.g.\nlp1"
+            test -z "$CHOICE" && return
+            PR_QUEUE=`echo $CHOICE | tr A-Z a-z`
+        fi
+        ;;
+
+    usage)
+	#Desc
+	# How the printer should be used. Selects throught which filters
+	# your Easy Linux Server should send the data throught.
+	#
+	#Item Usage
+	# Select one of the following:
+	#Menu For what subsystem do you need this printer?
+	# UNIX  filterig printer, for use at the Linux console
+	# WIN   raw printer, e.g. for Windows/SAMBA"
+	#MenuEnd
+	#Macro Menu
+	#DescEnd
+
+        dialog --menu "For what subsystem do you need this printer?" 10 61 2 \
+               "UNIX"  "filtering printer, for use at the Linux console" \
+               "WIN"   "raw printer, e.g. for Windows/SAMBA" \
+        2>$TMPFILE
+        CHOICE=`cat $TMPFILE`
+        test -z "CHOICE" && return
+        PR_USAGE=$CHOICE
+        case "$PR_USAGE" in
+            UNIX) dialog --msgbox "\
+Usage UNIX:
+
+This will give you a printer that is mainly useful for you
+at the unix commandline. This printer accepts all sorts of
+files directly, e.g. ascii files, man pages, postscript
+files and so on.
+
+The files will be formatted using the tools GhostScript and
+MPage, allowing you to print more then one pages on one
+physical sheet of paper." 14 64 ;;
+
+            WIN) dialog --msgbox "\
+Usage WIN:
+
+You need this printer types for your windows workstations.
+These workstations have their own printer driver and usually
+know exactly how to deal with your printer. Therefore your
+Unix box should not modify the data stream in any way." 10 64 ;;
+
+        esac
+        ;;
+
+    model)
+	#Desc
+	# Enter the model of your printer. Your system needs this info
+	# to format the output using GhostScript, a postscript processor.
+	#
+	#Item Usage
+	# Select the printer from the following list:
+	#Menu
+	# AppleDMP    Apple Dot Matrix
+	# BJC600      Canon BJC-600 and BJC-4000
+	# CItohM8510  C.Itoh M8510
+	# CanonBJ10e  Canon BJ-10e
+	# CanonBJ200  Canon BJ-100/200/210/240
+	# ...         &nbsp;
+	#MenuEnd
+	#Macro Menu
+	#
+	#Item Visibility
+	# This option is only visible if you selected "UNIX"
+	# at "<A HREF="#usage">Usage</A>".
+	#DescEnd
+
+        dialog --infobox "Wait a second ..." 3 30
+        echo -n "dialog --menu \"Select printer model or a compatible one\" 23 78 15 " >$TMPFILE.dialog
+        /usr/sbin/sysadm-printer.pl --listprinterdb >>$TMPFILE.dialog
+        { . $TMPFILE.dialog } 2>$TMPFILE
+        CHOICE=`cat $TMPFILE`
+        test -z "$CHOICE" && return
+        PR_MODEL=$CHOICE
+        PR_RESOLUTION="-not-defined-"
+        PR_BPS="-not-defined-"
+
+        RESOLUTIONS=`/usr/sbin/sysadm-printer.pl --listresolution=$PR_MODEL`
+        test "$RESOLUTIONS" = "NAxNA" && PR_RESOLUTION="NAxNA"
+        Count $RESOLUTIONS
+        test $? = 2 && PR_RESOLUTION=$CHOICE
+
+        BPS=`/usr/sbin/sysadm-printer.pl --listbps=$PR_MODEL`
+        ;;
+
+    size)
+	#Desc
+	# Select paper size.
+	#
+	#Item Usage
+	# Select your favorite paper size from the menu:
+	#Menu What paper size do you use?
+	# a4      DIN A4
+	# a3      DIN A3
+	# letter  letter, also known as 12 inch paper
+	# legal   legal
+	# ledger  ledger
+	#MenuEnd
+	#Macro Menu
+	#
+	#Item Visibility
+	# This option is only visible if you selected "UNIX"
+	# at "<A HREF="#usage">Usage</A>".
+	#DescEnd
+
+        dialog --menu "What paper size do you use?" 13 51 5 \
+               "a4"      "DIN A4" \
+               "a3"      "DIN A3" \
+               "letter"  "letter, also known as 12 inch paper" \
+               "legal"   "legal" \
+               "ledger"  "ledger" \
+        2>$TMPFILE
+        CHOICE=`cat $TMPFILE`
+        test -z "$CHOICE" && return
+        PR_SIZE=$CHOICE
+        ;;
+
+    pages)
+	#Desc
+	# Allows you to squeeze two or even four pages onto one sheet of
+	# of paper. This is very handy if you want to print out long
+	# documentations. When these documentations are in postscript
+	# format, they could even come from a your windows box!
+	#
+	#Item Usage
+	# Select you eye strength from the following menu:
+	#Menu How manypages should be printed on one sheet?
+	# 1  normal: one page per sheet
+	# 2  compressed: two pages per sheet is nice for documentations
+	# 4  tiny: have your magnifying glass ready ...
+	#MenuEnd
+	#Macro Menu
+	#
+	#Item Visibility
+	# This option is only visible if you selected "UNIX"
+	# at "<A HREF="#usage">Usage</A>".
+	#DescEnd
+
+        dialog --menu "How many pages should be printed on one paper?" 11 70 3 \
+               "1"  "normal: one page per sheet" \
+               "2"  "compressed: two pages per sheet is nice for documentations" \
+               "4"  "tiny: have your magnifying glass ready ...  :-)" \
+        2>$TMPFILE
+        CHOICE=`cat $TMPFILE`
+        test -z "$CHOICE" && return
+        PR_PAGES=$CHOICE
+        ;;
+
+    resolution)
+	#Desc
+	# Let you define the printing resolution. Higher resolutions take
+	# much longer to print.
+	#
+	#Item Visibility
+	# This option is only visible if you selected "UNIX"
+	# at "<A HREF="#usage">Usage</A>" and the selected printer
+	# model supports different resolutions.
+	#DescEnd
+
+        echo -n "dialog --menu \"Which resolution do you want?\" 13 70 5 $RESOLUTIONS" >$TMPFILE.dialog
+        { . $TMPFILE.dialog } 2>$TMPFILE
+        CHOICE=`cat $TMPFILE`
+        test -z "$CHOICE" && return
+        PR_RESOLUTION=$CHOICE
+        ;;
+
+    bps)
+	#Desc
+	# Lets you define the "bits per pixel". This is used for some
+	# monochrome printers to print colored images in nicer greys.
+	#
+	#Item Visibility
+	# This option is only visible if you selected "UNIX"
+	# at "<A HREF="#usage">Usage</A>" and the selected printer
+	# model supports different bits per pixels.
+	#DescEnd
+
+        echo -n "dialog --menu \"How many pits per pixel do you want?\" 13 70 5 $BPS" >$TMPFILE.dialog
+        { . $TMPFILE.dialog } 2>$TMPFILE
+        CHOICE=`cat $TMPFILE`
+        test -z "$CHOICE" && return
+        PR_BPS=$CHOICE
+        ;;
+
+    fast)
+	#Desc
+	# Normally, all text (even plain ascii text) is sent throught
+	# "<TT>ghostscript</TT>" and "<TT>mpage</TT>" for rendering. If
+	# you switch "Fast" on, this does not happen. The time between
+	# submitting a print job and the start of the print is much
+	# smaller, but the result will not look that nice.
+	#
+	#Item Visibility
+	# This option is only visible if "<A HREF="#usage">Usage</A>" is
+	# "UNIX" and "<A HREF="#pages">Pages</A>" is "1".
+	#DescEnd
+
+        if [ "$PR_FAST" = "YES" ]; then
+            PR_FAST=NO
+        else
+            PR_FAST=YES
+        fi
+        ;;
+
+    translation)
+	#Desc
+	# Allows you to change the used character set. Your Easy
+	# Linux Server as well as Windows uses ISO-LATIN character sets,
+	# usually ISO-LATIN-1. But most printers use code pages defined
+	# by Microsoft, usually Codepage 437 or 850.
+	#
+	#Item Usage
+	# Select the character set of the printer from the menu:
+	#Menu
+	# Apple-Mac  applemac
+	# arabic     asmo708 ecma114 iso88596 isoir127
+	# ascii      cp367 ibm367 iso646us isoir6 us usascii
+	# ASCII-BS   asciibs bs
+	# ASMO_449   arabic7 asmo449 iso9036 isoir89
+	# AtariST    atarist
+	# BS_4730    bs4730 gb iso646gb isoir4 uk
+	# ca         csa71 iso646ca isoir121
+	# cn         gb198880 iso646cn isoir57
+	# cp037      IBM037 ibm037
+	# cp038      IBM038 ebcdicint ibm038
+	# cp1026     IBM1026 ibm1026
+	# ...        &nbsp;
+	#MenuEnd
+	#Macro Menu
+	#
+	#Item Visibility
+	# This option is only visible if "<A HREF="#usage">Usage</A>" is
+	# "UNIX", "<A HREF="#pages">Pages</A>" is "1" and
+	# "<A HREF="#fast">Fast</A>" is "YES".
+	#DescEnd
+
+        echo -n "dialog --menu \"Select character set, try \\\"ascii\\\" or \\\"IBM-PC\\\" first.\" 23 78 15 " >$TMPFILE.dialog
+        /usr/sbin/sysadm-printer.pl --listfilters >>$TMPFILE.dialog
+        { . $TMPFILE.dialog } 2>$TMPFILE
+        CHOICE=`cat $TMPFILE`
+        test -z "$CHOICE" && return
+        PR_CHARSET=$CHOICE
+
+        # the IBM-PC translater translates LF into CRLF automatically
+        test "$PR_CHARSET" = "IBM-PC" && PR_FIXSTAIR="NO"
+        ;;
+
+    fixstairs)
+	#Desc
+	# Sometimes you have a staircase effect on the printouts, e.g.
+	#Screen
+	# This is a test
+	#               This is a test
+	#                             This is a test
+	#ScreenEnd
+	# If you experience this, switch this to "YES".
+	#
+	#Item Visibility
+	# This option is only visible if "<A HREF="#usage">Usage</A>" is
+	# "UNIX", "<A HREF="#pages">Pages</A>" is "1" and
+	# "<A HREF="#fast">Fast</A>" is "YES".
+	#DescEnd
+
+        if [ "$PR_FIXSTAIR" = "YES" ]; then
+            PR_FIXSTAIR=NO
+        else
+            PR_FIXSTAIR=YES
+        fi
+        ;;
+
+    formfeed)
+	#Desc
+	# Sets if a form feed should be sent after the print job or
+	# not.
+	#
+	#Item Visibility
+	# This option is only visible if "<A HREF="#usage">Usage</A>" is
+	# "UNIX", "<A HREF="#pages">Pages</A>" is "1" and
+	# "<A HREF="#fast">Fast</A>" is "YES".
+	#DescEnd
+
+        if [ "$PR_FORMFEED" = "YES" ]; then
+            PR_FORMFEED=NO
+        else
+            PR_FORMFEED=YES
+        fi
+        ;;
+
+    update)
+	#Desc
+	# After you changed all your settings, "Update" updates the printer
+	# database.
+	#
+	#Item Visibility
+	# This option is only displayed on the screen if all mandatory
+	# fields of the menu have a value.
+	#DescEnd
+	
+        # this perl script loads all the data via the environment
+        /usr/sbin/sysadm-printer.pl --addprinter 2>&1
+        lpc up all >/dev/null 2>&1
+        dialog --msgbox "Printer configuration updated" 5 40
+        ExitMenu
+        ;;
+
+esac
