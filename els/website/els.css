@@ -2,10 +2,10 @@ BODY { background-color: #FFFFFF }
 
 OL,UL,P,BODY,TD,TR,TH,FORM { font-family: verdana,arial,helvetica,sans-serif; font-size:small; color: #333333; }
 
-H1 { font-family: verdana,arial,helvetica,sans-serif; }
-H2 { font-family: verdana,arial,helvetica,sans-serif; }
-H3 { font-family: verdana,arial,helvetica,sans-serif; }
-H4 { font-family: verdana,arial,helvetica,sans-serif; }
+H1 { font-size: 1.7em; font-family: verdana,arial,helvetica,sans-serif; }
+H2 { font-size: 1.4em; font-family: verdana,arial,helvetica,sans-serif; }
+H3 { font-size: 1.17em; font-family: verdana,arial,helvetica,sans-serif; }
+H4 { font-size: 1.0em; font-family: verdana,arial,helvetica,sans-serif; }
 H5 { font-family: verdana,arial,helvetica,sans-serif; }
 H6 { font-family: verdana,arial,helvetica,sans-serif; }
 
@@ -17,11 +17,11 @@ A:link { text-decoration: none; color: #6666AA; }
 A:active { text-decoration: none; color: #6666AA; }
 A:hover { text-decoration: underline; color: #FF6666 }
 
-A.menubar { color: #FFFFFFM; font-weight: bold }
+A.menubar { color: #FFFFFF; font-weight: bold }
 A.menubar:visited { color: #FFFFFF; font-weight: bold }
 
 A.menus { color: #000000; text-decoration: none; }
-A.hover { color: #000000; text-decoration: none; underline; }
+A.hover { color: #000000; text-decoration: none; text-decoration: underline; }
 A.menus:visited { color: #000000; text-decoration: none; }
 
 SPAN.alignright { text-align: right }
