@@ -18,23 +18,28 @@ case "$1" in
 	# format disks from here.
 	#
 	#Item Hint
-	# If you just want to work with some files on a MSDOS disk,
-	# use the command line utilities "<TT>mcopy</TT>", "<TT>mdir</TT>"
-	# and "<TT>mdel</TT>" instead.
+	# If you just want to work with files on a MSDOS disk,
+	# you may use the command line utilities "<TT>mcopy</TT>", "<TT>mdir</TT>",
+	# "<TT>mdel</TT>" etc directly.
 	#DescEnd
 
 
     info)
 	#Desc
-	# "Info" shows you all mounted devices.
-	#
-	#Item Usage
-	# You will see a screen similar to the following:
+	# This shows you all mounted devices. Use it to find
+	# out if a CDROM is already mounted. You will see a screen
+	# similar to the following:
 	#TextBox
-	# +++
+	# Device       Mounted to directory         File system   Flags
+	# -------------------------------------------------------------
+	# /dev/root    /                            ext2          rw 0
+	# /proc        /proc                        proc          rw 0
+	# /dev/hda3    /usr                         ext2          rw 0
+	# /dev/hda5    /var                         ext2          rw 0
+	# /dev/fd0     /mnt/floppy                  vfat          rw 0
 	#TextBoxEnd
-	# Because there is no <TT>/mnt/floppy</TT> entry you see that
-	# no floppy is mounted.
+	# The last line contains <TT>/mnt/floppy</TT>, so a floppy disc is
+	# currently mounted.
 	# 
 	#Item Usage
 	#Macro Textbox
@@ -66,7 +71,8 @@ case "$1" in
         # Linux has a very efficient disk cache. The cache
         # works with any file system, not just for the hard disk. This is
 	# one of the reasons why you have to mount disks before usage and
-	# to dismount them before removing.
+	# to dismount them before removing (so that Linux can write out
+	# unwritten data blocks).
 	#
 	# "Mount" tries to mount a floppy onto the mount point
 	# <TT>/mnt/floppy</TT>. This will succeed if the disk is either
@@ -135,7 +141,7 @@ case "$1" in
         # This option is only available when no floppy is mounted.
         #DescEnd
 
-        cls
+        clear
         if fdformat /dev/fd0H1440; then
             $ELS_DIALOG --msgbox "Disk formatted, don't forget to create a filesystem" 6 40
         else
