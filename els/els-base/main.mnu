@@ -17,7 +17,7 @@ case "$1" in
 	#
 	#Item Start
         # To start sysadm, log in as user &quot;root&quot; and enter at the
-	# command prompt <TT>sysadm</TT>".
+	# command prompt "<TT>sysadm</TT>".
 	#
 	#Item Usage
 	# Use the [Up] and [Down] keys to select an option. Press the
@@ -25,8 +25,8 @@ case "$1" in
 	# also quicker selected with the red letters (not shown in this
 	# document, but on the real screen).
 	#
-	# Use the [Right] and [Left] keys to toggle between <Ok> and
-	# <Cancel>. If <Cancel> is highlighted and you press the [Enter]
+	# Use the [Right] and [Left] keys to toggle between &lt;Ok&gt; and
+	# &lt;Cancel&gt;. If &lt;Cancel&gt; is highlighted and you press the [Enter]
 	# key, the current menu is canceled and you're back in the previous
 	# menu --- or on the command line.
 	#DescEnd
