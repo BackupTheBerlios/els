@@ -86,7 +86,7 @@ case "$1" in
 
 	# check for samba directory
 	if [ -d /usr/samba/dat -a ! -d /usr/samba/dat/$CHOICE ]; then
-	    Question "Should I create a directory I:\\$CHOICE for you?" && {
+	    Question "Should I create a directory g:\\$CHOICE for you?" && {
 		test -d /usr/samba/dat/$CHOICE || mkdir /usr/samba/dat/$CHOICE
 		chgrp $CHOICE /usr/samba/dat/$CHOICE
 		chmod g+rwx,o-rwx /usr/samba/dat/$CHOICE
