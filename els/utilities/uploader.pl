@@ -22,8 +22,8 @@ use strict;
 use Digest::MD5;
 
 my $debug = 0;
-my $Md5File = ".sftp-mirror";
-
+my $Md5File = ".uploader";
+my $HomeDir = "/home/groups/els/htdocs";
 
 # Parse CVSROOT so that we know how to log in
 $ENV{CVSROOT} =~ /^(.+):(\/.+)$/ or
@@ -51,7 +51,7 @@ sub MirrorFile ($)
    my $olddigest = 'none';
 
    unless ($olddigest = $MD5{$file}) {
-      print "$file: will add\n" if $debug;
+      print "$file: will add\n" if $debug > 1;
       $olddigest  = 'added';
    }
 
@@ -63,10 +63,10 @@ sub MirrorFile ($)
    $_ = $ctx->b64digest;   
    if ($olddigest eq $_) {
       #print $olddigest, "\n", $_, "\n";
-      print "$file: md5 equal\n" if $debug;
+      print "$file: md5 equal\n" if $debug > 1;
    } else {
       #print $olddigest, "\n", $_, "\n";
-      print "$file: need update\n" if $debug;
+      print "$file: need update\n" if $debug > 1;
       push @Upload, $file;
       $MD5{$file} = $_;
    }
@@ -82,22 +82,36 @@ foreach (@ARGV) {
 
 # Upload all changed files
 my $first = 1;
-foreach (@Upload) {
+my $dir = '';
+my $newdir = '';
+foreach (sort @Upload) {
    my $file = $_;
    if ($first) {
-      #open FILE, ">/dev/stdout";
+      open FILE, ">/dev/stdout" if $debug;
       $_ = "sftp -1 -s /usr/lib/ssh/sftp-server $SshLogin";
       print "$_\n";
-      open FILE, "|$_";
-      print FILE "cd /home/groups/els/htdocs\n";
+      open FILE, $debug ? ">/dev/stdout" : "|$_";
+      print FILE "cd $HomeDir\n";
       $first = 0;
    }
+
+   ($newdir,$file) = ($1,$2) if $file =~ m:(.*)/([^/]*)$:;
+   if ($newdir ne $dir) {
+      $_ = $dir;
+      s{[^/\.]+}{..}g;
+      print FILE $_ ? "lcd $_/$newdir\n" : "lcd $newdir\n";
+      print FILE "cd $HomeDir/$newdir\n";
+      $dir = $newdir
+   }
+
    print FILE "put $file\n";
 }
 unless ($first) {
    close FILE;
 }
 
+
+exit if $debug;
 
 # Write MD5s
 open FILE, ">$Md5File";

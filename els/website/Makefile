@@ -20,8 +20,8 @@ docs:: .docs
 clean::
 	rm -f $(DST) .docs
 
-upload:: all
-	$(ROOT)/utilities/uploader.pl *.css *.html sysadm/*.html
+upload:: docs
+	$(ROOT)/utilities/uploader.pl *.css *.html */*.html
 
 lint:: .docs
 	$(ROOT)/utilities/linklint -quiet -error /@
