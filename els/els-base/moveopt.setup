@@ -1,0 +1,29 @@
+#Title Move /home to /var/home
+#Author Holger Schurig
+#Group els-base
+#Group Mandatory
+#Desc
+# Mandrake creates an /opt directory. Assuming that you don't have your
+# own partition for this, the data in opt (e.g. Acrabat Reader) will end
+# in the root partition. Which is a bad idea, imho.
+#
+# Therefore we move files from /opt to /usr and create a symlink.
+#DescEnd
+#Id $Id: moveopt.setup,v 1.1 2002/03/04 07:57:16 holgerschurig Exp $
+
+
+if (-d '/opt' && -f '/etc/fstab' && !-l '/opt' && (`mount | grep /opt` eq "")) {
+    # can't mv here, because it might be on a different file system
+    system 'mv /opt/* /usr'; # need to run throught shell because of globbing
+    system 'rm', '-rf', '/opt';
+}
+if (!-l '/opt' && -f '/etc/fstab' && (`mount | grep /opt` eq "")) {
+    system 'ln', '-s', '/usr', '/opt';
+
+    # Set default for new users
+    #system '/usr/sbin/useradd', '-D', '-b', '/var/home';
+    logit "/home moved to /var/home\n";
+}
+
+
+1;
