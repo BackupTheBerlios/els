@@ -19,6 +19,7 @@ function SetSource ()
         SOURCE=${SOURCE-/var/tmp}
         ;;
     *)
+	INSTALLFROM="CD-ROM"
         SOURCE=${SOURCE-/mnt/cdrom}
         ;;
     esac
@@ -84,19 +85,19 @@ function UnmountDevice ()
 #
 function SelectPackage ()
 {
-    $DIALOG --infobox "Searching for RPMs ..." 3 30
+    $ELS_DIALOG --infobox "Searching for RPMs ..." 3 30
     ls $SOURCE/*.rpm >/dev/null 2>&1 || {
-        $DIALOG --msgbox "There are no RPM modules on this disk" 5 50
+        $ELS_DIALOG --msgbox "There are no RPM modules on this disk" 5 50
         CHOICE=""
         return
     }
-    echo -n "$DIALOG --menu \"Select package to $1\" 23 65 15 " >$TMPFILE.dialog
+    echo -n "$ELS_DIALOG --menu \"Select package to $1\" 23 65 15 " >$ELS_TEMP.dialog
     cd $SOURCE
-    ls els-*.rpm >/dev/null 2>&1 && ls els-*.rpm |awk '{ printf("%s %c%c ", $1, 34,34) }' >>$TMPFILE.dialog
-    ls *.rpm | grep -sv ^els- |awk '{ printf("%s %c%c ", $1, 34,34) }' >>$TMPFILE.dialog
+    ls els-*.rpm >/dev/null 2>&1 && ls els-*.rpm | awk '{ printf("%s %c%c ", $1, 34,34) }' >>$ELS_TEMP.dialog
+    ls *.rpm | grep -sv ^els- | awk '{ printf("%s %c%c ", $1, 34,34) }' >>$ELS_TEMP.dialog
     cd -
-    { . $TMPFILE.dialog; } 2>$TMPFILE
-    CHOICE=`cat $TMPFILE`
+    { . $ELS_TEMP.dialog; } 2>$ELS_TEMP
+    CHOICE=`cat $ELS_TEMP`
 }
 
 
@@ -106,10 +107,10 @@ function SelectPackage ()
 #
 function SelectConfig ()
 {
-    $DIALOG --infobox "Searching config files..." 3 30
-    echo -n "$DIALOG --menu \"Select config file to $1\" 23 65 15 " >$TMPFILE.dialog
+    $ELS_DIALOG --infobox "Searching config files..." 3 30
+    echo -n "$ELS_DIALOG --menu \"Select config file to $1\" 23 65 15 " >$ELS_TEMP.dialog
 
-    perl -w <<-"EOF" >>$TMPFILE.dialog
+    perl -w <<-"EOF" >>$ELS_TEMP.dialog
     for $module (glob '/usr/src/redhat/SPECS/*.spec') {
         open FILE, $module;
         $module =~ m:SPECS/(.+)\.spec:;
@@ -134,8 +135,8 @@ EOF
     if [ $? = 1 ]; then
 	unset CHOICE
     else
-	{ . $TMPFILE.dialog; } 2>$TMPFILE
-	CHOICE=`cat $TMPFILE`
+	{ . $ELS_TEMP.dialog; } 2>$ELS_TEMP
+	CHOICE=`cat $ELS_TEMP`
     fi
 }
 
@@ -194,12 +195,12 @@ case "$1" in
 	#Macro Textbox
         #DescEnd
 
-        $DIALOG --infobox "Just a moment ..." 3 26
-        echo -e "Installed ELS packages:\n" >$TMPFILE
-        rpm -qa | grep ^els | sort >>$TMPFILE
-        echo -e "\nInstalled general packages:\n" >>$TMPFILE
-        rpm -qa | grep -v ^els | sort >>$TMPFILE
-        $DIALOG --textbox $TMPFILE 23 76
+        $ELS_DIALOG --infobox "Just a moment ..." 3 26
+        echo -e "Installed ELS packages:\n" >$ELS_TEMP
+        rpm -qa | grep ^els- | sort >>$ELS_TEMP
+        echo -e "\nInstalled general packages:\n" >>$ELS_TEMP
+        rpm -qa | grep -v ^els- | sort >>$ELS_TEMP
+        $ELS_DIALOG --textbox $ELS_TEMP 23 76
         ;;
 
 
@@ -250,23 +251,23 @@ case "$1" in
         #DescEnd
 
         # ask for an installed module
-        echo -n "$DIALOG --menu \"For which package do you want info?\" 23 65 15 " >$TMPFILE.dialog
-        rpm -qa | awk '{ printf("%s %c%c ", $1, 34,34) }' >>$TMPFILE.dialog
-        { . $TMPFILE.dialog; } 2>$TMPFILE
+        echo -n "$ELS_DIALOG --menu \"For which package do you want info?\" 23 65 15 " >$ELS_TEMP.dialog
+        rpm -qa | sort | awk '{ printf("%s %c%c ", $1, 34,34) }' >>$ELS_TEMP.dialog
+        { . $ELS_TEMP.dialog; } 2>$ELS_TEMP
         test $? = 0 || return
-        CHOICE=`cat $TMPFILE`
+        CHOICE=`cat $ELS_TEMP`
 
         # creating the asked data
-        echo -e "Contents of $CHOICE:\n" >$TMPFILE
-        rpm -qi $CHOICE 2>&1 >>$TMPFILE
-        echo -e "\n\nWhat files are in the module?" >>$TMPFILE
-        echo -e "-----------------------------" >>$TMPFILE
-        rpm -ql $CHOICE 2>>$TMPFILE >>$TMPFILE
-        echo -e "\n\nWhat scripts are in the module?" >>$TMPFILE
-        echo -e "-------------------------------" >>$TMPFILE
-        rpm -q --scripts $CHOICE >>$TMPFILE
-        echo -e "\n" >>$TMPFILE
-        $DIALOG --textbox $TMPFILE 23 76
+        echo -e "Contents of $CHOICE:\n" >$ELS_TEMP
+        rpm -qi $CHOICE 2>&1 >>$ELS_TEMP
+        echo -e "\n\nWhat files are in the module?" >>$ELS_TEMP
+        echo -e "-----------------------------" >>$ELS_TEMP
+        rpm -ql $CHOICE 2>>$ELS_TEMP >>$ELS_TEMP
+        echo -e "\n\nWhat scripts are in the module?" >>$ELS_TEMP
+        echo -e "-------------------------------" >>$ELS_TEMP
+        rpm -q --scripts $CHOICE >>$ELS_TEMP
+        echo -e "\n" >>$ELS_TEMP
+        $ELS_DIALOG --textbox $ELS_TEMP 23 76
 	;;
 
 
@@ -286,14 +287,14 @@ case "$1" in
 	#Macro Menu
         #DescEnd
 
-        $DIALOG --menu "Select source for installation of RPMs" 13 50 5 \
+        $ELS_DIALOG --menu "Select source for installation of RPMs" 13 50 5 \
                       "Floppy"    "/mnt/floppy" \
                       "CD-ROM"    "/mnt/cdrom" \
                       "RedHat-CD" "/mnt/cdrom/RedHat/RPMS" \
                       "ZIP"       "/mnt/zip" \
-                      "TempDir"   "/var/tmp" 2>$TMPFILE
+                      "TempDir"   "/var/tmp" 2>$ELS_TEMP
         test $? = 0 || return
-        CHOICE=`cat $TMPFILE`
+        CHOICE=`cat $ELS_TEMP`
         unset SOURCE
         SetOpt "INSTALLFROM" "$CHOICE"
         ;;
@@ -336,22 +337,24 @@ case "$1" in
         if MountDevice; then
             SelectPackage "test"
             if [ ! -z "$CHOICE" ]; then
-                $DIALOG --infobox "Please wait ... testing ..." 3 40
-                echo -e "Contents of $CHOICE:\n" >$TMPFILE
-                rpm -qip $SOURCE/$CHOICE 2>&1 >>$TMPFILE
-                echo -e "\n\nWould the installation succeed?" >>$TMPFILE
-                echo -e "-------------------------------" >>$TMPFILE
-                rpm -Uv --test $SOURCE/$CHOICE 2>>$TMPFILE >/dev/null && echo "yes" >>$TMPFILE
-                echo -e "\n\nWhat files are in the module?" >>$TMPFILE
-                echo -e "-----------------------------" >>$TMPFILE
-                rpm -qlp $SOURCE/$CHOICE 2>>$TMPFILE >>$TMPFILE
-                echo -e "\n\nWhat scripts are in the module?" >>$TMPFILE
-                echo -e "-------------------------------" >>$TMPFILE
-                rpm -q --scripts -p $SOURCE/$CHOICE >>$TMPFILE
-                echo -e "\n" >>$TMPFILE
-                $DIALOG --textbox $TMPFILE 23 76
+                $ELS_DIALOG --infobox "Please wait ... testing ..." 3 40
+                echo -e "Contents of $CHOICE:\n" >$ELS_TEMP
+                rpm -qip $SOURCE/$CHOICE 2>&1 >>$ELS_TEMP
+                echo -e "\n\nWould the installation succeed?" >>$ELS_TEMP
+                echo -e "-------------------------------" >>$ELS_TEMP
+                rpm -Uv --test $SOURCE/$CHOICE 2>>$ELS_TEMP >/dev/null && echo "yes" >>$ELS_TEMP
+                echo -e "\n\nWhat files are in the module?" >>$ELS_TEMP
+                echo -e "-----------------------------" >>$ELS_TEMP
+                rpm -qlp $SOURCE/$CHOICE 2>>$ELS_TEMP >>$ELS_TEMP
+                echo -e "\n\nWhat scripts are in the module?" >>$ELS_TEMP
+                echo -e "-------------------------------" >>$ELS_TEMP
+                rpm -q --scripts -p $SOURCE/$CHOICE >>$ELS_TEMP
+                echo -e "\n" >>$ELS_TEMP
+                $ELS_DIALOG --textbox $ELS_TEMP 23 76
             fi
             UnmountDevice
+        else
+	    $ELS_DIALOG --msgbox "Unable to mount $INSTALLFROM" 5 50
         fi
         ;;
 
@@ -383,17 +386,19 @@ case "$1" in
 			echo -e "\nInstallation successful."
 			{
 			    rpm -ql ${CHOICE%%.i386.rpm} | grep .sample
-			} >$TMPFILE.2 2>/dev/null
-			test -s $TMPFILE.2 && {
+			} >$ELS_TEMP.2 2>/dev/null
+			test -s $ELS_TEMP.2 && {
 			    echo -e "\n\n\nPlease check the following config files for new features:\n"
-			    cat $TMPFILE.2
+			    cat $ELS_TEMP.2
 			}
-			rm -f $TMPFILE.2
+			rm -f $ELS_TEMP.2
 		    fi
-		} 2>&1 | tee $TMPFILE
-		$DIALOG --textbox $TMPFILE 23 76
+		} 2>&1 | tee $ELS_TEMP
+		$ELS_DIALOG --textbox $ELS_TEMP 23 76
             fi
             UnmountDevice
+        else
+	    $ELS_DIALOG --msgbox "Unable to mount $INSTALLFROM" 5 50
         fi
         ;;
 
@@ -410,23 +415,23 @@ case "$1" in
         ExpertWarning || return
 
         # ask for an installed module
-        echo -n "$DIALOG --menu \"Select installed package to remove $1\" 23 65 15 " >$TMPFILE.dialog
-        rpm -qa |sort |grep ^om |awk '{ printf("%s %c%c ", $1, 34,34) }' >>$TMPFILE.dialog
-        rpm -qa |sort |grep -v ^om |awk '{ printf("%s %c%c ", $1, 34,34) }' >>$TMPFILE.dialog
-        { . $TMPFILE.dialog; } 2>$TMPFILE
+        echo -n "$ELS_DIALOG --menu \"Select installed package to remove $1\" 23 65 15 " >$ELS_TEMP.dialog
+        rpm -qa | grep ^els- | sort | awk '{ printf("%s %c%c ", $1, 34,34) }' >>$ELS_TEMP.dialog
+        rpm -qa | grep -v ^els- | sort | awk '{ printf("%s %c%c ", $1, 34,34) }' >>$ELS_TEMP.dialog
+        { . $ELS_TEMP.dialog; } 2>$ELS_TEMP
         test $? = 0 || return
-        CHOICE=`cat $TMPFILE`
+        CHOICE=`cat $ELS_TEMP`
 
         # Confirmation two
         Question "\nAre you SURE you want to remove module $CHOICE  ???" || return
 
         # ok, now get rid of the module
-        $DIALOG --infobox "Removing $CHOICE ..." 3 60
-        rpm -e $CHOICE >$TMPFILE 2>&1
+        $ELS_DIALOG --infobox "Removing $CHOICE ..." 3 60
+        rpm -e $CHOICE >$ELS_TEMP 2>&1
         if [ $? = 0 ]; then
-            $DIALOG --msgbox "$CHOICE removed" 3 60
+            $ELS_DIALOG --msgbox "$CHOICE removed" 3 60
         else
-            $DIALOG --title "Warning: couldn't remove module" --textbox $TMPFILE 23 78
+            $ELS_DIALOG --title "Warning: couldn't remove module" --textbox $ELS_TEMP 23 78
         fi
         ;;
 
