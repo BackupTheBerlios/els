@@ -9,81 +9,89 @@
 # programs, so to define environment variable see /etc/profile or just
 # create your own executable shell script in /etc/profile.d/*.sh.
 #DescEnd
+#Id $Id: bashrc.setup,v 1.2 2001/11/26 13:09:34 holgerschurig Exp $
+
 
 loadfile '/etc/bashrc';
 unless (search('function cd')) {
-    append '# Better Prompt';
-    append 'PROMPT_COMMAND=\'PS1=`test "$UID" = 0 && echo "\h:\w# " || echo "\h:\w$ "`\'';
-    append '';
-    append '# make it more like dos';
-    append 'alias copy="cp -i"';
-    append 'alias del="rm -i"';
-    append 'alias dir="ls"';
-    append 'alias md="mkdir"';
-    append 'alias move="mv -i"';
-    append 'alias rd="rmdir"';
-    append 'alias ren="mv -i"';
-    append '# several handy shortcuts';
-    append 'alias l="ls -lF --color=tty"';
-    append 'alias ll="ls -lAF --color=tty"';
-    append 'alias ls="ls -AF --color=tty"';
-    append 'alias psg="ps auxww | grep"';
-    append 'alias gdb="gdb --quiet"';
-    append 'alias diff="diff -u"';
-    append '# directory changing for the lazy ones';
-    append 'alias ..="cd .."';
-    append 'alias ...="cd ../.."';
-    append 'alias ....="cd ../../.."';
-    append 'alias .....="cd ../../../.."';
-    append 'alias -- -="cd -"';
-    append '';
-    append '#';
-    append '# Enhanced cd, like "acd" or "ncd" in DOS. It reads a list of';
-    append '# "hot" directories either from /etc/diralias or from ~/.diralias.';
-    append '# This function replaces the builtin "cd" command.';
-    append '#';
-    append '# The contents of the configuration files should have the following form:';
-    append '#';
-    append '#       local SHORT-NAME=FULL-DIRECTORY-PATH';
-    append '#';
-    append '# Here is an example:';
-    append '#';
-    append '#       local specs=/usr/src/redhat/SPECS';
-    append '#       local rpms=/usr/src/redhat/RPMS/i386';
-    append '#';
-    append '# Now a simple "cd specs" will put you into the /usr/src/redhat/SPECS';
-    append '# directory.';
-    append '#';
-    append '# This code is based on an idea of Wolf Paul (he also did the first';
-    append '# implementation, but I have deleted his source by accident, so I had';
-    append '# to rewrite it ...).';
-    append '#';
-    append 'function cd ()';
-    append '{';
-    append '    # shortcut if the directory exists because then the lengthy load of';
-    append '    # hot directories is not necessary anyway';
-    append '    [ -z "$1" ] && builtin cd >/dev/null 2>/dev/null && return';
-    append '    builtin cd "$1" >/dev/null 2>/dev/null && return';
-    append '    test -d /etc/diralias.d && {
-    append '        local file';
-    append '';
-    append '        # read in the directories in as variables:';
-    append '        for file in /etc/diralias.d/* ; do';
-    append '            . $file';
-    append '        done';
-    append '        test -s ~/.diralias && . ~/.diralias';
-    append '';
-    append '        # nice CSH feature that is also present in bash: if now "cd spec" wont';
-    append '        # work, CD will do the equivalent of "cd $spec". We switch this feature';
-    append '        # on, try to change the directory and switch that feature back off.';
-    append '        shopt -s cdable_vars';
-    append '        builtin cd "$1" >/dev/null';
-    append '        shopt -u cdable_vars';
-    append '     }';
-    append '}';
+open FILE, '>/etc/bashrc';
+print FILE <<EOF;
+# Better Prompt
+PROMPT_COMMAND='PS1=`test "\$UID" = 0 && echo "\\h:\\w# " || echo "\\h:\\w\$ "`'
+
+# make it more like dos
+alias copy="cp -i"
+alias del="rm -i"
+alias dir="ls"
+alias md="mkdir"
+alias move="mv -i"
+alias rd="rmdir"
+alias ren="mv -i"
+# several handy shortcuts
+alias l="ls -lF --color=tty"
+alias ll="ls -lAF --color=tty"
+alias ls="ls -AF --color=tty"
+alias psg="ps auxww | grep"
+alias gdb="gdb --quiet"
+alias diff="diff -u"
+alias grep="grep -r"
+# directory changing for the lazy ones
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias -- -="cd -"
+
+
+#
+# Enhanced cd, like "acd" or "ncd" in DOS. It reads a list of
+# "hot" directories either from /etc/diralias or from ~/.diralias.
+# This function replaces the builtin "cd" command.
+#
+# The contents of the configuration files should have the following form:
+#
+#       local SHORT-NAME=FULL-DIRECTORY-PATH
+#
+# Here is an example:
+#
+#       local specs=/usr/src/redhat/SPECS
+#       local rpms=/usr/src/redhat/RPMS/i386
+#
+# Now a simple "cd specs" will put you into the /usr/src/redhat/SPECS
+# directory.
+#
+# This code is based on an idea of Wolf Paul (he also did the first
+# implementation, but I have deleted his source by accident, so I had
+# to rewrite it ...).
+#
+function cd ()
+{
+    # shortcut if the directory exists because then the lengthy load of
+    # hot directories is not necessary anyway
+    [ -z "\$1" ] && builtin cd >/dev/null 2>/dev/null && return
+    builtin cd "\$1" >/dev/null 2>/dev/null && return
+    test -d /etc/diralias.d && {
+        local file
+
+        # read in the directories in as variables:
+        for file in /etc/diralias.d/* ; do
+            . \$file
+        done
+        test -s ~/.diralias && . ~/.diralias
+
+        # nice CSH feature that is also present in bash: if now "cd spec" wont
+        # work, CD will do the equivalent of "cd \$spec". We switch this feature
+        # on, try to change the directory and switch that feature back off.
+        shopt -s cdable_vars
+        builtin cd "\$1" >/dev/null
+        shopt -u cdable_vars
+     }
+}
+EOF
 
     writefile;
     logit "/etc/bashrc: changed prompt\n";
 }
+
 
 1;
