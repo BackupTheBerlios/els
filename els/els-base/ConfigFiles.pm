@@ -175,8 +175,9 @@ sub getopt ($) {
 #	returns whether a string has been found or not
 sub search ($) {
     $pattern = shift(@_);
-    $_ = grep { m/$pattern/ } @lines;
-    return $_;
+    my $line;
+    $_ = grep { $line = $_ if m/$pattern/ } @lines;
+    return $line;
 }
 
 # REPLACE
