@@ -1,0 +1,77 @@
+case "$1" in
+
+    Query)
+        Title "internal" "Runlevel" "For experts: change runlevel"
+        Option "Info"  "Show current runlevel"
+        Option "1"     "Single user mode"
+        Option "2"     "Multiuser without Network"
+        Option "3"     "Multiuser with Network (NFS or SAMBA)"
+        ;;
+
+	#Desc
+	# Runlevels are a very rought way to control which processes
+	# are running on the server and thus which services your server
+	# are offering to other systems.
+	#DescEnd
+
+
+    info)
+	#Desc
+	# Displays the current runlevel, e.g.
+	#MsgBox
+	# The previous and current runlevel: N 3
+	#MsgBoxEnd
+	#DescEnd
+	
+        $DIALOG --msgbox "The previous and current runlevel: `runlevel`" 5 50
+        ;;
+
+    1)
+	#Desc
+	# Switches to runlevel 1, also known as single user mode.
+	#
+	# Select this mode if you have to deal with low-level problems
+	# that require not no one besides you are can have access to
+	# the server.
+	#
+	# This mode shuts down the network and the modem, and
+	# even at the console only one user can log in. Almost all
+	# background processes get stopped. This assures that no
+	# unintended write access take place to the hard disk, allowing
+	# you special repair procedures that are overwise impossible.
+	#DescEnd
+
+        cls
+        echo "Switching to runlevel $1 and waiting 10 seconds ..."
+        init $1
+        sleep 10
+	;;
+
+    2)
+	#Desc
+	# Switches to runlevel 2. This mode is still a multiuser, but
+	# because the network is down, logins are only possible from
+	# the console or the modem. 
+	#
+	# One reason to switch to this are changes at low-level
+	# parameters, e.g. the IP address of your ethernet card.
+	#DescEnd
+
+        cls
+        echo "Switching to runlevel $1 and waiting 10 seconds ..."
+        init $1
+        sleep 10
+	;;
+
+    3)
+	#Desc
+	# Switches to runlevel 3. This runlevel allows full use of your
+	# server and is the default.
+	#DescEnd
+        cls
+        echo "Switching to runlevel $1 and waiting 10 seconds ..."
+        init $1
+        sleep 10
+        ;;
+
+esac

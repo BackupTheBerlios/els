@@ -1,0 +1,184 @@
+case "$1" in
+
+    Query)
+        Title "Hardware" "Floppy" "Format and mount floppies"
+        Option "Info"         "Info on mounted devices"
+        if fgrep -q dev/fd0 /etc/mtab; then
+            Option "Unmount"  "Unmount floppy"
+        else
+            Option "Mount"   "Mount floppy"
+            Option "Format"  "Format floppy"
+            Option "Linux"   "Create LINUX filesystem on floppy"
+            Option "DOS"     "Create DOS filesystem on floppy"
+        fi
+        ;;
+
+	#Desc
+	# Use this menu to mount/unmount floppy disk. You can also
+	# format disks from here.
+	#
+	#Item Hint
+	# If you just want to work with some files on a MSDOS disk,
+	# use the command line utilities "<TT>mcopy</TT>", "<TT>mdir</TT>"
+	# and "<TT>mdel</TT>" instead.
+	#DescEnd
+
+
+    info)
+	#Desc
+	# "Info" shows you all mounted devices.
+	#
+	#Item Usage
+	# You will see a screen similar to the following:
+	#TextBox
+	#TextBoxEnd
+	# Because there is no <TT>/mnt/floppy</TT> entry you see that
+	# no floppy is mounted.
+	# 
+	#Item Usage
+	#Macro Textbox
+	#DescEnd
+
+	perl -nw - /proc/mounts >$TMPFILE <<-"EOF"
+
+	format STDOUT_TOP =
+	Device       Mounted to directory         File system   Flags
+	-------------------------------------------------------------
+	.
+	format STDOUT =
+	@<<<<<<<<<<< @<<<<<<<<<<<<<<<<<<<<<<<<<<< @<<<<<<<<<<<< @<<<<
+	$1,          $2,                          $3,           $4
+	.
+
+	/^(\S+)\s+(\S+)\s+(\S+)\s+(.+)/;
+	#print "$1 -- $2 -- $3 -- $4\n";
+	write;
+
+	EOF
+        $DIALOG --textbox $TMPFILE 23 78
+        ;;
+
+
+    mount)
+        #Desc
+	#Item Background
+        # Linux has a very efficient disk cache. The cache
+        # works with any file system, not just for the hard disk. This is
+	# one of the reasons why you have to mount disks before usage and
+	# to dismount them before removing.
+	#
+	# "Mount" tries to mount a floppy onto the mount point
+	# <TT>/mnt/floppy</TT>. This will succeed if the disk is either
+	# formatted  with a DOS "vfat" or with a Linux "e2fs" file system.
+	# Mount uses always the first physical floppy <TT>/dev/fd0</TT>,
+	# also know as <TT>A:</TT> to DOS users.
+	#
+	#Item Hint
+	# As stated above, it is sometimes more convenient to use the
+	# command line utilites "<TT>mcopy</TT>", "<TT>mdir</TT>"
+	# and "<TT>mdel</TT>" rather than mounting/unmounting a single
+	# floppy. 
+	#
+	# A DOS file system can't store the Unix' groups and permission
+	# bits. So there might be cases there the DOS file system can't
+	# be used for your task.
+	#
+	#Item Usage
+	# <OL>
+	# <LI>insert disk in drive
+	# <LI>select <A HREF="#mount">Mount</A>
+	# <LI>you can now access the disk via the <TT>/mnt/floppy</TT> directory
+	# <LI>select <A HREF="#unmount">unmount</A>
+	# <LI>remove the inserted disk
+	# </OL>
+        #
+	#Item Visibility
+        # This option is only available when no floppy is mounted.
+        #DescEnd
+
+        MountFloppy
+        ;;
+
+
+    unmount)
+        #Desc
+	# Use this option to unmount a currently mounted floppy. Every
+	# outstanding data in the cache will be written to the disk.
+	#
+	#Item Important
+	# It is absolutely important that you unmount a floppy before
+	# removing it. Otherwise, the kernel get confused about the
+	# inserted disk and trash the integrity of the disks.
+	#
+	#Item Visibility
+        # This option is only available when a floppy is currently mounted.
+        #DescEnd
+
+	$DIALOG --infobox "Just a moment ..." 3 26
+	sync
+        umount /mnt/floppy
+        ;;
+
+
+    format)
+        #Desc
+	# Any new disk must be formatted before it can be used. The formatting
+        # wipes out any data that might be on the disk.
+	#
+	# After you formatted a disk, you cannot use it immediately. First
+	# you must decide which file system the disk should get. Use the
+	# menu entries <A HREF="#linux">Linux</A> or <A HREF="#dos">DOS</A>
+	# to create a file system on the disk and render them usable.
+        #
+	#Item Visibility
+        # This option is only available when no floppy is mounted.
+        #DescEnd
+
+        cls
+        if fdformat /dev/fd0H1440; then
+            $DIALOG --msgbox "Disk formatted, don't forget to create a filesystem" 6 40
+        else
+            $DIALOG --msgbox "Unable to format disk" 5 40
+        fi
+        ;;
+
+
+    linux)
+        #Desc
+        # This creates the standard Linux file system "e2fs" on the disk.
+        # You can apply this to any formatted floppy. It is very fast and
+        # can be compared to the "quick format" option of MSDOS.
+        #
+	#Item Visibility
+        # This option is only available when no floppy is mounted.
+        #DescEnd
+
+        $DIALOG --infobox "Please wait ...  creating LINUX disk" 3 40
+        if mke2fs /dev/fd0H1440 >/dev/null 2>&1; then
+            $DIALOG --msgbox "The disk is now a LINUX disk" 5 40
+        else
+            $DIALOG --msgbox "Could not create LINUX disk" 5 40
+        fi
+        ;;
+
+
+    dos)
+        #Desc
+        # This creates a DOS file system on the disk. It will actually
+        # create a "vfat" type file system. This is the file system used by
+        # Windows 95. It is also backwards compatible to normal DOS 2.1 -
+        # 6.12 file systems. This option is comparable to the "quick format"
+	# of the MSDOS format utility.
+        #
+	#Item Visibility
+        # This option is only available when no floppy is mounted.
+        #DescEnd
+
+        if mformat a: 2>/dev/null; then
+            $DIALOG --msgbox "The disk is now a DOS disk" 5 40
+        else
+            $DIALOG --msgbox "Could not create DOS disk" 5 40
+        fi
+        ;;
+
+esac

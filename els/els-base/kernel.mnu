@@ -1,0 +1,189 @@
+case "$1" in
+
+    Query)
+        Title "System" "Kernel" "For experts: kernel setup and compilation"
+        Option "Parameters"  "For experts: set kernel parameters"
+
+	# ensure that user was at least once in "Parameters"
+	test -f /usr/src/linux/.config -a -f /usr/src/linux/.config.old &&
+        Option "Compile"     "For experts: compile kernel and modules"
+
+	# Install makes only sense if you've something to install
+	test -f /usr/src/linux/arch/i386/boot/bzImage    -a \
+	     -f /usr/src/linux/modules/BLOCK_MODULES    -a \
+	     -f /usr/src/linux/modules/FS_MODULES       -a \
+	     -f /usr/src/linux/modules/IPV4_MODULES     -a \
+	     -f /usr/src/linux/modules/NET_MODULES      -a \
+	     -f /usr/src/linux/modules/NET_MISC_MODULES -a \
+	     -f /usr/src/linux/modules/SCSI_MODULES     &&
+        Option "Install"     "For experts: install new kernel and modules"
+
+        if [ -f /usr/src/linux/.compile_log ]; then
+            Option "Log"     "Display log file of compilation"
+            Option "Remove"  "Remove log and temporary files"
+        fi
+        Option "Reboot"      "Reboot your computer"
+        ;;
+
+	#Desc
+	# This menu allows you to taylor your kernel. Be warned:
+	# <B><FONT COLOR=red>most modifications make your system
+	# unbootable</FONT></B>.
+	# Never change anything on you main server just for curiosity.
+	#DescEnd
+
+
+    parameters)
+	#Desc
+	# Allows you to check and/or modify the kernel parameters.
+	#DescEnd
+
+        ExpertWarning || return
+        cd /usr/src/linux
+        cls
+
+        # set the kernel parameters
+        make menuconfig
+
+        cd $MENULIB
+        $DIALOG --msgbox "Your kernel is re-configured,\nnow you can compile your kernel." 6 40
+        ;;
+
+    compile)
+	#Desc
+	# Allows you to compile the whole kernel as well as all drivers.
+	# The compilation might take 5 to 10 minutes, so go and get a
+	# cup of coffee ...  maybe from your Java enabled browser :-)
+	#DescEnd
+
+        ExpertWarning || return
+        $DIALOG --infobox "Compiling a new kernel will take some minutes ..." 3 60
+        sleep 3
+        cd /usr/src/linux
+        cls
+
+        # remove old log if one existed
+        rm .compile_log 2>/dev/null
+
+	{
+	    echo -e "Making dependencies ...\n"		&&
+            nice -2 make dep				&&
+	    echo -e "\n\nCleaning directories...\n"	&&
+            nice -2 make clean				&&
+	    echo -e "\n\nMaking (bzipped) kernel...\n"	&&
+            nice -2 make bzImage			&&
+	    echo -e "\n\nMaking modules...\n"		&&
+            nice -2 make modules
+	} 2>&1 | tee .compile_log 
+
+	# compilation finished (or aborted), ring the bell
+	echo -e "\7"
+
+        cd $MENULIB
+	if [ -f /usr/src/linux/arch/i386/boot/bzImage   -a \
+	     -f /usr/src/linux/modules/BLOCK_MODULES    -a \
+	     -f /usr/src/linux/modules/FS_MODULES       -a \
+	     -f /usr/src/linux/modules/IPV4_MODULES     -a \
+	     -f /usr/src/linux/modules/NET_MODULES      -a \
+	     -f /usr/src/linux/modules/NET_MISC_MODULES -a \
+	     -f /usr/src/linux/modules/SCSI_MODULES     ]
+	then
+            $DIALOG --msgbox "Your kernel is re-compiled,\nyou can now install your kernel." 6 40
+	else
+            $DIALOG --msgbox "An error occured during compilation,\nmake sure you check the log file." 6 50
+	fi
+        ;;
+
+    install)
+	#Desc
+	# Installs the new kernel and all modules. Note: if you install
+	# a kernel that doesn't suit your system, <B><FONT COLOR=red>
+	# there is a high possibility that the system cannot restart
+	# </FONT></B>. Think twice before installing a kernel!
+	#
+	# If you boot your system from a floppy, be sure to insert the
+	# floppy before selecting this option. On these systems the
+	# install procedure will write a new bootstrap loader.
+	#DescEnd
+
+        ExpertWarning || return
+        cd /usr/src/linux
+        cls
+
+	# try to load loop driver early, BEFORE we install next modules
+	test -f /etc/sysconfig/rc.modules && modprobe loop >/dev/null 2>&1
+
+	echo -e "\n\nInstall new modules ...\n"
+        rm -rf /lib/modules/[0-9]*
+        nice -2 make modules_install
+        depmod -a >/dev/null 2>&1
+	# second chance to get loop module loaded
+	test -f /etc/sysconfig/rc.modules && {
+	    insmod -f /lib/modules/2*/block/loop.o ||
+	    insmod -f drivers/block/loop.o
+	} >/dev/null 2>&1
+
+	# this code must be located AFTER the modules have been removed
+	# and freshly installed, the VERSION=`ls ...` line assumes that
+	# there is only ONE directory present in /lib/modules!
+	test -f /etc/sysconfig/rc.modules && {
+	    echo -e "\n\nMake initial ram disk ...\n"
+	    cd /lib/modules
+	    VERSION=`ls -d [0-9]*`
+	    cd -
+	    cp -p /boot/initrd.img /boot/initrd.img.old
+	    #echo mkinitrd -f `cat /etc/sysconfig/rc.modules` /boot/initrd.img $VERSION
+	    mkinitrd -f `cat /etc/sysconfig/rc.modules` /boot/initrd.img $VERSION
+	}
+
+	echo -e "\n\nInstall new kernel ...\n"
+        nice -2 make install
+
+        cd $MENULIB
+        $DIALOG --msgbox "New kernel installed, please reboot now ..." 5 60
+        ;;
+
+    log)
+	#Desc
+	# Shows you the log file of the kernel compilation.
+	#Macro Textbox
+	#
+	#Item Visibility
+	# This option is only visible after you compiled a kernel.
+	#DescEnd
+
+        $DIALOG --textbox /usr/src/linux/.compile_log 23 76
+        ;;
+
+    remove)
+	#Desc
+	# This removes all temporary files, reclaiming about 10 MB on
+	# your <TT>/usr</TT> file system.
+	#
+	#Item Visibility
+	# This option is only visible after you compiled a kernel.
+	#DescEnd
+
+        cd /usr/src/linux
+        rm .compile_log 2>/dev/null
+        make clean
+        cd -
+        ;;
+
+    reboot)
+	#Desc
+	# After you installed the new kernel and drivers, you must reboot
+	# your system to bring the changes into effect.
+	#DescEnd
+
+        GetUsers
+        if [ $USERCNT -gt 0 ]; then
+           Question "Reboot with logged in users?\n\n( $USERS)" || return
+        fi
+
+        DELAY="+2"
+        Question "Immediate shutdown ?\n\n(yes=shutdown now, no=shutdown in 2 minutes)" && DELAY="now"
+        shutdown -r $DELAY
+        ;;
+
+esac

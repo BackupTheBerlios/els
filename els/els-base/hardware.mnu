@@ -1,0 +1,18 @@
+case "$1" in
+
+    Query)
+        Title "Main" "Hardware" "Define and configure your hardware"
+        #Include Hardware sysadm -> Hardware
+        perl -nw - $MENULIB/*.mnu 2>/dev/null >>$TMPFILE.dialog <<-"EOF"
+        if ( /^\s+Title\s+"Hardware"\s+"(.*)"\s+"(.*)"/ ) {
+            print "\"$1\" \"$2\" ";
+        }
+	EOF
+        ;;
+
+
+    *)
+        $0 $1
+        ;;
+
+esac

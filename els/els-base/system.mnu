@@ -1,0 +1,132 @@
+case "$1" in
+
+    Query)
+        Title "Main" "System" "General system administration"
+        # static menu entries
+        DATE=`date +"%d-%b-%Y"`
+        TIME=`date +"%T"`
+        Option "Date"      "Set the system date  (now $DATE)"
+        Option "Time"      "Set the system time  (now $TIME)"
+        Option "Space"     "Hard disk space report"
+        Option "Shutdown"  "Down the server (before switching power off)"
+
+        #include System sysadm -> System
+        perl -nw - $MENULIB/*.mnu 2>/dev/null >>$TMPFILE.dialog <<-"EOF"
+        if ( /^\s+Title\s+"System"\s+"(.*)"\s+"(.*)"/ ) {
+            print "\"$1\" \"$2\" ";
+        }
+	EOF
+        ;;
+
+        #Desc
+        # In the "General system administration" menu you will find all
+        # those entries that hasn't been important enought to me to give
+        # them their own main-menu entry. So here you might find many
+        # options that you don't need that often.
+        #
+        # Some options here are static and others are dynmic. Depending on
+        # your specific installation, some of the following options might
+        # be missing. Or you could have even more options:
+        #DescEnd
+
+
+    date)
+        #Desc
+	# Allows you to set the date.
+	#
+	#Item Usage
+	# Enter the new date into the following input mask:
+	#Input
+	# Please enter the new date in the following format<BR>
+	# 17-Nov-1997:<BR>
+	# <BR>
+	# MMDDYYYY
+	#InputEnd
+	# Type the new date, press [Enter] and your system and CMOS clocks
+	# will be updated.
+        #DescEnd
+
+	InputString "Please enter the new date, e.g.\n`date +%d-%b-%Y`"
+	test -z "$CHOICE" && return
+        date --set "$CHOICE `date +%H:%M`" >/dev/null
+	clock -w
+        ;;
+
+    time)
+        #Desc
+	# Allows you to set the time.
+	#
+	#Item Usage
+	# Enter the new time into the following input mask:
+	#Input
+	# Please enter the new time, e.g.<BR>
+	# 17:43
+	# <BR>
+	# hhmm<BR>
+	#InputEnd
+	# Type the new time, press [Enter] and your system and CMOS clock
+	# will be updated. Note that you have to use the 24 hour clock!
+	#
+	#Item Note
+	# You don't have to change the time for winter or summer time
+	# because Linux knows all this <B>if</B> you entered the correct
+	# time zone at installation time. If you didn't, go to the command
+	# prompt and issue the command <TT>timeconfig</TT>.
+        #DescEnd
+
+	InputString "Please enter the new time, e.g.\n`date +%H:%M`"
+	test -z "$CHOICE" && return
+        date --set "$CHOICE" >/dev/null
+	clock -w
+        ;;
+
+    space)
+        #Desc
+        # This gives you a brief report on how congested your hard disk(s)
+        # are. All numbers are shown in Megabytes, like in the following
+        # example:
+        #
+        #Textbox
+        # Filesystem            Size  Used  Avail  Capacity Mounted on
+        # /dev/hda6             342M   16M   308M      5%   /
+        # /dev/hda7             972M  749M   172M     81%   /usr
+        # /dev/hda8             1.4G  208M   1.1G     15%   /usr/src
+        #TextboxEnd
+        #
+        # Note: this option intentionally shows you only the space report of
+        # ext2fs (Linux formatted) hard disk.
+        #DescEnd
+
+        df -h -t ext2 >$TMPFILE
+        $DIALOG --textbox $TMPFILE 23 78
+        ;;
+
+    shutdown)
+	#Desc
+	# Allows you to shut your server down. You can do the same with
+	# [Ctrl-Alt-Del], but with this option you are warned about users
+	# that are still logged in.
+	#DescEnd
+
+        GetUsers
+        if [ $USERCNT -gt 0 ]; then
+           Question "Shutdown with logged in users?\n\n( $USERS)" || return
+        fi
+
+        DELAY="now"
+        Question "Delay shutdown ?\n\n(yes=shutdown in 2 minutes, no=shutdown now)" && DELAY="+2"
+        if [ "$DELAY" = "+2" ]; then
+            cls
+            echo "-----------------------------------------------------------"
+            echo "Note: to cancel the shutdown for now, just press Ctrl-C ..."
+            echo "-----------------------------------------------------------"
+            echo
+        fi
+        shutdown -h $DELAY
+        ;;
+
+    *)
+        $0 $1
+        ;;
+
+esac

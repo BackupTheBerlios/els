@@ -1,0 +1,165 @@
+function ExpertWarning
+{
+    $DIALOG --yesno "\
+\
+WARNING:\n\
+\n\
+All options marked \"for experts\" are dangerous. You should\n\
+know what happens behind the scenes before doing changes.\n\
+Otherwise, the user might not be able to login again.\n\
+\n\
+Do you want to continue?\
+" 11 70
+}
+
+function SelectGroup ()
+{
+    echo -n "$DIALOG --menu \"Select a group $1\" 23 55 15 " >$TMPFILE.dialog
+    if sysadm-user.pl --listgroups $2 $3 >>$TMPFILE.dialog 2>$TMPFILE; then
+        { . $TMPFILE.dialog } 2>$TMPFILE
+        CHOICE=`cat $TMPFILE`
+    else
+        $DIALOG --textbox $TMPFILE 5 50
+        unset CHOICE
+    fi
+}
+
+
+case "$1" in
+
+    Query)
+        Title "internal to Users" "User modification" "Parameters for user '$LOGIN'"
+        sysadm-user.pl -getuserdata $LOGIN >$TMPFILE
+        . $TMPFILE
+        Option "Name"     "Set full name            (now $USER_FULLNAME)"
+        Option "Password" "Set password             $USER_PASSWORD"
+        test "$USER_PASSWORD" != "(no password, login disabled)" &&
+        Option "Inhibit"  "Inhibit user temporarily"
+	test "$LOGIN" != "root" &&
+	Option "Delete"   "Delete this user"
+	Option "Member"   "Set groups this user is a member of"
+        ;;
+
+	#Desc
+	# This menu is display when you create a new user or when you want
+	# to modify an existing user.
+	#DescEnd
+
+
+    name)
+	#Desc
+	# Use this to change the full name of a user.
+	#
+	# The full name is used almost only for the purpose of receiving
+	# e-mails. Example: the user "donald" with full name "Donald Duck"
+	# can receive e-mail as donald@company.de and as
+        # donald.duck@company.de.
+	#DescEnd
+
+        InputString "Enter full name, e.g. \"Donald Duck\""
+        test -z "$CHOICE" && return
+        /usr/sbin/usermod -c "$CHOICE" $LOGIN 2>$TMPFILE || {
+            $DIALOG --textbox $TMPFILE 10 60
+            return
+        }
+        ;;
+
+    password)
+	#Desc
+	# Use this entry to change the password of a user. A password
+	# can be up to 16 characters long. For best security, mix
+	# letters, digits and special characters as well as upper and
+	# lower case.
+	#
+	# It is not possible to enter empty passwords.
+	#DescEnd
+
+        InputString "Enter new password"
+        test -z "$CHOICE" && {
+            $DIALOG --msgbox "Empty password not permitted. Password *NOT* changed." 5 60
+	    return
+	}
+
+	rm -f $TMPFILE
+	for i in $MENULIB/pwchange.*; do $i $LOGIN "$CHOICE" 2>>$TMPFILE; done
+	test -s $TMPFILE && {
+            $DIALOG --textbox $TMPFILE 10 60
+            return
+	}
+
+        $DIALOG --msgbox "Password changed." 5 30
+        ;;
+
+    inhibit)
+	#Desc
+	# This will inhibit a user from logging in into the system. The
+	# user will not be deleted nor any one of his files. E-mail will
+	# still be received under his user id.
+	#
+	#Item Visibility
+	# This entry is only displayed if the user is not already disabled.
+	# That makes sense, doesn't it?
+	#DescEnd
+
+        /usr/sbin/usermod -L "$LOGIN" 2>$TMPFILE || {
+            $DIALOG --textbox $TMPFILE 10 60
+            return
+        }
+        $DIALOG --msgbox "User '$LOGIN' is now disabled.\nPlease set a new password to re-enable." 6 50
+        ;;
+
+    delete)
+	#Desc
+	# Use this option with care, it will delete the current user!
+	#
+	#Item Usage
+	# Before the user will be deleted, you will be asked:
+	#
+	#Question
+	# Do you really want to delete user 'donald' ?
+	#QuestionEnd
+	#Macro Question
+	#DescEnd
+
+	Question "Do you really want to delete user '$LOGIN'?" || return
+	$DIALOG --infobox "One moment ... deleting ..." 3 32
+        /usr/sbin/userdel -r $LOGIN 2>$TMPFILE || {
+            $DIALOG --textbox $TMPFILE 10 60
+            return
+        }
+	# call programs supplied by other modules
+	cls
+	for i in $MENULIB/deluser.*; do $i $LOGIN interactive; done
+	sleep 1
+	ExitMenu
+	;;
+
+    member)
+	#Desc
+	# This is yet another way on how to change the groups a user
+	# belongs into (see also
+	# <A HREF="groups.html">sysadm -&gt; users -&gt; groups)</A>.
+	#
+	#Item Usage
+	# You will be presented with all groups that make sense for this
+	# user. Mark every group the user should be a member of and unmark
+	# every group the users should't be a member of:
+	#
+	#Checklist Set groups for 'donald'
+	# [ ] finance  normal group
+	# [X] users    normal group
+	# [ ] holger   user private group
+	# [ ] iccm     user private group
+	# [ ] keesk    user private group
+	#ChecklistEnd
+	#Macro Checklist
+	#Macro Cancel
+	#DescEnd
+
+	sysadm-user.pl --all --userintogroups $LOGIN 2>$TMPFILE || {
+            $DIALOG --textbox $TMPFILE 10 60
+            return
+	}
+	;;
+
+esac

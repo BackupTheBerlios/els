@@ -1,0 +1,106 @@
+case "$1" in
+
+    Query)
+        Title "System" "Login" "For experts: login control"
+        Option "Who"      "Display list of logged in users"
+        Option "Greeting" "Edit login greeting"
+        Option "MOTD"     "Edit message of the day (displayed after login)"
+        if [ -f /etc/nologin ]; then
+            Option "Allow"    "Allow logins"
+	else
+            Option "Disable"  "Disable logins"
+	fi
+        ;;
+
+	#Desc
+	# This menu controls all aspects of users that are directly
+	# logging in into your server.
+	#DescEnd
+
+
+    who)
+	#Desc
+	# "Who" displays all logged in users. You see a screen similar to
+	#TextBox
+	#   7:24pm  up  1:37,  4 users,  load average: 0.00, 0.02, 0.01
+	# USER     TTY      FROM              LOGIN@  IDLE   JCPU   PCPU  WHAT
+	# root     tty1                       5:47pm  5:28   0.36s  0.17s  q makehtml.pl
+	# holger   tty2                       5:48pm  0.00s  0.29s  0.03s  w
+ 	#TextBoxEnd
+	#Macro Textbox
+	#DescEnd
+
+        w >$TMPFILE
+        $DIALOG --textbox $TMPFILE 23 78
+        ;;
+
+    greeting)
+	#Desc
+	# Each user see's a greeting message before logging in. 
+	#
+	#Item Usage
+	# First, you have to select which greeting message you want to
+	# edit. There is one for the local users (logging in at the console,
+	# not exactly what you want them to do) or remote users (via modem
+	# or via telnet:
+	#Menu Select issue text
+	# /etc/issue
+	# /etc/issue.net
+	#MenuEnd
+	#Macro Menu
+	#Macro Cancel
+	#
+	#Screen
+	# Welcome to the Easy Linux Server at company.de
+	#ScreenEnd
+	#Macro Editor
+	#DescEnd
+
+        echo -n "$DIALOG --menu \"Select issue text\" 23 40 15 " >$TMPFILE.dialog
+        ls --color=never /etc/issue* | awk '{ printf("%s %c%c ", $1,34,34) }' >>$TMPFILE.dialog
+        . $TMPFILE.dialog 2>$TMPFILE
+        test $? = 1 -o $? = 255 || EditFile `cat $TMPFILE`
+        ;;
+
+    motd)
+	#Desc
+	# "MOTD" means "Message of the day". It is displayed right after
+	# a user logged in into the server. Usually, it just contains
+	#Screen
+	# Have a lot of fun...
+	#ScreenEnd
+	#Macro Editor
+	#DescEnd
+
+        EditFile /etc/motd
+        ;;
+
+    allow)
+	#Desc
+	# This re-enables login after it has been disabled with
+	# "<A HREF="#disable">Disable</A>".
+	#
+	#Item Visibility
+	# You see this option only if logins are currently disabled.
+	#DescEnd
+
+        rm -f /etc/nologin
+        $DIALOG --msgbox "Login is enabled" 5 40
+        ;;
+
+    disable)
+	#Desc
+	# This disables login to the computer for all users.
+	# User "root" can always log in. The login will be disabled
+	# until the next reboot or until you re-enable it with the
+	# <A HREF="#enable">Enable</A> option.
+	#
+	#Item Visibility
+	# You see this option only if logins are currently enabled.
+	#DescEnd
+
+        echo -e "\\b\\n\\nLogin disabled by System Administrator\\n\\b" >/etc/nologin
+        $DIALOG --msgbox "Login is now disabled, but user 'root' can still login." 6 40
+        ;;
+
+esac
