@@ -12,7 +12,7 @@ Copyright: GPL
 Group: System Environment/Base
 Packager: Holger Schurig <holgerschurig@gmx.de>
 Requires: redhat-release => 7.2, dialog, findutils, grep, gawk, textutils
-Requires: perl
+Requires: util-linux, mtools, e2fstools, shadow-utils, perl
 %if %{withjoe}
 Requires: joe
 %endif
