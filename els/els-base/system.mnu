@@ -2,7 +2,7 @@ case "$1" in
 
     Query)
         Title "Main" "System" "General system administration"
-        # static menu entries
+	# static menu entries
         DATE=`date +"%d-%b-%Y"`
         TIME=`date +"%T"`
         Option "Date"      "Set the system date  (now $DATE)"
@@ -10,7 +10,7 @@ case "$1" in
         Option "Usage"     "Hard disk usage report"
         Option "Shutdown"  "Down the server (before switching power off)"
 
-        #include System sysadm -> System
+	#include System sysadm -> System
         perl -nw - $ELS_MENULIB/*.mnu 2>/dev/null >>$ELS_TEMP.dialog <<-"EOF"
         if ( /^\s+Title\s+"System"\s+"(.*)"\s+"(.*)"/ ) {
             print "\"$1\" \"$2\" ";
@@ -18,20 +18,20 @@ case "$1" in
 	EOF
         ;;
 
-        #Desc
-        # In the "General system administration" menu you will find all
-        # those entries that hasn't been important enought to me to give
-        # them their own main-menu entry. So here you might find many
-        # options that you don't need that often.
-        #
-        # Some options here are static and others are dynmic. Depending on
-        # your specific installation, some of the following options might
-        # be missing. Or you could have even more options:
-        #DescEnd
+	#Desc
+	# In the "General system administration" menu you will find all
+	# those entries that hasn't been important enought to me to give
+	# them their own main-menu entry. So here you might find many
+	# options that you don't need that often.
+	#
+	# Some options here are static and others are dynmic. Depending on
+	# your specific installation, some of the following options might
+	# be missing. Or you could have even more options:
+	#DescEnd
 
 
     date)
-        #Desc
+	#Desc
 	# Allows you to set the date.
 	#
 	#Item Usage
@@ -44,16 +44,16 @@ case "$1" in
 	#InputEnd
 	# Type the new date, press [Enter] and your system and CMOS clocks
 	# will be updated.
-        #DescEnd
+	#DescEnd
 
 	InputString "Please enter the new date, e.g.\n`date +%d-%b-%Y`"
 	test -z "$CHOICE" && return
         date --set "$CHOICE `date +%H:%M`" >/dev/null
-	clock -w
+	hwclock --systohc
         ;;
 
     time)
-        #Desc
+	#Desc
 	# Allows you to set the time.
 	#
 	#Item Usage
@@ -72,30 +72,30 @@ case "$1" in
 	# because Linux knows all this <B>if</B> you entered the correct
 	# time zone at installation time. If you didn't, go to the command
 	# prompt and issue the command <TT>timeconfig</TT>.
-        #DescEnd
+	#DescEnd
 
 	InputString "Please enter the new time, e.g.\n`date +%H:%M`"
 	test -z "$CHOICE" && return
         date --set "$CHOICE" >/dev/null
-	clock -w
+	hwclock --systohc
         ;;
 
     usage)
-        #Desc
-        # This gives you a brief report on how congested your hard disk(s)
-        # are. All numbers are shown in Megabytes, like in the following
-        # example:
-        #
-        #Textbox
-        # Filesystem            Size  Used  Avail  Capacity Mounted on
-        # /dev/hda6             342M   16M   308M      5%   /
-        # /dev/hda7             972M  749M   172M     81%   /usr
-        # /dev/hda8             1.4G  208M   1.1G     15%   /usr/src
-        #TextboxEnd
-        #
-        # Note: this option intentionally shows you only the space report of
-        # ext2fs (Linux formatted) hard disk.
-        #DescEnd
+	#Desc
+	# This gives you a brief report on how congested your hard disk(s)
+	# are. All numbers are shown in Megabytes, like in the following
+	# example:
+	#
+	#Textbox
+	# Filesystem            Size  Used  Avail  Capacity Mounted on
+	# /dev/hda6             342M   16M   308M      5%   /
+	# /dev/hda7             972M  749M   172M     81%   /usr
+	# /dev/hda8             1.4G  208M   1.1G     15%   /usr/src
+	#TextboxEnd
+	#
+	# Note: this option intentionally shows you only the space report of
+	# ext2fs (Linux formatted) hard disk.
+	#DescEnd
 
         df -h -t ext2 -t ext3 >$ELS_TEMP
         $ELS_DIALOG --textbox $ELS_TEMP 23 78
