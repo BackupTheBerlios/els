@@ -1,4 +1,4 @@
-#Title Allow drop-in scripts in /etc/rc.d
+#Title drop-in scripts in /etc/rc.d
 #Author Holger Schurig
 #Group els-base
 #Desc
@@ -7,7 +7,7 @@
 # executed automatically. So if you need special SCSI setup, just
 # place a rc.scsi file in this directory and it gets automatically executed.
 #DescEnd
-#Id $Id: rclocal.setup,v 1.3 2001/11/30 15:21:03 holgerschurig Exp $
+#Id $Id: rclocal.setup,v 1.4 2001/11/30 16:24:56 holgerschurig Exp $
 
 
 loadfile '/etc/rc.d/rc.local';

@@ -1,10 +1,10 @@
-#Title Make Ctrl-Alt-Del halt the system
+#Title make Ctrl-Alt-Del halt the system
 #Author Holger Schurig
 #Group els-base
 #Desc
 # If we want to stop workstation, we dont want it to boot again.
 #DescEnd
-#Id $Id: ctrlaltdel.setup,v 1.4 2001/11/30 15:21:03 holgerschurig Exp $
+#Id $Id: ctrlaltdel.setup,v 1.5 2001/11/30 16:24:56 holgerschurig Exp $
 
 
 loadfile '/etc/inittab';

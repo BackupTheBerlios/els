@@ -7,7 +7,7 @@ case "$1" in
         TIME=`date +"%T"`
         Option "Date"      "Set the system date  (now $DATE)"
         Option "Time"      "Set the system time  (now $TIME)"
-        Option "Space"     "Hard disk space report"
+        Option "Usage"     "Hard disk usage report"
         Option "Shutdown"  "Down the server (before switching power off)"
 
         #include System sysadm -> System
@@ -80,7 +80,7 @@ case "$1" in
 	clock -w
         ;;
 
-    space)
+    usage)
         #Desc
         # This gives you a brief report on how congested your hard disk(s)
         # are. All numbers are shown in Megabytes, like in the following
