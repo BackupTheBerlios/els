@@ -1,0 +1,48 @@
+#Title Create a backup set definition for each partition
+#Mandatory
+#Author Holger Schurig
+#Desc
+#DescEnd
+
+
+open MOUNTS, "</proc/mounts";
+while (defined ($_ = <MOUNTS>)) {
+    my($dev, $dir, $fs, $flags) = split / /, $_;
+    next if $flags eq "ro";
+    next if $fs ne "ext2";
+
+    # transform "/usr/samba/app" into "app":
+    $dir =~ /([^\/]*$)/;
+    my $name = $1 || 'root';
+
+    # create backup set definition file, if it doesn't exist yet
+    next if -f "/etc/backup.d/$name.set";
+    open SET, ">/etc/backup.d/$name.set";
+
+    # Note: this should be the same text as in /usr/lib/sysadm/backupsets.mnu
+    print SET <<"EOF";
+#
+# /etc/backup.d/$name.set
+#
+# Backup set definition file, used by sysadm -> backup
+#
+#
+# Format
+# ------
+# This file may contain many line. The starting character of each line
+# does tells what this line is for:
+#
+#   #                  comment
+#   /usr/samba    slashes define paths to be backed up
+#   -*.bak        minus denote files that should not be backed up
+#
+
+EOF
+    print SET "$dir\n";
+    close SET;
+    #print "$name   $dir\n";
+}
+close MOUNTS;
+
+
+1;

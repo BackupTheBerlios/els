@@ -1,0 +1,192 @@
+FILELIST=/var/tmp/sysadm.filelist
+
+function my_mt ()
+{
+    mt $1 $2 >$ELS_TEMP 2>&1
+    if [ -s $ELS_TEMP ]; then
+        $ELS_DIALOG --textbox $ELS_TEMP 23 78
+    fi
+}
+
+
+case "$1" in
+
+    Query)
+        Title "Hardware" "Tape" "Configure backup tape"
+
+        test -z "$TAPE" || WHICH=" (now $TAPE)"
+        Option "Device"       "Set tape device$WHICH"
+        if [ ! -z "$TAPE" -a "$TAPE" != "/dev/null" ]; then
+            #GetDriveType
+            Option "Status"       "Display status of tape"
+            Option "Eject"        "Rewind and eject tape"
+            Option "Begin"        "Rewind tape"
+            Option "End"          "Go to end of data"
+            Option "Retension"    "Retension tape"
+            Option "Erase"        "Erase tape"
+
+            test -z "$FROMBACKUP" &&
+            Option "Backup"       "Backup menu"
+        fi
+        ;;
+
+    device)
+        #Desc
+	# You must define which tape you have before you can backup and
+	# restore.
+	#
+	#Item Usage
+	# Select the device from the following list:
+        #Menu Select tape device
+        # null   no tape connected to the system
+        # nst0   SCSI tape 0
+        # nst1   SCSI tape 1
+        #MenuEnd
+	#Macro Menu
+	#Macro Cancel
+        #DescEnd
+
+        $ELS_DIALOG --menu "Select tape device" 11 70 3 \
+                "null"    "no tape in system" \
+                "nst0"    "SCSI tape 0" \
+                "nst1"    "SCSI tape 1" \
+        2>$ELS_TEMP
+        test $? = 0 || return
+        CHOICE=`cat $ELS_TEMP`
+
+        SetOpt "TAPE" "/dev/$CHOICE"
+
+        # make proper link in /dev.
+        rm -f /dev/tape
+        test "$TAPE" = "/dev/null" || ln -s $TAPE /dev/tape
+
+	rm -f $FILELIST
+        $ELS_DIALOG --msgbox "Tape set to $TAPE" 5 40
+        ;;
+
+    status)
+        #Desc
+	# Displays the current tape status. The output is not that
+	# user friendly, it is the output of "<TT>mt status</TT>":
+	#
+	# Here is an example:
+        #Textbox
+        # SCSI 2 tape drive:
+        #
+        # File number=3, block number=0, partition=0.
+        # Tape block size 0 bytes, Density code 0x13 (DDS (61000 bpi)).
+        # Soft error count since last status=0
+        # General status bits (81010000):
+        # EOF ONLINE IM_REP_EN
+        #TextboxEnd
+        # <B>SCSI 2 tape drive</B>: the linix tape driver detected a
+	# SCSI-2 tape drive. They are faster than SCSI-1 drives.<BR>
+        # <B>File number=3</B>: each backup consists of three "files"
+	# (header, file list and backup data each count as one "file").
+	# Files numbers are starting with zero.<BR>
+	# <B>block number=0</B>: the tape is at block zero.<BR>
+        # <B>partition=0</B>: some SCSI tapes support partitions. This
+	# is not used by this package.<BR>
+        # <B>Tape block size 0 bytes</B>: this means that the driver will
+	# detect the real tape block size (usually 512, 1024 or 4096 bytes)
+        # automatically.<BR>
+        # <B>Density code</B>: the tape driver detected a DDS tape (that
+	# is the name of the tapes for DAT tape drives).<BR>
+        # <B>Soft error count since last status=0</B>: this are detected
+	# and recovered read errors. No one has been discovered so far. If
+	# you see a hight number, you should clean the head of your drive
+	# and/or use other tapes.<BR>
+        # <B>General status bits</B>: this bits are explained in the next
+	# line. Some of the bits are: EOF=end of file, BOT=begin of tape,
+        # ONLINE=tape inserted, DR_OPEN=drive open, no tape inserted.
+        #DescEnd
+	
+	$ELS_DIALOG --infobox "Just a moment ..." 3 30
+
+        echo -e "Output of 'mt status':\n" >$ELS_TEMP
+        mt status >>$ELS_TEMP 2>&1
+        echo >>$ELS_TEMP
+        $ELS_DIALOG --textbox $ELS_TEMP 23 77
+        ;;
+
+    retension)
+        #Desc
+        # This will retension your tape. During a retension the tape will be
+	# wounded completely forward and backward. Sometimes this is
+	# necessary to reduce read-errors. The idea is that because of this
+	# complete back-and-forth winding, the tape is wounded up in a more
+	# homogenous way before, having a constant tension and therefore a
+	# constant speed throughtout it's whole length.
+        #DescEnd
+
+        $ELS_DIALOG --infobox "One moment ...  retensioning ..." 3 35
+        my_mt rewind
+        my_mt retension
+	rm -f $FILELIST
+        ;;
+
+    erase)
+        #Desc
+	# Erases the tape.
+	#
+        # This writes the whole tape full with zeros, overwriting
+        # physically any previous data. This might take some time.
+        #DescEnd
+
+        $ELS_DIALOG --infobox "One moment ...  erasing ..." 3 30
+        my_mt erase
+	rm -f $FILELIST
+        ;;
+
+    eject)
+        #Desc
+        # Ejects the tape. Most DAT drives rewind the tape before ejecting it.
+        #DescEnd
+
+        $ELS_DIALOG --infobox "One moment ...  ejecting ..." 3 31
+        my_mt offline
+	rm -f $FILELIST
+        ;;
+
+    begin)
+        #Desc
+	# This will rewind your tape.
+        #
+        # This means that the next backup will start at the beginning,
+	# overwriting all previous backups on the tape.
+	#
+	# If your next action is a restore, the restore will read data
+	# from the first backup of the tape.
+        #DescEnd
+
+        $ELS_DIALOG --infobox "One moment ...  rewinding ..." 3 32
+        my_mt rewind
+	rm -f $FILELIST
+        ;;
+
+    end)
+        #Desc
+        # Positions your tape at the end of all data.
+        #
+        # The next backup would append it's data at the end of the
+        # tape.
+	#
+	# Obviously an file list import or restore wouldn't work while
+	# the tape is positioned at the end of all data ...
+        #DescEnd
+
+        $ELS_DIALOG --infobox "One moment ...  go to end ..." 3 32
+        my_mt eod
+	rm -f $FILELIST
+        ;;
+
+    backup)
+        #Desc
+        # See <A HREF="backup.html">sysadm -&gt; Backup</A>.
+        #DescEnd
+
+        export FROMTAPE=YES
+        $0 backup
+        ;;
+
+esac

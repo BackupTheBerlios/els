@@ -1,0 +1,148 @@
+FILELIST=/var/tmp/sysadm.filelist
+
+function ShowPosition
+{
+    $ELS_DIALOG --infobox "One moment ... reading info from tape ..." 3 45
+    sysadm-backup.pl --getposition >$ELS_TEMP || {
+	$ELS_DIALOG --title "Tape access problem" --textbox 23 76 $ELS_TEMP
+	return
+    }
+    unset DESC
+    . $ELS_TEMP
+    test -z "$DESC" && DESC="$INCLUDE"
+    $ELS_DIALOG --title "Current tape position" --msgbox "
+Backup set:    $DESC
+Backup date:   $DATE
+Backup set no: $[BACKUPSET+1]
+Files in set:  $TAPEFILES
+Bytes in set:  $TAPESIZE" 11 60
+}
+
+
+case "$1" in
+
+    Query)
+        Title "Backup" "Position" "Position tape"
+
+        #Desc
+	# This menu allows to navigate to different backup sets on one
+	# tape.
+        #DescEnd
+
+        Option "Report"   "Report current position"
+        Option "Next"     "Skip to next backup set"
+        Option "Previous" "Skip to previous backup set"
+        Option "Begin"    "Position at the beginning of the tape"
+        Option "End"      "Position after the last backup set"
+        ;;
+
+    report)
+        #Desc
+        # "Report" read the header of the current backup set and displays it, e.g.:
+        #Msgbox Current tape position
+	# Backup set:      /root
+        # Backup date:     1997-05-30 16:48:55
+	# Backups set no:  1
+	# Files in set:    66
+	# Bytes in set:    295
+        #MsgboxEnd
+	# The position can only be displayed if the first file on the tape contains
+	# the position information. If the tape is blank, you might get an error
+	# telling you that the tape has not been used from OM BACKUP or that the
+	# tape is empty.
+	#
+	#Item Description
+	# <B>Backup set</B>: name of the backup set.
+	#
+	# <B>Backup date</B>: date of the backup, in the form "year-month-day
+	# hour:minutes:seconds".
+	#
+	# <B>Backup set no</B>: is the number of this backup set on the tape,
+	# the first set is numbered 1.
+	#
+	# <B>Files in set</B>: number of files in this backup set.
+	#
+	# <B>Bytes in set</B>: total number of all bytes in this backup set. The
+	# number of bytes on the tape can be smaller if compression is enabled.
+        #DescEnd
+
+	ShowPosition
+        ;;
+
+    next)
+        #Desc
+        # "Next" advances the tape to the next backup set. Displays the new
+	# position or "End of tape reached." at the end of the tape.
+	#
+	# You get a <A HREF="#report">position report</A> after the tape has
+	# been re-positioned.
+        #DescEnd
+
+ 	$ELS_DIALOG --infobox "One moment ... skipping to next backup set ..." 3 50
+	sysadm-backup.pl --nexttapeset >$ELS_TEMP || {
+	    $ELS_DIALOG --title "Tape access problem" --textbox $ELS_TEMP 23 76
+	    return
+	}
+	rm -f $FILELIST
+	ShowPosition
+        ;;
+
+    previous)
+        #Desc
+        # Rewinds the tape to the previous backup set. Displays the new
+	# position or "Already at start of tape." if that is true.
+	#
+	# You get a <A HREF="#report">position report</A> after the tape has
+	# been re-positioned.
+        #DescEnd
+
+ 	$ELS_DIALOG --infobox "One moment ... rewinding to previous backup set ..." 3 55
+	sysadm-backup.pl --prevtapeset >$ELS_TEMP || {
+	    $ELS_DIALOG --title "Tape access problem" --textbox $ELS_TEMP 23 76
+	    return
+	}
+	rm -f $FILELIST
+	ShowPosition
+        ;;
+
+    begin)
+        #Desc
+        # This rewinds the tape to the first backup set on the tape.
+	#
+	# You get a <A HREF="#report">position report</A> after the tape has
+	# been re-positioned.
+        #DescEnd
+
+        $ELS_DIALOG --infobox "One moment ... rewinding ..." 3 32
+        mt rewind >$ELS_TEMP 2>&1
+        if [ -s $ELS_TEMP ]; then
+            echo -e "\nPossible problems:\n- tape not inserted\n- tape not formatted/erased\n- hardware fault" >>$ELS_TEMP
+            $ELS_DIALOG --textbox $ELS_TEMP 10 50
+            return
+        fi
+	rm -f $FILELIST
+        ShowPosition
+        ;;
+
+    end)
+        #Desc
+        # Advances the tape after the last backup set. This allows you
+        # to write another backup set onto a tape that is already used.
+	#
+	# This option doesn't present you a position report like all the other
+	# options. If you are at the end of the tape data, there is no header
+	# to read and to display.
+        #DescEnd
+
+        $ELS_DIALOG --infobox "One moment ... skipping to end of data ..." 3 46
+        mt eod >$ELS_TEMP 2>&1
+        if [ -s $ELS_TEMP ]; then
+            echo -e "\nPossible problems:\n- tape not inserted\n- tape not formatted/erased\n- hardware fault" >>$ELS_TEMP
+            $ELS_DIALOG --textbox $ELS_TEMP 10 50
+            return
+        fi
+	rm -f $FILELIST
+        $ELS_DIALOG --msgbox "Now the tape is at the end of the data.\nYou can append another backup.\n" 6 45
+        ;;
+
+esac

@@ -1,0 +1,228 @@
+function SelectSets ()
+{
+    echo -n "$ELS_DIALOG --checklist \"Select back sets $1\" " >$ELS_TEMP.
+    sysadm-backup.pl --selectsets $2 $3 >>$ELS_TEMP.
+    { . $ELS_TEMP.; } 2>$ELS_TEMP
+    CHOICE=`cat $ELS_TEMP`
+}
+
+
+case "$1" in
+
+    Query)
+        Title "Main" "Backup" "Backup your system"
+
+	#Desc
+	# The backup menu allows you to backup your server. This can even be
+	# automatically in the night and with an e-mail to you telling you
+	# what happened. This menu and it's submenus allow you to specify
+	# what files should be backed up, what files should be excluded and
+	# when the backup should take place.
+	#DescEnd
+
+        # the following options make only sense once you have a tape defined
+        if [ ! -z "$TAPE" -a "$TAPE" != "/dev/null" ]; then
+
+            Option "Manual"    "Manually backup now!"
+            Option "Automatic" "Schedule automatic backups in the night"
+            Option "Exclude"   "For experts: define files/directories to exclude"
+
+            #include Backup sysadm -> Backup
+            perl -nw - $ELS_MENULIB/*.mnu 2>/dev/null >>$ELS_TEMP. <<-"EOF"
+	    	if ( /^\s+Title\s+"Backup"\s+"(.*)"\s+"(.*)"/ ) {
+		    print "\"$1\" \"$2\" ";
+	    	}
+		EOF
+
+        else
+	    $ELS_DIALOG --msgbox "Define tape type first." 5 30
+	    ExitMenu
+	fi
+        ;;
+
+
+    manual)
+	#Desc
+	# This options starts a backup immediately.
+	#
+	#Item Note
+	# Any backup software can only safely write tapes that are not
+	# currently in use. Linux can access any file, even when it is
+	# opened by several users. This is not the problem. It's
+	# more subtle: if one of your users is logged in and
+	# does work in an MS Access database, the opened database
+	# will be written in an undefined state onto the tape. It might
+	# be corrupt when restored from the tape.
+	#
+	# Therefore, you might want to check that no one has open files.
+	#
+	#Item Usage
+	# Insert a tape and select "Manual". You will see a screen like this:
+	#CheckList Select back up sets to backup
+	# [x] root
+        # [x] usr
+	# [x] var
+	#CheckListEnd
+	#Macro CheckList
+	#Macro Cancel
+	#
+	# Now the system starts the backup. A backup takes some time, so
+	# you won't see an immediate result. Instead, the log file of the
+	# backup will be sent to "<TT>operator</TT>" by e-mail. Usually,
+	# operator is the same person as the postmaster.
+	#DescEnd
+
+	SelectSets "to backup"
+	test -z "$CHOICE" && return
+
+	/usr/sbin/sysadm-backup.pl --mail --backup -- $CHOICE &
+
+	$ELS_DIALOG --msgbox "Backup is running now. An email with results will be sent to the operator." 6 41
+	;;
+
+    automatic)
+        #Desc
+	# Doing backups during the day is somewhat inconvenient, because
+	# you always have to start it manually and no one should be using
+	# the server. Wouldn't it be nice if this could all happen
+	# automatically?
+	#
+	# Yes, it can!  And best: unattended in the night. All you've to do
+	# is insert another tape each morning and look at the backup log
+	# sent to you by e-mail.
+	# 
+	#Item Usage
+        # First you may select the time for the backup to take place:
+        #Menu Select time for backup
+        # a 20:00
+        # b 21:00
+        # c 22:00 (best time)
+        # d 23:00
+        # e 00:00
+        # f 01:00
+        # g 02:00
+        # h 03:00
+        # i 04:00
+        # j 05:00
+        # k kill previously configured schedule
+        #MenuEnd
+	#Macro Menu
+	#Macro Cancel
+	#
+	#Item Which time to use?
+	# As you see above, one time is marked "best". Why?
+	#
+	# There is one common rule: no one should use the server during
+	# backup. If a user modifies a file while it is backed up, the
+	# data integrity will be broken. So if the backup starts too
+	# early, it is very likely that people are still logged in.
+	#
+	# Several maintenance jobs (e.g. cleaning old log files etc) are
+	# executed in the night. There are daily, weekly and monthly
+	# tasks to be done. These tasks are launched at 04:00.
+	# If one of this tasks is still running while
+	# the backup is active data integrity would be voided, too.
+	#
+	# Therefore, 22:00 is a good time: it is not too early, but still
+	# it gives us 6 hours till the next background task. But
+	# the best time is in the morning at 04:00. The likelihood that a
+	# user works at this time is also small. No background tasks
+	# are running either.
+	#DescEnd
+
+        $ELS_DIALOG --menu "Select time for backup" 18 40 11 \
+		"a" "20:00" \
+		"b" "21:00" \
+		"c" "22:00 (best time)" \
+		"d" "23:00" \
+		"e" "00:00" \
+		"f" "01:00" \
+		"g" "02:00" \
+		"h" "03:00" \
+		"i" "04:00" \
+		"j" "05:00" \
+		"k" "kill previous schedule" 2>$ELS_TEMP
+        HOUR=`cat $ELS_TEMP`
+        test -z "$HOUR" && return
+
+	crontab -l 2>/dev/null | grep -v sysadm-backup | tail +4 >$ELS_TEMP.cron
+	test -s $ELS_TEMP.cron || {
+                echo "#"
+                echo "# This file has been automatically created by $0."
+                echo "#"
+                echo "SHELL=/bin/bash"
+                echo "PATH=/sbin:/usr/sbin:/bin/:/usr/bin"
+                echo "MAILTO=operator"
+                echo
+                echo "#min hour              day month weekday command"
+                echo "#--- --------------- ----- ----- ------- ------------------------------------"
+	} >$ELS_TEMP.cron
+
+        case "$HOUR" in
+            a) HOUR="20" ;;
+            b) HOUR="21" ;;
+            c) HOUR="22" ;;
+            d) HOUR="23" ;;
+            e) HOUR="00" ;;
+            f) HOUR="01" ;;
+            g) HOUR="02" ;;
+            h) HOUR="03" ;;
+            i) HOUR="04" ;;
+            j) HOUR="05" ;;
+            k) crontab $ELS_TEMP.cron
+               return
+               ;;
+        esac
+
+	SelectSets "to backup"
+	test -z "$CHOICE" && return
+	
+	# append proper entry, backups made after 00:00 need a different day
+        {
+            case "$HOUR" in
+            20|21|22|23 \
+	     )
+                echo "0    $HOUR                     *     *     1-5 /usr/sbin/sysadm-backup.pl --mail --eject --backup -- $CHOICE"
+                ;;
+            *)
+                echo "0    $HOUR                     *     *     2-6 /usr/sbin/sysadm-backup.pl --mail --eject --backup -- $CHOICE"
+                ;;
+            esac
+        } >>$ELS_TEMP.cron
+	crontab $ELS_TEMP.cron
+	;;
+
+    exclude)
+        #Desc
+        # It's usually not necessary to back up all files
+        # or directories. Some of them are temporary, some will be
+        # automatically re-created etc. So you can exclude specific
+	# files and/or directories. Please try this option on your
+	# system. The default exclusion list is heavily documented
+	# and should give you an idea on what can be done.
+	#
+	# After you modified that file, you might want to execute
+	# <A HREF="sets.htm#files">sysadm -&gt; Backup -&gt; Sets -&gt; Files</A>
+	# to check what files get saved.
+	#
+	#Item Usage
+        #Macro Editor
+        #DescEnd
+
+	ExpertWarning || return
+
+	EditFile /etc/backup.d/default.exclude
+	;;
+
+    sets\
+	)
+	ExpertWarning || return
+	$0 $1
+	;;
+
+    *)
+	$0 $1
+	;;
+
+
+esac

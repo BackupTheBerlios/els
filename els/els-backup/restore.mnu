@@ -1,0 +1,220 @@
+FILELIST=/var/tmp/sysadm.filelist
+
+
+case "$1" in
+
+    Query)
+        Title "Backup" "Restore" "Restore files from tape"
+
+	#Desc
+	# The restore function is based around a file list. First you
+	# read the file list from the tape, then you can edit the list.
+	# The actual restore does only read those files back that are
+	# listed in the file list.
+	#DescEnd
+
+        if [ -s "$FILELIST" ]; then
+	    Option "Import"  "Re-read file list from tape"
+            Option "List"    "List files in loaded backup set"
+	    Option "Edit"    "Edit file list"
+            Option "Restore" "Restore all files in the file list"
+        else
+	    Option "Import"  "Read file list from tape"
+	fi
+        Option "Position" "Position tape to a specific file set"
+        ;;
+
+    import)
+	#Desc
+	# Before you restore, you must select which files to restore. This is
+	# done with this menu option.
+	#
+	#Item Usage
+	# After you selected this option, the backup set information is read in
+	# and after a short while you see an info box similar to this:
+	#
+	#MsgBox
+	# File list read
+	#
+	# Backup set:    /
+	# Backup dat:    1999-05-01 20:00:04
+	# Backup set no: 1
+	# Files in set:  2369
+	# Bytes in set:  18035
+	#MsgBoxEnd
+	# If the displayed backup set is not the one you need, you
+	# should use <A HREF="#position">sysadm -&gt; Backup -&gt;
+	# Position</A> to position the tape to the wanted backup set.
+	# After you've done this, import the file list again.
+	#DescEnd
+
+	$ELS_DIALOG --infobox "One moment ... reading info from tape ..." 3 45
+	sysadm-backup.pl --getposition >$ELS_TEMP || {
+	    $ELS_DIALOG --title "Tape access problem" --textbox 23 76 $ELS_TEMP
+	    return
+	}
+
+	unset DESC
+	. $ELS_TEMP
+	test -z "$DESC" && DESC="$INCLUDE"
+
+	$ELS_DIALOG --infobox "Moment ... reading file list ..." 3 36
+	sysadm-backup.pl --getfilelist >$ELS_TEMP || {
+	     --title "Tape access problem" --textbox $ELS_TEMP 23 76
+	    return
+	}
+
+        $ELS_DIALOG --title "File list read" --msgbox "
+Backup set:    $DESC
+Backup date:   $DATE
+Backup set no: $[BACKUPSET+1]
+Files in set:  $TAPEFILES
+Bytes in set:  $TAPESIZE" 11 60
+        ;;
+
+    list)
+	#Desc
+	# Displays the list of files and directories on the tape, e.g.
+	#TextBox
+	# /
+	# /lost+found
+	# /tmp
+	# /var
+	# /var/lib
+	# /var/lib/rpm
+	# /var/lib/rpm/packages.rpm
+	# /var/lib/rpm/nameindex.rpm
+	# /var/lib/rpm/fileindex.rpm
+	# ...
+	#TextBoxEnd
+	#Macro Textbox
+	#
+	#Item Visibility
+	# This option is only visible if a file list has been imported.
+	#DescEnd
+
+            $ELS_DIALOG --textbox $FILELIST 23 76
+        ;;
+
+    edit)
+	#Desc
+	# This is similar to <A HREF="#list>List</A>. It displays all files
+	# that are in the current backup set.
+	#
+	# However, most of the time you won't restore all files. However, the
+	# <A HREF="#restore">Restore</A> menu option only restores listed files,
+	# So whatever file you delete won't be restored.
+	#
+	#Item Usage
+	# After you selected "Edit", you see the file list in the
+	# editor:
+	#Edit
+	# /
+	# /lost+found
+	# /tmp
+	# /var
+	# /var/lib
+	# /var/lib/rpm
+	# /var/lib/rpm/packages.rpm
+	# /var/lib/rpm/nameindex.rpm
+	# /var/lib/rpm/fileindex.rpm
+	# ...
+	#EditEnd
+	#
+	# Delete all files and directories that you <B>don't</B> want to
+	# be restored. The following keys help you deleting lines or whole
+	# chunks of text at once:
+	#
+	#Table Key&nbsp;sequence Meaning
+	# Ctrl-Y         Delete current line
+	# Ctrl-K&nbsp;B  Mark the <B>b</B>egin of a block
+	# Ctrl-K&nbsp;K  Mark the end of a bloc<B>k</B>
+	# Ctrl-K&nbsp;Y  Delete marked block
+	#TableEnd
+	#
+	#Macro Editor
+	#
+	#Item Visibility
+	# This option is only visible if a file list has been imported.
+	#DescEnd
+        $ELS_DIALOG --msgbox "\
+Hints for the Restore Procedure
+
+You are now presented with a list of all the files in the
+backup. You should delete all the files that are *NOT* to
+be restored. You can delete the following way:
+
+CTRL-Z    delete current line
+CTRL-KB   mark begin of a block
+CTRL-KK   mark end of a block
+CTRL-KY   delete complete block
+
+Please be careful what you are restoring. If you restore
+files in use, you could damage your system!" 17 65
+
+        $EDITOR $FILELIST
+	;;
+
+
+    restore)
+	#Desc
+	# Allows you to restore individual files.
+	#
+	#Item Usage
+	# Before something starts, you will be asked a question like this:
+	#
+	#Question
+	# Do you really want to restore 21 files?
+	#QuestionEnd
+	#Macro Question
+	#
+	# Only if you select "yes" does the restore proceed by asking you the
+	# next question:
+	#
+	#CheckList Select restore options
+	# [ ] Temp       Restore to /var/tmp
+	# [ ] Overwrite  Overwrite existing files
+	#CheckListEnd
+	#Macro CheckList
+	#
+	# <B>Temp</B>: all restored file will end up in /var/tmp. For example, the
+	# file usr/samba/dat/transfer/Letter.doc would end up as
+	# /var/tmp/usr/samba/dat/transfer/Letter.doc. Use this option if you want manually
+	# look into files or have very tight control of what file to copy back to the
+	# user or not.
+	# Please be sure that your /var/tmp file system does not overflow (you
+	# can use <A HREF="hardware.htm#space">sysadm -&gt; Hardware -&gt; Space</A>
+	# to get an overview of used and free hard disk space.
+	#
+	# <B>Overwrite</B>: normally an existing file is not overwritten during the
+	# restore. So any existing file won't be accidentally overwritten by an older
+	# file from the backup.
+	# But if you know what you're doing, no one is hindering you from selecting
+	# this option and overwriting even existing files.
+	#
+	#Item Visibility
+	# This option is only visible if a file list has been imported.
+	#DescEnd
+
+        # calculate number of files to restore
+        RESTOREFILES=`cat $FILELIST | wc --lines | tr -d " "`
+        Question "\nDo you really want to restore $RESTOREFILES files?" || return
+
+	$ELS_DIALOG --checklist "Select restore options" 10 60 2	\
+		"Temp"      "Restore to /var/tmp" "" 		\
+		"Overwrite" "Overwrite existing files" ""	2>$ELS_TEMP || return
+	# convert checkbox result into command line parameters for sysadm-backup.pl
+	TMPRES="`cat $ELS_TEMP | tr A-Z a-z | tr -d '"'`"
+	unset RESULT
+	for i in $TMPRES; do RESULT="$RESULT --$i"; done
+
+ 	sysadm-backup.pl $RESULT --mail --eject --restore &
+
+	$ELS_DIALOG --msgbox "Restore has been started. Result will be sent as e-mail." 5 60
+        ;;
+
+    *)
+	$0 $1
+        ;;
+
+esac
