@@ -1,6 +1,6 @@
 function ExpertWarning
 {
-    $DIALOG --yesno "\
+    $ELS_DIALOG --yesno "\
 \
 WARNING:\n\
 \n\
@@ -14,12 +14,12 @@ Do you want to continue?\
 
 function SelectGroup ()
 {
-    echo -n "$DIALOG --menu \"Select a group $1\" 23 55 15 " >$TMPFILE.dialog
-    if sysadm-user.pl --listgroups $2 $3 >>$TMPFILE.dialog 2>$TMPFILE; then
-        { . $TMPFILE.dialog; } 2>$TMPFILE
-        CHOICE=`cat $TMPFILE`
+    echo -n "$ELS_DIALOG --menu \"Select a group $1\" 23 55 15 " >$ELS_TEMP.dialog
+    if sysadm-user.pl --listgroups $2 $3 >>$ELS_TEMP.dialog 2>$ELS_TEMP; then
+        { . $ELS_TEMP.dialog; } 2>$ELS_TEMP
+        CHOICE=`cat $ELS_TEMP`
     else
-        $DIALOG --textbox $TMPFILE 5 50
+        $ELS_DIALOG --textbox $ELS_TEMP 5 50
         unset CHOICE
     fi
 }
@@ -29,8 +29,8 @@ case "$1" in
 
     Query)
         Title "internal to Users" "User modification" "Parameters for user '$LOGIN'"
-        sysadm-user.pl -getuserdata $LOGIN >$TMPFILE
-        . $TMPFILE
+        sysadm-user.pl -getuserdata $LOGIN >$ELS_TEMP
+        . $ELS_TEMP
         Option "Name"     "Set full name            (now $USER_FULLNAME)"
         Option "Password" "Set password             $USER_PASSWORD"
 	test "$LOGIN" != "root" &&
@@ -56,8 +56,8 @@ case "$1" in
 
         InputString "Enter full name, e.g. \"Donald Duck\""
         test -z "$CHOICE" && return
-        /usr/sbin/usermod -c "$CHOICE" $LOGIN 2>$TMPFILE || {
-            $DIALOG --textbox $TMPFILE 10 60
+        /usr/sbin/usermod -c "$CHOICE" $LOGIN 2>$ELS_TEMP || {
+            $ELS_DIALOG --textbox $ELS_TEMP 10 60
             return
         }
         ;;
@@ -74,18 +74,18 @@ case "$1" in
 
         InputString "Enter new password"
         test -z "$CHOICE" && {
-            $DIALOG --msgbox "Empty password not permitted. Password *NOT* changed." 5 60
+            $ELS_DIALOG --msgbox "Empty password not permitted. Password *NOT* changed." 5 60
 	    return
 	}
 
-	rm -f $TMPFILE
-	for i in $MENULIB/pwchange.*; do $i $LOGIN "$CHOICE" 2>>$TMPFILE; done
-	test -s $TMPFILE && {
-            $DIALOG --textbox $TMPFILE 10 60
+	rm -f $ELS_TEMP
+	for i in $ELS_MENULIB/pwchange.*; do $i $LOGIN "$CHOICE" 2>>$ELS_TEMP; done
+	test -s $ELS_TEMP && {
+            $ELS_DIALOG --textbox $ELS_TEMP 10 60
             return
 	}
 
-        $DIALOG --msgbox "Password changed." 5 30
+        $ELS_DIALOG --msgbox "Password changed." 5 30
         ;;
 
     delete)
@@ -102,14 +102,14 @@ case "$1" in
 	#DescEnd
 
 	Question "Do you really want to delete user '$LOGIN'?" || return
-	$DIALOG --infobox "One moment ... deleting ..." 3 32
-        /usr/sbin/userdel -r $LOGIN 2>$TMPFILE || {
-            $DIALOG --textbox $TMPFILE 10 60
+	$ELS_DIALOG --infobox "One moment ... deleting ..." 3 32
+        /usr/sbin/userdel -r $LOGIN 2>$ELS_TEMP || {
+            $ELS_DIALOG --textbox $ELS_TEMP 10 60
             return
         }
 	# call programs supplied by other modules
 	cls
-	for i in $MENULIB/deluser.*; do $i $LOGIN interactive; done
+	for i in $ELS_MENULIB/deluser.*; do $i $LOGIN interactive; done
 	sleep 1
 	ExitMenu
 	;;
@@ -136,8 +136,8 @@ case "$1" in
 	#Macro Cancel
 	#DescEnd
 
-	sysadm-user.pl --all --userintogroups $LOGIN 2>$TMPFILE || {
-            $DIALOG --textbox $TMPFILE 10 60
+	sysadm-user.pl --all --userintogroups $LOGIN 2>$ELS_TEMP || {
+            $ELS_DIALOG --textbox $ELS_TEMP 10 60
             return
 	}
 	;;

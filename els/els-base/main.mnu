@@ -3,7 +3,7 @@ case "$1" in
     Query)
         Title "" "Main" "Main menu"
         #Include Main sysadm
-        perl -nw - $MENULIB/*.mnu 2>/dev/null >>$TMPFILE.dialog <<-"EOF"
+        perl -nw - $ELS_MENULIB/*.mnu 2>/dev/null >>$ELS_TEMP.dialog <<-"EOF"
         if ( /^\s+Title\s+"Main"\s+"(.*)"\s+"(.*)"/ ) {
             print "\"$1\" \"$2\" ";
         }

@@ -11,7 +11,7 @@ case "$1" in
         Option "Shutdown"  "Down the server (before switching power off)"
 
         #include System sysadm -> System
-        perl -nw - $MENULIB/*.mnu 2>/dev/null >>$TMPFILE.dialog <<-"EOF"
+        perl -nw - $ELS_MENULIB/*.mnu 2>/dev/null >>$ELS_TEMP.dialog <<-"EOF"
         if ( /^\s+Title\s+"System"\s+"(.*)"\s+"(.*)"/ ) {
             print "\"$1\" \"$2\" ";
         }
@@ -97,8 +97,8 @@ case "$1" in
         # ext2fs (Linux formatted) hard disk.
         #DescEnd
 
-        df -h -t ext2 >$TMPFILE
-        $DIALOG --textbox $TMPFILE 23 78
+        df -h -t ext2 >$ELS_TEMP
+        $ELS_DIALOG --textbox $ELS_TEMP 23 78
         ;;
 
     shutdown)

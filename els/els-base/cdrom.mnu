@@ -1,5 +1,5 @@
 unset CDROM
-test -f /etc/els.conf && . /etc/els.conf
+test -f $ELS_CONF && . $ELS_CONF
 
 case "$1" in
 
@@ -46,7 +46,7 @@ case "$1" in
 	#Macro Textbox
 	#DescEnd
 
-	perl -nw - /proc/mounts >$TMPFILE <<-"EOF"
+	perl -nw - /proc/mounts >$ELS_TEMP <<-"EOF"
 
 	format STDOUT_TOP =
 	Device       Mounted to directory         File system   Flags
@@ -62,7 +62,7 @@ case "$1" in
 	write;
 
 	EOF
-        $DIALOG --textbox $TMPFILE 23 78
+        $ELS_DIALOG --textbox $ELS_TEMP 23 78
         ;;
 
 
@@ -84,15 +84,15 @@ case "$1" in
 	#Macro Cancel
 	#DescEnd
 
-        $DIALOG --menu "Select port of CD-ROM" 18 70 10 \
+        $ELS_DIALOG --menu "Select port of CD-ROM" 18 70 10 \
                 "none" "no CD-ROM drive attached" \
                 "hda" "first IDE controller, first drive" \
                 "hdb" "first IDE controller, second  drive" \
                 "hdc" "second IDE controller, first drive" \
                 "hdd" "second IDE controller, second  drive" \
-                "scd0" "CD-ROM drive on a SCSI controller" 2>$TMPFILE
+                "scd0" "CD-ROM drive on a SCSI controller" 2>$ELS_TEMP
         test $? = 0 || return
-        CHOICE=`cat $TMPFILE`
+        CHOICE=`cat $ELS_TEMP`
 
         # make proper link in /dev
         rm -f /dev/cdrom
@@ -100,7 +100,7 @@ case "$1" in
 
         SetOpt "CDROM" "/dev/$CHOICE"
 
-        $DIALOG --msgbox "CD-ROM entry set" 5 40
+        $ELS_DIALOG --msgbox "CD-ROM entry set" 5 40
         ;;
 
 
@@ -124,9 +124,9 @@ case "$1" in
 
 	cls
         if mount -o ro /dev/cdrom /mnt/cdrom ; then
-	    $DIALOG --msgbox "Ok, CD is now mounted." 5 28
+	    $ELS_DIALOG --msgbox "Ok, CD is now mounted." 5 28
 	else
-	    $DIALOG --msgbox "Sorry, the CD was not readable." 5 36
+	    $ELS_DIALOG --msgbox "Sorry, the CD was not readable." 5 36
 	fi
         ;;
 
@@ -139,14 +139,14 @@ case "$1" in
 	#Item Visibility
 	# This menu entry is only visible when the CDROM is defined.
 	#DescEnd
-	rm -f $TMPFILE
-        umount /dev/cdrom >/dev/null 2>$TMPFILE
-	if [ -s $TMPFILE ]; then
-	    echo -e "Could not unmount the CD-ROM:\n" >$TMPFILE.dialog
-	    cat $TMPFILE >>$TMPFILE.dialog
-	    echo -e "\n\nTip: make sure that no user is in a directory\non that drive." >>$TMPFILE.dialog
+	rm -f $ELS_TEMP
+        umount /dev/cdrom >/dev/null 2>$ELS_TEMP
+	if [ -s $ELS_TEMP ]; then
+	    echo -e "Could not unmount the CD-ROM:\n" >$ELS_TEMP.dialog
+	    cat $ELS_TEMP >>$ELS_TEMP.dialog
+	    echo -e "\n\nTip: make sure that no user is in a directory\non that drive." >>$ELS_TEMP.dialog
 
-	    $DIALOG --textbox $TMPFILE.dialog 12 50
+	    $ELS_DIALOG --textbox $ELS_TEMP.dialog 12 50
 	fi
         ;;
 

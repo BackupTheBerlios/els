@@ -3,7 +3,7 @@ case "$1" in
     Query)
         Title "" "Expert" "For the experts only :-)"
 
-	. /etc/els.conf
+	test -f $ELS_CONF && . $ELS_CONF
 	EXPERTMODE=${EXPERTMODE:-no}
 
 	Option "ExpertMode"     "Toggle expert mode     (now $EXPERTMODE)"

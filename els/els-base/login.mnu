@@ -30,8 +30,8 @@ case "$1" in
 	#Macro Textbox
 	#DescEnd
 
-        w >$TMPFILE
-        $DIALOG --textbox $TMPFILE 23 78
+        w >$ELS_TEMP
+        $ELS_DIALOG --textbox $ELS_TEMP 23 78
         ;;
 
     greeting)
@@ -56,10 +56,10 @@ case "$1" in
 	#Macro Editor
 	#DescEnd
 
-        echo -n "$DIALOG --menu \"Select issue text\" 23 40 15 " >$TMPFILE.dialog
-        ls --color=never /etc/issue* | awk '{ printf("%s %c%c ", $1,34,34) }' >>$TMPFILE.dialog
-        . $TMPFILE.dialog 2>$TMPFILE
-        test $? = 1 -o $? = 255 || EditFile `cat $TMPFILE`
+        echo -n "$ELS_DIALOG --menu \"Select issue text\" 23 40 15 " >$ELS_TEMP.dialog
+        ls --color=never /etc/issue* | awk '{ printf("%s %c%c ", $1,34,34) }' >>$ELS_TEMP.dialog
+        . $ELS_TEMP.dialog 2>$ELS_TEMP
+        test $? = 1 -o $? = 255 || EditFile `cat $ELS_TEMP`
         ;;
 
     motd)
@@ -85,7 +85,7 @@ case "$1" in
 	#DescEnd
 
         rm -f /etc/nologin
-        $DIALOG --msgbox "Login is enabled" 5 40
+        $ELS_DIALOG --msgbox "Login is enabled" 5 40
         ;;
 
     disable)
@@ -100,7 +100,7 @@ case "$1" in
 	#DescEnd
 
         echo -e "\\b\\n\\nLogin disabled by System Administrator\\n\\b" >/etc/nologin
-        $DIALOG --msgbox "Login is now disabled, but user 'root' can still login." 6 40
+        $ELS_DIALOG --msgbox "Login is now disabled, but user 'root' can still login." 6 40
         ;;
 
 esac

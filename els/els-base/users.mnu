@@ -1,9 +1,9 @@
 function SelectUser ()
 {
-    echo -n "$DIALOG --menu \"Select user $1\" 23 65 15 " >$TMPFILE.dialog
-    sysadm-user.pl --listusers $2 $3 >>$TMPFILE.dialog
-    { . $TMPFILE.dialog; } 2>$TMPFILE
-    CHOICE=`cat $TMPFILE`
+    echo -n "$ELS_DIALOG --menu \"Select user $1\" 23 65 15 " >$ELS_TEMP.dialog
+    sysadm-user.pl --listusers $2 $3 >>$ELS_TEMP.dialog
+    { . $ELS_TEMP.dialog; } 2>$ELS_TEMP
+    CHOICE=`cat $ELS_TEMP`
 }
 
 
@@ -17,7 +17,7 @@ case "$1" in
         Option "Modify"    "Modify a user"
 
         #include Users sysadm -> Users
-        perl -nw - $MENULIB/*.mnu 2>/dev/null >>$TMPFILE.dialog <<-"EOF"
+        perl -nw - $ELS_MENULIB/*.mnu 2>/dev/null >>$ELS_TEMP.dialog <<-"EOF"
 	if ( /^\s+Title\s+"Users"\s+"(.*)"\s+"(.*)"/ ) {
 	    print "\"$1\" \"$2\" ";
 	}
@@ -48,8 +48,8 @@ case "$1" in
         #TextboxEnd
         #DescEnd
 
-        sysadm-user.pl --users >$TMPFILE
-        $DIALOG --textbox $TMPFILE 23 76
+        sysadm-user.pl --users >$ELS_TEMP
+        $ELS_DIALOG --textbox $ELS_TEMP 23 76
         ;;
 
     add)
@@ -79,15 +79,15 @@ case "$1" in
         test -z "$CHOICE" && return
 
         # ask a program to actually enter the user
-        /usr/sbin/useradd -c "$CHOICE" -G users -m -s /bin/false $LOGIN >$TMPFILE 2>&1 || {
+        /usr/sbin/useradd -c "$CHOICE" -G users -m -s /bin/false $LOGIN >$ELS_TEMP 2>&1 || {
             # bail out if there was an error
-            $DIALOG --textbox $TMPFILE 10 60
+            $ELS_DIALOG --textbox $ELS_TEMP 10 60
             return
         }
 
 	# call programs supplied by other modules
 	cls
-	for i in $MENULIB/adduser.*; do $i $LOGIN "$CHOICE" interactive; done
+	for i in $ELS_MENULIB/adduser.*; do $i $LOGIN "$CHOICE" interactive; done
 	sleep 1
 
 	# call the "Modify User" sub-menu
@@ -114,19 +114,19 @@ case "$1" in
         SelectUser "to delete"
         test -z "$CHOICE" && return
 	test "$CHOICE" = "root" && {
-            $DIALOG --msgbox "Hey, it's silly to delete the root account. Don't do that!" 6 47
+            $ELS_DIALOG --msgbox "Hey, it's silly to delete the root account. Don't do that!" 6 47
             return
 	}
-        /usr/sbin/userdel -r $CHOICE 2>$TMPFILE || {
-            $DIALOG --textbox $TMPFILE 10 60
+        /usr/sbin/userdel -r $CHOICE 2>$ELS_TEMP || {
+            $ELS_DIALOG --textbox $ELS_TEMP 10 60
             return
         }
 
 	# call programs supplied by other modules
 	cls
-	for i in $MENULIB/deluser.*; do $i $CHOICE interactive; done
+	for i in $ELS_MENULIB/deluser.*; do $i $CHOICE interactive; done
 	sleep 1
-	$DIALOG --msgbox "User '$CHOICE' removed" 5 50
+	$ELS_DIALOG --msgbox "User '$CHOICE' removed" 5 50
         ;;
 
     modify)

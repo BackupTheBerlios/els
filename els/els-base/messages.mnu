@@ -55,7 +55,7 @@ case "$1" in
 	#Macro Textbox
 	#DescEnd
 
-        $DIALOG --textbox /var/log/messages 23 78
+        $ELS_DIALOG --textbox /var/log/messages 23 78
         ;;
 
     kernel)
@@ -82,7 +82,7 @@ case "$1" in
 	#Macro Textbox
 	#DescEnd
 
-        $DIALOG --textbox /var/log/dmesg 23 78
+        $ELS_DIALOG --textbox /var/log/dmesg 23 78
         ;;
 
     cron)
@@ -111,7 +111,7 @@ case "$1" in
 	#Macro Textbox
 	#DescEnd
 
-	$DIALOG --textbox /var/log/cron 23 78
+	$ELS_DIALOG --textbox /var/log/cron 23 78
         ;;
 
     security)
@@ -132,10 +132,10 @@ case "$1" in
 	#DescEnd
 
 	test -s /var/log/secure || {
-	    $DIALOG --msgbox "No security problems found.  But don't trust an automated message like this too much ..." 6 50
+	    $ELS_DIALOG --msgbox "No security problems found.  But don't trust an automated message like this too much ..." 6 50
 	    return
 	}
-	$DIALOG --textbox /var/log/secure 23 78
+	$ELS_DIALOG --textbox /var/log/secure 23 78
         ;;
 
     boot)
@@ -163,7 +163,7 @@ case "$1" in
 	#Macro Textbox
 	#DescEnd
 
-	$DIALOG --textbox /var/log/boot.log 23 78
+	$ELS_DIALOG --textbox /var/log/boot.log 23 78
         ;;
 
     apache)
@@ -185,7 +185,7 @@ case "$1" in
 	#Macro Textbox
 	#DescEnd
 
-	$DIALOG --textbox /var/log/errors.httpd 23 78
+	$ELS_DIALOG --textbox /var/log/errors.httpd 23 78
 	;;
 
     modem)
@@ -229,7 +229,7 @@ case "$1" in
 	#Macro Textbox
 	#DescEnd
 
-	$DIALOG --textbox /var/log/log_mg.$MYMODEM 23 78
+	$ELS_DIALOG --textbox /var/log/log_mg.$MYMODEM 23 78
 	;;
 
     email)
@@ -256,7 +256,7 @@ case "$1" in
 	#Macro Textbox
 	#DescEnd
 
-	$DIALOG --textbox /var/log/maillog 23 78
+	$ELS_DIALOG --textbox /var/log/maillog 23 78
 	;;
 
     samba)
@@ -279,7 +279,7 @@ case "$1" in
 	#Macro Textbox
 	#DescEnd
 
-	$DIALOG --textbox /var/log/samba/log.smb 23 78
+	$ELS_DIALOG --textbox /var/log/samba/log.smb 23 78
 	;;
 
     netbios)
@@ -317,7 +317,7 @@ case "$1" in
 	#Macro Textbox
 	#DescEnd
 
-	$DIALOG --textbox /var/log/samba/log.nmb 23 78
+	$ELS_DIALOG --textbox /var/log/samba/log.nmb 23 78
 	;;
 
 esac

@@ -4,7 +4,7 @@ case "$1" in
         Title "Main" "Network" "Configure local network and/or internet access"
 
         #include Network sysadm -> Network
-        perl -nw - $MENULIB/*.mnu 2>/dev/null >>$TMPFILE.dialog <<-"EOF"
+        perl -nw - $ELS_MENULIB/*.mnu 2>/dev/null >>$ELS_TEMP.dialog <<-"EOF"
 	if ( /^\s+Title\s+"Network"\s+"(.*)"\s+"(.*)"/ ) {
 	    print "\"$1\" \"$2\" ";
 	}

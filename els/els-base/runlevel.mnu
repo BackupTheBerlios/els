@@ -23,7 +23,7 @@ case "$1" in
 	#MsgBoxEnd
 	#DescEnd
 	
-        $DIALOG --msgbox "The previous and current runlevel: `runlevel`" 5 50
+        $ELS_DIALOG --msgbox "The previous and current runlevel: `runlevel`" 5 50
         ;;
 
     1)

@@ -1,11 +1,11 @@
 function SelectGroup ()
 {
-    echo -n "$DIALOG --menu \"Select group $1\" 23 55 15 " >$TMPFILE.dialog
-    if sysadm-user.pl --listgroups $2 $3 >>$TMPFILE.dialog 2>$TMPFILE; then
-        { . $TMPFILE.dialog; } 2>$TMPFILE
-        CHOICE=`cat $TMPFILE`
+    echo -n "$ELS_DIALOG --menu \"Select group $1\" 23 55 15 " >$ELS_TEMP.dialog
+    if sysadm-user.pl --listgroups $2 $3 >>$ELS_TEMP.dialog 2>$ELS_TEMP; then
+        { . $ELS_TEMP.dialog; } 2>$ELS_TEMP
+        CHOICE=`cat $ELS_TEMP`
     else
-        $DIALOG --textbox $TMPFILE 5 50
+        $ELS_DIALOG --textbox $ELS_TEMP 5 50
         unset CHOICE
     fi
 }
@@ -13,10 +13,10 @@ function SelectGroup ()
 
 function SelectUser ()
 {
-    echo -n "$DIALOG --menu \"Select user $1\" 23 65 15 " >$TMPFILE.dialog
-    sysadm-user.pl --listusers $2 $3 >>$TMPFILE.dialog
-    { . $TMPFILE.dialog; } 2>$TMPFILE
-    CHOICE=`cat $TMPFILE`
+    echo -n "$ELS_DIALOG --menu \"Select user $1\" 23 65 15 " >$ELS_TEMP.dialog
+    sysadm-user.pl --listusers $2 $3 >>$ELS_TEMP.dialog
+    { . $ELS_TEMP.dialog; } 2>$ELS_TEMP
+    CHOICE=`cat $ELS_TEMP`
 }
 
 
@@ -55,8 +55,8 @@ case "$1" in
 	#Macro Textbox
         #DescEnd
 
-        sysadm-user.pl --groups >$TMPFILE
-        $DIALOG --textbox $TMPFILE 23 76
+        sysadm-user.pl --groups >$ELS_TEMP
+        $ELS_DIALOG --textbox $ELS_TEMP 23 76
         ;;
 
     add)
@@ -78,9 +78,9 @@ case "$1" in
         test -z "$CHOICE" && return
 
         # ask a perl program to actually create the group directory
-        /usr/sbin/groupadd "$CHOICE" >$TMPFILE 2>&1 || {
+        /usr/sbin/groupadd "$CHOICE" >$ELS_TEMP 2>&1 || {
             # bail out if there was an error
-            $DIALOG --textbox $TMPFILE 10 60
+            $ELS_DIALOG --textbox $ELS_TEMP 10 60
             return
         }
 
@@ -118,19 +118,19 @@ case "$1" in
 	    SelectGroup "to delete"
 	fi
         test -z "$CHOICE" && return
-        /usr/sbin/groupdel "$CHOICE" 2>$TMPFILE || {
-            $DIALOG --textbox $TMPFILE 10 60
+        /usr/sbin/groupdel "$CHOICE" 2>$ELS_TEMP || {
+            $ELS_DIALOG --textbox $ELS_TEMP 10 60
             return
         }
 
 	# Test for Samba
 	if [ "$CHOICE" != "users" -a -d /usr/samba/dat/$CHOICE ]; then
 	    Question "Should I delete the directory I:\\$CHOICE for you?" && {
-		$DIALOG --infobox "Please wait ... deleting ..." 3 32
+		$ELS_DIALOG --infobox "Please wait ... deleting ..." 3 32
 		rm -rf /usr/samba/dat/$CHOICE
 	    }
 	fi
-	$DIALOG --msgbox "Group '$CHOICE' deleted." 5 40
+	$ELS_DIALOG --msgbox "Group '$CHOICE' deleted." 5 40
         ;;
 
     members)
@@ -171,8 +171,8 @@ case "$1" in
 	fi
         test -z "$CHOICE" && return
 
-	sysadm-user.pl --usersintogroup $CHOICE 2>$TMPFILE || {
-            $DIALOG --textbox $TMPFILE 10 60
+	sysadm-user.pl --usersintogroup $CHOICE 2>$ELS_TEMP || {
+            $ELS_DIALOG --textbox $ELS_TEMP 10 60
             return
 	}
 	;;
