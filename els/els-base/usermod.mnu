@@ -31,8 +31,11 @@ case "$1" in
         Title "internal to Users" "User modification" "Parameters for user '$LOGIN'"
         sysadm-user.pl -getuserdata $LOGIN >$ELS_TEMP
         . $ELS_TEMP
+	test "$USER_SHELL" = "/bin/false" && SHELLSTATE="disabled" || SHELLSTATE="enabled"
         Option "Name"     "Set full name            (now $USER_FULLNAME)"
         Option "Password" "Set password             $USER_PASSWORD"
+	test "$LOGIN" != "root" &&
+	Option "Shell"    "Set server login         (now $SHELLSTATE)"
 	test "$LOGIN" != "root" &&
 	Option "Member"   "Set groups this user is a member of"
         ;;
@@ -78,7 +81,8 @@ case "$1" in
 	}
 
 	rm -f $ELS_TEMP
-	for i in $ELS_MENULIB/pwchange.*; do $i $LOGIN "$CHOICE" 2>>$ELS_TEMP; done
+	cls
+	for i in $ELS_MENULIB/pwchange.*; do $i $LOGIN "$CHOICE" interactive 2>$ELS_TEMP; done
 	test -s $ELS_TEMP && {
             $ELS_DIALOG --textbox $ELS_TEMP 10 60
             return
@@ -108,12 +112,36 @@ case "$1" in
 	#ChecklistEnd
 	#Macro Checklist
 	#Macro Cancel
+	#Item Visibility
+	# This menu option is only visible if you selected a different user but 'root'.
 	#DescEnd
 
 	sysadm-user.pl --all --userintogroups $LOGIN 2>$ELS_TEMP || {
             $ELS_DIALOG --textbox $ELS_TEMP 10 60
             return
 	}
+	;;
+
+    shell)
+	#Desc
+	# New users are generally only created for SAMBA (file server login) and EMail,
+	# depending on the installed modules.
+	#
+	# If you want that a user is allowed to login into the Linux server (via
+	# a SSH client like PuTTY), then use this option.
+	#
+	# Whenever you call it, the state of the user will be toggled.
+	#Item Visibility
+	# This menu option is only visible if you selected a different user but 'root'.
+	#DescEnd
+
+	cls
+	if [ "$SHELLSTATE" = "enabled" ]; then
+	    chsh -s /bin/false "$LOGIN"
+	else
+	    chsh -s /bin/bash "$LOGIN"
+	fi
+	sleep 1
 	;;
 
 esac
