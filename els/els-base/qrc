@@ -231,9 +231,13 @@ delch		.kD
 pgup		.kP
 pgdn            .kN
 uparw		.ku
+uparw		^] ] A
 dnarw		.kd
+uparw		^] ] B
 rtarw		.kr
+uparw		^] ] D
 ltarw		.kl
+uparw		^] ] C
 
 
 arg		^Q ^Q
