@@ -9,9 +9,6 @@ function SetSource ()
     Floppy)
         SOURCE=${SOURCE-/mnt/floppy}
         ;;
-    CD-ROM)
-        SOURCE=${SOURCE-/mnt/cdrom}
-        ;;
     RedHat-CD)
         SOURCE=${SOURCE-/mnt/cdrom/RedHat/RPMS}
         ;;
@@ -20,6 +17,9 @@ function SetSource ()
         ;;
     TempDir)
         SOURCE=${SOURCE-/var/tmp}
+        ;;
+    *)
+        SOURCE=${SOURCE-/mnt/cdrom}
         ;;
     esac
 }
@@ -95,7 +95,7 @@ function SelectPackage ()
     ls els-*.rpm >/dev/null 2>&1 && ls els-*.rpm |awk '{ printf("%s %c%c ", $1, 34,34) }' >>$TMPFILE.dialog
     ls *.rpm | grep -sv ^els- |awk '{ printf("%s %c%c ", $1, 34,34) }' >>$TMPFILE.dialog
     cd -
-    { . $TMPFILE.dialog } 2>$TMPFILE
+    { . $TMPFILE.dialog; } 2>$TMPFILE
     CHOICE=`cat $TMPFILE`
 }
 
@@ -134,7 +134,7 @@ EOF
     if [ $? = 1 ]; then
 	unset CHOICE
     else
-	{ . $TMPFILE.dialog } 2>$TMPFILE
+	{ . $TMPFILE.dialog; } 2>$TMPFILE
 	CHOICE=`cat $TMPFILE`
     fi
 }
@@ -154,11 +154,9 @@ case "$1" in
         test "$INSTALLFROM" = "Floppy" || \
         Option "Path"        "For experts: source path (now $SOURCE)"
 
-        Option "Test"        "Test installation and show info of uninstalled module"
+        Option "Test"        "Check out if an installation would work"
         Option "Install"     "Install a module"
         Option "Remove"      "Remove a module"
-	Option "Verify"      "Verify what's new in the sample config files"
-	Option "Modulelist"  "List missing or non-standard modules"
         ;;
 
 	#Desc
@@ -196,6 +194,7 @@ case "$1" in
 	#Macro Textbox
         #DescEnd
 
+        $DIALOG --infobox "Just a moment ..." 3 26
         echo -e "Installed ELS packages:\n" >$TMPFILE
         rpm -qa | grep ^els | sort >>$TMPFILE
         echo -e "\nInstalled general packages:\n" >>$TMPFILE
@@ -253,7 +252,7 @@ case "$1" in
         # ask for an installed module
         echo -n "$DIALOG --menu \"For which package do you want info?\" 23 65 15 " >$TMPFILE.dialog
         rpm -qa | awk '{ printf("%s %c%c ", $1, 34,34) }' >>$TMPFILE.dialog
-        { . $TMPFILE.dialog } 2>$TMPFILE
+        { . $TMPFILE.dialog; } 2>$TMPFILE
         test $? = 0 || return
         CHOICE=`cat $TMPFILE`
 
@@ -268,7 +267,7 @@ case "$1" in
         rpm -q --scripts $CHOICE >>$TMPFILE
         echo -e "\n" >>$TMPFILE
         $DIALOG --textbox $TMPFILE 23 76
-        ;;
+	;;
 
 
      source)
@@ -414,7 +413,7 @@ case "$1" in
         echo -n "$DIALOG --menu \"Select installed package to remove $1\" 23 65 15 " >$TMPFILE.dialog
         rpm -qa |sort |grep ^om |awk '{ printf("%s %c%c ", $1, 34,34) }' >>$TMPFILE.dialog
         rpm -qa |sort |grep -v ^om |awk '{ printf("%s %c%c ", $1, 34,34) }' >>$TMPFILE.dialog
-        { . $TMPFILE.dialog } 2>$TMPFILE
+        { . $TMPFILE.dialog; } 2>$TMPFILE
         test $? = 0 || return
         CHOICE=`cat $TMPFILE`
 
@@ -431,141 +430,5 @@ case "$1" in
         fi
         ;;
 
-    verify)
-	#Desc
-	# This option allows you to check your current configuration file
-	# with the sample configuration file of an installed package.
-	#
-	#Item Usage
-	# First, you can select from all configuration files that actually
-	# differ:
-	#Menu Select config file to test
-	# /etc/aliases                          els-email
-	# /etc/mailertable                      els-email
-	# /etc/samba.d/global.smb               els-samba
-	#MenuEnd
-	#Macro Menu
-	#
-	# After selecting something, e.g. "<TT>/etc/mailertable</TT>", you
-	# see a screen of all the differences:
-	#
-	#TextBox
-	# Below is a list of all changes between the sample configuration
-	# file and current config file. Look at the first character:
-	# 
-	# +  a line in your current config file (/etc/mailertable)
-	# -  a line in the sample
-	# 
-	# 
-	# --- /etc/mailertable.sample Tue Aug 11 21:49:07 1998
-	# +++ /etc/mailertable Fri Aug 14 09:44:32 1998
-	# @@ -48,7 +48,2 @@
-	# #
-	# #######################################################################
-	# +subsidiary.company.de relay:subsidiary.company.de
-	# +subs.company.de relay:subsidiary.company.de
-	#TextBoxEnd
-	#Macro TextBox
-	#
-	# This is a so called "contextual diff". It shows you the differences
-	# as well as the context, the lines around the differences. In the
-	# example, the lines beginning with hash marks '#' are such context
-	# lines.
-	#
-	# As you can see from the + signs, I've added four mailertable
-	# entries to the provided sample file. So I press the [Enter] key
-	# to get to the question:
-	#
-	#Question
-	# Do you want to activate the sample config file?
-	#QuestionEnd
-	#Macro Question
-	#
-	# "Activation" means that the original config file will be used
-	# instead of my own version. While this is handy when the sample
-	# config file contains major redesigns, this is not what I want in
-	# the example above. So I selected "No".
-	#DescEnd
-
-	SelectConfig "test"
-	if [ -z "$CHOICE" ]; then
-            $DIALOG --msgbox "All your config files are up to date!" 5 50
-	    return
-	fi
-	SAMPLE=$CHOICE
-
-	diff -udb $CHOICE $CHOICE.sample >$TMPFILE
-	
-	if [ -s $TMPFILE ]; then
-	    {
-		echo "Below is a list of all changes between the sample configuration file and your"
-		echo "current config file. Look at the first character:"
-		echo
-		echo "-  a line in your current config file ($CHOICE)"
-		echo "+  a line in the sample"
-		echo
-		echo
-		tr "\t" "        " <$TMPFILE
-	    } >$TMPFILE.2
-	    $DIALOG --textbox $TMPFILE.2 23 76
-	    Question "Do you want to activate the sample config file?" &&
-		cp --preserve $CHOICE.sample $CHOICE
-	else
-	    $DIALOG --msgbox "The two files are identical, they had just different time stamps" 5 70
-	    cp --preserve $CHOICE.sample $CHOICE
-	fi	
-	;;
-
-  modulelist)
-	#Desc
-	# This option lists standard modules that are missing or upgraded
-	# on your system, and any extra non-standard modules you have added.
-	# Example output might be:
-	#TextBox
-        # MISSING:  inetd 0.16-4
-	# MISSING:  gnupg 1.0.1-1
-	# ADDED:    cdrecord 1.8a32-1
-	# UPGRADED: info from 3.12h-2 to 4.0-5
-	#TextBoxEnd
-	#Macro Textbox
-	#DescEnd
-
-	# Generate list of differences in installed modules
-	rpm -qa --queryformat "%{NAME} %{VERSION}-%{RELEASE}\n" |sort |diff rpmlist.txt - |egrep "^>|^<" |sort +1 >$TMPFILE.rpmdiff
-
-	# Look for missing or upgraded standard modules
-	perl -w <<-"EOF" >>$TMPFILE.modulelist
-	open(RPMDIFF, "$ENV{'TMPFILE'}.rpmdiff");
-	while (<RPMDIFF>) {
-	    ($type, $rpmname, $rpmver)=split " ";
-	    ($type eq ">") ? $added{"$rpmname"}=$rpmver : $removed{"$rpmname"}=$rpmver;
-	}
-
-	# Now print the results
-	foreach $rpm (sort keys %removed) {
-	    $ver = $removed{"$rpm"};
-	    $addedver=$added{"$rpm"};
-            if (!defined($addedver)) {
-                print "MISSING:  $rpm $ver\n";
-            }
-            elsif ($ver > $addedver) {
-                print "UPGRADE!: to $rpm $ver\n";
-            }
-            elsif ($ver < $addedver) {
-                print "UPGRADED: $rpm from $ver to $addedver\n";
-            }
-	}
-	foreach $rpm (sort keys %added) {
-	    print "ADDED:    $rpm ". $added{"$rpm"} . "\n" if (!defined($removed{"$rpm"}));
-	}
-	EOF
-	if [ -s $TMPFILE.modulelist ]; then
-	    sort -o $TMPFILE.modulelist $TMPFILE.modulelist
-	    $DIALOG --textbox $TMPFILE.modulelist 23 76
-	else
-	    $DIALOG --msgbox "No modules have been added, removed or upgraded" 5 70
-	fi
-	/bin/rm $TMPFILE.modulelist $TMPFILE.rpmdiff
-	;;
 
 esac
