@@ -1,10 +1,10 @@
-#Title less annoying directory colors
+#Title nicer colors for ls
 #Author Holger Schurig
 #Group els-base
 #Desc
 # Patch /etc/DIR_COLORS because some colors are nearly unvisible
 #DescEnd
-#Id $Id: dircolors.setup,v 1.4 2001/11/30 16:24:56 holgerschurig Exp $
+#Id $Id: dircolors.setup,v 1.5 2001/12/04 15:56:28 holgerschurig Exp $
 
 
 loadfile '/etc/DIR_COLORS';
