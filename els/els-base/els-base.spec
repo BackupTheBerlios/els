@@ -1,6 +1,6 @@
 %define name els-base
 %define vers 1.96
-%define rel  4
+%define rel  5
 %define withdoc 1
 %define withjoe 1
 
@@ -35,6 +35,7 @@ easy-to-administer and easy-to-enhance Linux server system.
 %prep
 # There is nothing to prepare ...
 
+
 %build
 %if %{withdoc}
 cd -
@@ -52,7 +53,8 @@ mkdir -p $RPM_BUILD_ROOT/usr/doc/%{name}-%{vers}
 
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+# Clean up after ourselves, but be careful in case someone sets a bad buildroot
+[ -d $RPM_BUILD_ROOT ] && [ "/" != "$RPM_BUILD_ROOT" ] && rm -rf $RPM_BUILD_ROOT
 
 
 %post

@@ -8,14 +8,15 @@
 
 
 my $lines = `infocmp xterm`;
-if ($lines =~ s/cbt=.*, //) {
-   my $fn = "/var/tmp/sysadm-setup.$$";
+if ($lines =~ s: cbt=\\E\[Z,::) {
+   $lines =~ s:xterm\|.+\|:xterm\|:;
+   my $fn = "/var/tmp/sysadm-setup.xterm";
    open FILE, ">$fn";
    print FILE $lines;
    close FILE;
    system('/usr/bin/tic', $fn);
    unlink $fn;
-   logit "fixed terminfo entry for 'xterm'\n";
+   logit "/usr/share/terminfo/x/xterm: fixed terminfo entry\n";
 }
 
 
