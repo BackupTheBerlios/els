@@ -10,7 +10,7 @@ function SelectShare ()
 case "$1" in
 
     Query)
-	Title "Network" "Samba" "Setup SAMBA file server"
+	Title "Network" "Samba" "SAMBA file server"
 	Option "Who"      "Display users connected to SAMBA"
 	Option "List"     "Display list of shares"
 	[ -s /var/log/samba/log.smbd ] &&
