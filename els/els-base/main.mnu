@@ -16,8 +16,8 @@ case "$1" in
 	# system administration tool of the Easy Linux Server.
 	#
 	#Item Start
-        # To start sysadm, log in as user &quot;root&quot; and enter at the
-	# command prompt "<TT>sysadm</TT>".
+        # To start sysadm, log in as user &quot;root&quot; and enter
+	# "<TT>sysadm</TT>" at the command prompt.
 	#
 	#Item Usage
 	# Use the [Up] and [Down] keys to select an option. Press the

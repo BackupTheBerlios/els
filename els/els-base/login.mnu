@@ -14,7 +14,10 @@ case "$1" in
 
 	#Desc
 	# This menu controls all aspects of users that are directly
-	# logging in into your server.
+	# logging in into your server. It migth be possible that you
+	# never use this menu because your user's won't login into the
+	# file server (they can use file services and e-mail without logging
+	# in).
 	#DescEnd
 
 
