@@ -1,0 +1,1218 @@
+4
+
+1 Base {
+  MAKEDEV
+  (lang ja): Canna
+  (lang ja): Canna-libs
+  SysVinit
+  alpha: aboot
+  anacron
+  i386: apmd
+  ash
+  at
+  authconfig
+  basesystem
+  bash
+  bdflush
+  bzip2
+  bzip2-libs
+  chkconfig
+  cpio
+  cracklib
+  cracklib-dicts
+  crontabs
+  cyrus-sasl
+  cyrus-sasl-md5
+  cyrus-sasl-plain
+  cyrus-sasl-md5
+  db1
+  db2
+  db3
+  dev
+  dhcpcd
+  diffutils
+  dosfstools
+  e2fsprogs
+  ed
+  ia64: elilo
+  (arch !s390 and arch !s390x): eject
+  file
+  filesystem
+  fileutils
+  findutils
+  gawk
+  gdbm
+  glib
+  glibc
+  glibc-common
+  (arch !s390 and arch !s390x): gpm
+  grep
+  groff
+  i386: grub
+  gzip
+  (arch !s390 and arch !s390x): hdparm
+  (arch !s390 and arch !s390x): hotplug
+  i386: lilo
+  indexhtml
+  info
+  initscripts
+  ipchains
+  iproute
+  iputils
+  iptables
+  (lang ja): jcode.pl
+  (lang ja): kakasi
+  (arch !s390 and arch !s390x): console-tools
+  (arch !s390 and arch !s390x): kbdconfig
+  (lang ja): kcc
+  kernel
+  (lang ja and arch i386): kon2
+  (lang ja and arch i386): kon2-fonts
+  ksymoops
+  krb5-libs
+  kudzu
+  less
+  libstdc++
+  libtermcap
+  logrotate
+  lokkit
+  losetup
+  mailcap
+  mailx
+  man
+  mingetty
+  i386: mkbootdisk
+  mkinitrd
+  mktemp
+  modutils
+  mount
+  (arch !s390 and arch !s390x): mouseconfig
+  ncurses
+  netconfig
+  net-tools
+  newt
+  ntsysv
+  (lang ja): perl
+  (lang ko): perl
+  (lang zh): perl
+  (lang ja): nvi-m17n
+  (lang ko): nvi-m17n
+  (lang zh): nvi-m17n
+  (lang ja): nvi-m17n-canna
+  openldap
+  openssl
+  pam
+  parted
+  passwd
+  (arch !s390 and arch !s390x): pciutils
+  pcre
+  (lang ja): perl
+  (lang ja): perl-File-MMagic
+  (lang ja): perl-NKF
+  (lang ja): perl-Text-Kakasi
+  popt
+  procmail
+  procps
+  psmisc
+  pwdb
+  (arch !s390 and arch !s390x): quota
+  raidtools
+  readline
+  redhat-logos
+  redhat-release
+  (arch !s390 and arch !s390x): reiserfs-utils
+  rootfiles
+  rpm
+  s390: s390utils
+  s390x: s390utils
+  s390: binutils
+  s390x: binutils
+  (lang ja and arch i386): specspo
+  (lang ja and arch ia64): specspo
+  (lang ja and arch alpha): specspo
+  sed
+  (arch !s390 and arch !s390x): setserial
+  setup
+  setuptool
+  sh-utils
+  shadow-utils
+  slang
+  slocate
+  i386: syslinux
+  sysklogd
+  tar
+  tcsh
+  termcap
+  textutils
+  time
+  timeconfig
+  tmpwatch
+  ia64: unzip
+  utempter
+  util-linux
+  vim-common
+  vim-minimal
+  vixie-cron
+  which
+  words
+  zlib
+}
+
+1 Printing Support {
+  4Suite
+  (lang zh): bg5ps
+  LPRng
+  PyXML
+  VFlib2
+  XFree86-libs
+  XFree86-xfs
+  a2ps
+  alchemist
+  chkfontpath
+  expat
+  freetype
+  ghostscript
+  ghostscript-fonts
+  gmp
+  groff-perl
+  (lang ko): h2ps
+  libpng
+  libxslt
+  libxml2
+  m4
+  mpage
+  (lang ko): nhpf
+  nkf
+  perl
+  perl-XML-Dumper
+  perl-XML-Encoding
+  perl-XML-Grove
+  perl-XML-Parser
+  perl-XML-Twig
+  perl-DateManip
+  perl-Digest-MD5
+  perl-HTML-Parser
+  perl-HTML-Tagset
+  perl-libnet
+  perl-libwww-perl
+  perl-libxml-perl
+  perl-libxml-enno
+  perl-MIME-Base64
+  perl-Parse-Yapp
+  perl-Storable
+  perl-URI
+  foomatic
+  pnm2ppa
+  printconf
+  psutils
+  python
+  ttfonts-ja
+  (lang zh): ttfm
+  (lang zh_TW): ttfprint
+  (lang ko): ttfonts-ko
+  urw-fonts
+  watanabe-vf
+}
+
+0 Classic X Window System {
+  @ Printing Support
+  (lang ja): FreeWnn
+  (lang ja): FreeWnn-common
+  (lang zh_CN): ttfonts-zh_CN
+  (lang zh_TW): ttfonts-zh_TW
+  (lang zh): ttfm
+  (lang ja): Wnn6-SDK
+  (lang ko): ami
+  (arch !alpha and lang zh): miniChinput
+  (lang zh): libungif
+  (lang zh): imlib
+  (lang zh): netpbm-progs
+  (lang zh): netpbm
+  Mesa
+  Xaw3d
+  gtk+
+  gdk-pixbuf
+  (arch !s390 and arch !s390x): Xconfigurator
+  XFree86
+  XFree86-75dpi-fonts
+  XFree86-100dpi-fonts
+  XFree86-ISO8859-15-100dpi-fonts
+  XFree86-ISO8859-15-75dpi-fonts
+  ttfonts
+  (lang cs): XFree86-ISO8859-2-75dpi-fonts
+  (lang cs): XFree86-ISO8859-2-100dpi-fonts
+  (lang pl): XFree86-ISO8859-2-75dpi-fonts
+  (lang pl): XFree86-ISO8859-2-100dpi-fonts
+  (lang ro): XFree86-ISO8859-2-75dpi-fonts
+  (lang ro): XFree86-ISO8859-2-100dpi-fonts
+  (lang sl): XFree86-ISO8859-2-75dpi-fonts
+  (lang sl): XFree86-ISO8859-2-100dpi-fonts
+  (lang sk): XFree86-ISO8859-2-75dpi-fonts
+  (lang sk): XFree86-ISO8859-2-100dpi-fonts
+  (lang tr): XFree86-ISO8859-9-75dpi-fonts
+  (lang tr): XFree86-ISO8859-9-100dpi-fonts
+  (lang uk): XFree86-KOI8-R
+  (lang uk): XFree86-KOI8-R-75dpi-fonts
+  (lang uk): XFree86-cyrillic-fonts
+  (lang ru): XFree86-KOI8-R
+  (lang ru): XFree86-KOI8-R-75dpi-fonts
+  (lang ru): XFree86-cyrillic-fonts
+  (lang ja): XFree86-jpfonts
+  XFree86-libs
+  XFree86-tools
+  XFree86-twm
+  XFree86-xdm
+  fortune-mod
+  (lang ja): jisksp14
+  (lang ja): jisksp16-1990
+  (lang ja): kappa20
+  (lang ja): kinput2-canna-wnn6
+  (lang ja): knm_new
+  (lang ja): kterm
+  (lang ko): hanterm-xf
+  lesstif
+  libjpeg
+  libtiff
+  mkxauth
+  (lang ja): skkdic
+  (lang ja): skkinput
+  switchdesk
+  (lang zh_TW): taipeifonts
+  (lang zh_TW): xcin
+  (lang zh_TW): libtabe
+  (lang zh_TW): tWnn
+  (lang zh_TW): FreeWnn-common
+  (lang zh_TW): cWnn-common
+  (lang zh_TW): ttfm
+  (lang zh_CN): FreeWnn-common
+  (lang zh_CN): cWnn-common
+  (lang zh_CN): ttfm
+  (lang zh_CN): cWnn
+  (lang zh): cWnn-common
+  (lang zh): FreeWnn-common
+  (lang ko): kWnn
+  (lang ko): FreeWnn-common
+  xinitrc
+  xloadimage
+}
+
+0 X Window System {
+  @ Classic X Window System
+  ORBit
+  alpha: Tru64-compat
+  arts
+  audiofile
+  dateconfig
+  esound  
+  gdk-pixbuf
+  gmp
+  gnome-audio
+  gnome-libs
+  hwbrowser
+  imlib
+  ksconfig
+  libcap
+  libglade
+  libmng
+  libpng
+  libungif
+  libuser
+  libxml
+  locale_config
+  netpbm-progs
+  netpbm
+  ntp
+  printconf-gui
+  pygnome
+  pygnome-libglade
+  pygtk
+  pygtk-libglade
+  qt
+  switchdesk
+  tcl
+  redhat-config-users
+  serviceconf
+  tk
+  tkinter
+  tix
+  usermode
+  xsri
+}
+
+i386: 0 Laptop Support {
+i386:   kernel-pcmcia-cs
+i386:   irda-utils
+i386:   wireless-tools
+i386: }
+
+
+0 --hide Spelling {
+  aspell
+  (lang no): aspell-no
+  (lang da): aspell-da
+  (lang de): aspell-de
+  (lang es): aspell-es
+  (lang fr): aspell-fr
+  (lang it): aspell-it
+  (lang nl): aspell-nl
+  (lang sv): aspell-sv
+  (lang en_GB): aspell-en-gb
+  (lang en_CA): aspell-en-ca
+  (lang pt): aspell-pt
+  (lang pt_BR): aspell-pt_BR
+  (lang ca_ES): aspell-ca
+  libtool-libs
+  pspell
+}
+
+
+0 GNOME {
+  @ X Window System
+  @ Spelling
+  GConf
+  (lang ko): ami-gnome
+  abiword
+  aumix
+  (lang zh_CN): autoconvert
+  (lang zh_CN): autoconvert-xchat
+  bonobo
+  bug-buddy
+  control-center
+  desktop-backgrounds
+  dia
+  ee
+  eel
+  esound
+  extace
+  fam
+  gal
+  gdk-pixbuf-gnome
+  gdm
+  gedit
+  gftp
+  gmc
+  gnome-applets
+  gnome-audio
+  gnome-audio-extra
+  gnome-core
+  gnome-libs
+  gnome-pim
+  gnome-print
+  gnome-user-docs
+  gnome-utils
+  gnome-vfs
+  gnome-vfs-extras
+  gnorpm
+  gnumeric
+  gtk-engines
+  gtkhtml
+  gtop
+  gqview
+  guile
+  ImageMagick
+  imlib-cfgeditor
+  libgal7
+  libghttp
+  libglade
+  libgnomeprint15
+  libgtop
+  libole2
+  librep
+  librsvg
+  libunicode
+  libxml
+  mc
+  nautilus
+  !ia64: nautilus-mozilla
+  !ia64: mozilla
+  oaf
+  portmap
+  pygnome-libglade
+  pygtk-libglade
+  sawfish
+  switchdesk-gnome
+  rep-gtk
+  rep-gtk-gnome
+  rep-gtk-libglade
+  scrollkeeper
+  xchat
+  xinetd
+  xscreensaver
+  umb-scheme
+}
+
+0 KDE {
+  @ X Window System
+  efax
+  make
+  fam
+  htdig
+  (lang zh_CN): kde-i18n-Chinese
+  (lang cs): kde-i18n-Czech
+  (lang da): kde-i18n-Danish
+  (lang nl): kde-i18n-Dutch
+  (lang en_GB): kde-i18n-British
+  (lang et): kde-i18n-Estonian
+  (lang fi): kde-i18n-Finnish
+  (lang fr): kde-i18n-French
+  (lang de): kde-i18n-German
+  (lang hu): kde-i18n-Hungarian
+  (lang is): kde-i18n-Icelandic
+  (lang it): kde-i18n-Italian
+  (lang ja): kde-i18n-Japanese
+  (lang ko): kde-i18n-Korean
+  (lang no): kde-i18n-Norwegian
+  (lang no_NY): kde-i18n-Norwegian-Nynorsk
+  (lang nn_NO): kde-i18n-Norwegian-Nynorsk
+  (lang pt): kde-i18n-Portuguese
+  (lang ro): kde-i18n-Romanian
+  (lang ru): kde-i18n-Russian
+  (lang sl): kde-i18n-Slovenian
+  (lang sk): kde-i18n-Slovak
+  (lang es): kde-i18n-Spanish
+  (lang sv): kde-i18n-Swedish
+  (lang tr): kde-i18n-Turkish
+  (lang uk): kde-i18n-Ukrainian
+  kdeartwork
+  kdeartwork-locolor
+  kdeaddons-kate
+  kdeaddons-kicker
+  kdeaddons-konqueror
+  kdeadmin
+  kdebase
+  kdelibs
+  kdelibs-sound
+  kdepim
+  kdeutils
+  (arch !alpha): koffice
+  libogg
+  libvorbis
+  i386: lm_sensors
+  alpha: lm_sensors
+  (arch !s390 and arch !s390x): pilot-link
+  portmap
+  switchdesk-kde  
+  unzip
+  xinetd
+  zip
+}
+
+0 Sound and Multimedia Support {
+  ? X Window System {
+    (arch !s390 and arch !s390x): SDL
+    (arch !s390 and arch !s390x): SDL_image
+    (arch !s390 and arch !s390x): SDL_mixer
+    (arch !s390 and arch !s390x): SDL_net
+    (arch !s390 and arch !s390x): smpeg
+    (arch !s390 and arch !s390x): xawtv
+    (arch !s390 and arch !s390x): xmms
+  }
+  ? GNOME {
+    gnome-media
+    i386: magicdev
+    ia64: magicdev
+    (arch !s390 and arch !s390x): xmms-gnome
+  }
+  ? KDE {
+    i386: autorun
+    ia64: autorun
+    kdelibs-sound
+    kdemultimedia
+    kdeaddons-noatun
+    timidity++
+  }
+  arts
+  audiofile
+  aumix
+  i386: awesfx
+  alpha: awesfx
+  cdda2wav
+  cdp
+  cdlabelgen
+  cdparanoia
+  cdrecord
+  esound
+  gsm
+  libogg
+  mikmod
+  mkisofs
+  (arch !s390 and arch !s390x): mpg321
+  perl
+  (arch !s390 and arch !s390x): playmidi
+  (arch !s390 and arch !s390x): sndconfig
+  sox
+  libao
+  libvorbis
+  vorbis
+}
+
+1 Network Support {
+  ? X Window System {
+    i386: compat-libstdc++
+    alpha: compat-libstdc++
+    libpcap
+    nmap-frontend
+    openssh-askpass
+    i386: rhn_register-gnome
+    ia64: rhn_register-gnome
+    alpha: rhn_register-gnome
+    ucd-snmp
+    redhat-config-network
+    i386: up2date-gnome
+    alpha: up2date-gnome
+    ia64: up2date-gnome
+  }
+  ? GNOME {
+    gq
+    openssh-askpass-gnome
+  }
+  ? KDE {
+    firewall-config
+    htmlview
+    kdenetwork
+  }
+  bind-utils
+  cipe
+  finger
+  ftp
+  gmp
+  gnupg
+  krbafs
+  lynx
+  m4
+  make
+  mtr
+  ncftp
+  nfs-utils
+  nmap
+  nscd
+  nss_ldap
+  openldap-clients
+  openssh
+  openssh-clients
+  pam_krb5
+  perl
+  python
+  python-xmlrpc
+  radvd
+  rpm-python
+  stunnel
+  tcp_wrappers
+  telnet
+  traceroute
+  wget
+  whois
+}
+
+1 Dialup Support {
+  @ Network Support
+  (arch !s390 and arch !s390x): ? X Window System {
+  (arch !s390 and arch !s390x):   xisdnload
+  (arch !s390 and arch !s390x): }
+  ? KDE {
+    kdenetwork-ppp
+  (arch !s390 and arch !s390x): kpppload
+  }
+  (arch !s390 and arch !s390x): isdn4k-utils
+  lockdev
+  lrzsz
+  (arch !s390 and arch !s390x): minicom
+  ppp
+  ? GNOME {
+    (arch !s390 and arch !s390x): rp3
+  }
+  (arch !s390 and arch !s390x): rp-pppoe
+  (arch !s390 and arch !s390x): statserial
+  tcl
+  (arch !s390 and arch !s390x): wvdial
+}
+
+0 Messaging and Web Tools {
+  @ Network Support
+  @ Spelling
+  ? X Window System {
+    exmh
+    htmlview
+    !ia64: mozilla
+    !ia64: mozilla-psm
+    !ia64: mozilla-mail
+    ? KDE {
+      !ia64: kdebindings
+      !ia64: kdebindings-kmozilla
+    }
+    i386: netscape-communicator
+    i386: netscape-common
+    alpha: netscape-communicator
+    alpha: netscape-common
+    ia64: netscape-communicator
+    ia64: netscape-common
+    ia64: x86-compat-libs
+  }
+  ? GNOME {
+    balsa
+    gaim
+    (arch !s390 and arch !s390x and arch !ia64): galeon
+    libesmtp
+    licq
+    licq-gnome
+    pan
+  }
+  ? KDE {
+    licq
+    licq-kde
+  }
+  fetchmail
+  links
+  m4
+  metamail
+  mutt
+  nmh
+  pine
+  sharutils
+}
+
+0 Graphics and Image Manipulation {
+  @ X Window System
+  ? KDE {
+    kdegraphics
+  }
+  ImageMagick
+  giftrans
+  gimp
+  (arch !s390 and arch !s390x): gphoto
+  netpbm
+  netpbm-progs
+  (arch !s390 and arch !s390x): sane-backends
+  (arch !s390 and arch !s390x): sane-frontends
+  (arch !s390 and arch !s390x): xsane
+}
+
+0 --hide Network Server {
+  @ Network Support
+  (arch !s390 and arch !s390x and arch !ia64): ? X Window System {
+  (arch !s390 and arch !s390x and arch !ia64):   vnc
+  (arch !s390 and arch !s390x and arch !ia64):   vnc-server
+  (arch !s390 and arch !s390x and arch !ia64): }
+  openssh-server
+  sysstat
+  xinetd
+}
+
+0 News Server {
+  @ Network Server
+  cleanfeed
+  inn
+}
+
+0 NFS File Server {
+  @ Network Server
+  nfs-utils
+}
+
+1 Windows File Server {
+  @ Network Server
+  samba
+  samba-client
+  samba-common
+}
+
+0 Anonymous FTP Server {
+  @ Network Server
+  anonftp
+  wu-ftpd
+}
+
+0 SQL Database Server {
+  @ Network Server
+  cpp
+  libodbc++
+  perl
+  perl-DBI
+  perl-DBD-Pg
+  postgresql
+  postgresql-libs
+  postgresql-server
+  postgresql-devel
+  unixODBC
+}
+
+0 Web Server {
+  @ Network Server
+  @ Spelling
+  ? X Window System {
+    apacheconf
+    asp2php-gtk
+  }
+  ? Messaging and Web Tools {
+    php-imap
+  }
+  ? SQL Database Server {
+    php-pgsql
+  }
+  apache
+  asp2php
+  i386: bcm5820
+  curl
+  expat
+  freetype
+  gd
+  libjpeg
+  libpng
+  libtool-libs
+  libxml2
+  mm
+  mod_dav
+  mod_perl
+  mod_ssl
+  mrtg
+  perl
+  php
+  php-ldap
+  squid
+  i386: tux
+  webalizer
+}
+
+0 Router / Firewall {
+  @ Dialup Support
+  @ Network Server
+  ? X Window System {
+    mtr-gtk
+  }
+  ? GNOME {
+    gnome-lokkit
+  }
+  ethtool
+  iptables-ipv6
+  iptraf
+  mrtg
+  mtr
+}
+
+0 DNS Name Server {
+  @ Network Server
+  ? X Window System {
+    alchemist
+    libxslt
+    libxml2
+    bindconf
+  }
+  bind
+  caching-nameserver
+}
+
+0 Network Managed Workstation {
+  @ Network Server
+  mt-st
+  !ia64: rdist
+  tcpdump
+  ucd-snmp
+  ucd-snmp-utils
+}
+
+0 Authoring and Publishing {
+  @ Printing Support
+  ? X Window System {
+    tetex-xdvi
+    tetex-fonts
+    w3c-libwww
+  }
+  dialog
+  docbook-dtd30-sgml
+  docbook-dtd31-sgml
+  docbook-dtd40-sgml
+  docbook-dtd41-sgml
+  docbook-style-dsssl
+  docbook-utils
+  docbook-utils-pdf  
+  jadetex
+  libpng
+  openjade
+  sgml-common
+  sgml-tools
+  perl
+  perl-SGMLSpm
+  tetex
+  tetex-afm
+  tetex-dvilj
+  tetex-dvips
+  tetex-fonts
+  tetex-latex
+}
+
+0 Emacs {
+  ? X Window System {
+    emacs-X11
+  }
+  ? Authoring and Publishing {
+    psgml
+  }
+  ? Messaging and Web Tools {
+    (lang ja): im
+    (lang ja): mew
+  }
+  (lang ja): Wnn6-SDK
+  (lang ja): ddskk
+  (lang ja): apel
+  (lang ko): emacs-leim
+  (lang zh): emacs-leim
+  emacs
+  emacs-nox
+  (lang ja): semi
+  (lang ja and arch !ia64): wl
+  tamago
+}
+
+1 Utilities {
+  ? X Window System {
+    ical
+    (arch !s390 and arch !s390x): usbview
+    xpdf
+  }
+  ? Network Managed Workstation {
+    arpwatch
+    i386: shapecfg
+  }
+  ? Network Support {
+    rsync
+  }
+  dialog
+  make
+  mt-st
+  gmp
+  joe
+  (lang ja): kcc
+  lsof
+  make
+  lm_sensors
+  lslk
+  lv
+  pax
+  perl
+  pinfo
+  procinfo
+  python
+  screen
+  stat
+  symlinks
+  tree
+  s390: lkcdutils
+  s390x: lkcdutils
+}
+
+0 Legacy Application Support {
+!ia64:   compat-glibc
+!ia64:   compat-libstdc++
+s390:    pdksh
+s390x:    pdksh
+s390:    compat-libs
+s390x:    compat-libs
+(arch !s390 and arch !s390x and arch !ia64):   glib10
+(arch !s390 and arch !s390x and arch !ia64):   libjpeg6a
+(arch !s390 and arch !s390x and arch !ia64):   libxml10
+(arch !s390 and arch !s390x and arch !ia64):   ? X Window System {
+(arch !s390 and arch !s390x and arch !ia64):     gtk+10
+(arch !s390 and arch !s390x and arch !ia64):     qt1x
+(arch !s390 and arch !s390x and arch !ia64):     qt1x-GL
+(arch !s390 and arch !s390x):                    XFree86-compat-libs
+(arch !s390 and arch !s390x and arch !ia64):   }
+(arch !s390 and arch !s390x and arch !ia64):   ? KDE {
+(arch !s390 and arch !s390x and arch !ia64):     kde1-compat
+(arch !s390 and arch !s390x and arch !ia64):   }
+(arch !s390 and arch !s390x and arch !ia64):   ncurses4
+(arch !s390 and arch !s390x and arch !ia64):   openldap12
+(arch !s390 and arch !s390x and arch !ia64):   openssl095a
+(arch !s390 and arch !s390x):   openssl096
+ia64: x86-compat-libs
+(arch !s390 and arch !s390x and arch !ia64):   readline2.2.1
+}
+
+1 Software Development {
+  ? X Window System {
+    Mesa-devel
+    XFree86-devel
+    Xaw3d-devel
+    audiofile-devel
+    ddd
+    lesstif-devel
+    libmng-devel
+    (lang zh_TW): libtabe-devel
+    libungif
+    libungif-devel
+    libxml-devel
+    freetype-devel
+    gtk+-devel
+    imlib-devel
+    netpbm-devel
+    i386: memprof
+    doxygen
+  }
+  ? Printing Support {
+    VFlib2-devel
+  }
+  ? Sound and Multimedia Support {
+    audiofile-devel
+    cdrecord-devel
+    esound-devel
+    libao-devel
+    libogg-devel
+    libvorbis-devel
+    gsm-devel
+  }
+  ? Graphics and Image Manipulation {
+    gimp-devel
+    i386: sane-backends-devel
+    alpha: sane-backends-devel
+    ia64: sane-backends-devel
+  }
+  ? GNOME {
+    GConf-devel
+    ORBit-devel
+    audiofile-devel
+    bonobo-devel
+    control-center-devel
+    esound
+    esound-devel
+    fam-devel
+    gcc-objc
+    gdk-pixbuf-devel
+    glade
+    gnome-core-devel
+    gnome-games
+    gnome-games-devel
+    gnome-libs-devel
+    gnome-pim-devel
+    libghttp-devel
+    libglade-devel
+    libgtop-devel
+    librep-devel
+    libunicode-devel
+    oaf-devel
+  }
+  ? KDE {
+    fam-devel
+    kdbg
+    kdebindings
+    kdelibs-devel
+    kdelibs-sound
+    kdelibs-sound-devel
+    kdesdk
+    kdesdk-devel
+    kdevelop
+    kdoc
+    perl
+    (arch !s390 and arch !s390x): pilot-link-devel
+    qt-designer
+    qt-devel
+  }
+  (arch !s390 and arch !s390x and arch !ia64): ? Legacy Application Support {
+  (arch !s390 and arch !s390x and arch !ia64):   compat-egcs
+  (arch !s390 and arch !s390x and arch !ia64):   compat-egcs-c++
+  (arch !s390 and arch !s390x and arch !ia64):   compat-egcs-g77
+  (arch !s390 and arch !s390x and arch !ia64):   compat-libstdc++
+  (arch !s390 and arch !s390x and arch !ia64): }
+  ? SQL Database Server {
+    libodbc++-devel
+    unixODBC-devel    
+  }
+  ? DNS Name Server {
+    bind-devel
+  }
+  ? Web Server {
+    apache-devel
+    gd
+    gd-devel
+  }
+  autoconf
+  automake
+  binutils
+  bison
+  byacc
+  bzip2-devel
+  cdecl
+  cpp
+  ctags
+  cvs
+  cyrus-sasl-devel
+  db1-devel
+  db3-devel
+  db3-utils
+  i386: dev86
+  docbook-dtd30-sgml
+  docbook-dtd31-sgml
+  docbook-dtd40-sgml
+  docbook-dtd41-sgml
+  docbook-style-dsssl
+  docbook-utils
+  e2fsprogs-devel
+  expat
+  expat-devel
+  flex
+  freetype
+  gcc
+  gcc-c++
+  gdb
+  gdbm-devel
+  gd
+  gd-devel
+  gettext
+  glib-devel
+  glibc-devel
+  gmp
+  gmp-devel
+  (arch !s390 and arch !s390x): gpm-devel
+  ia64: gnu-efi
+  indent
+  (lang ja): kakasi-devel
+  kernel-headers
+  krb5-devel
+  krbafs
+  krbafs-devel
+  kudzu-devel
+  libjpeg
+  libjpeg-devel
+  libpng
+  libpng-devel
+  (arch !s390 and arch !s390x): libstdc++-devel
+  libtermcap-devel
+  libtiff
+  libtiff-devel
+  libtool
+  libtool-libs
+  lockdev
+  lockdev-devel
+  i386: ltrace
+  m4
+  make
+  man-pages
+  (lang cs): man-pages-cs
+  (lang da): man-pages-da
+  (lang de): man-pages-de
+  (lang es): man-pages-es
+  (lang fr): man-pages-fr
+  (lang it): man-pages-it
+  (lang ja): man-pages-ja
+  (lang ko): man-pages-ko
+  (lang pl): man-pages-pl
+  (lang ru): man-pages-ru
+  mm
+  mm-devel
+  ncurses-devel
+  ? Graphics and Image Manipulation {
+    netpbm-devel
+  }
+  newt-devel
+  openjade
+  openldap-devel
+  openssl-devel
+  pam-devel
+  patch
+  pciutils-devel
+  pcre-devel
+  perl
+  perl-SGMLSpm
+  pmake
+  ia64: prctl
+  python
+  python-devel
+  readline-devel
+  rpm-build
+  rpm-devel
+  rpmlint
+  sgml-common
+  sgml-tools
+  slang-devel
+  strace
+  tcl
+  texinfo
+  zlib-devel
+}
+
+1 Kernel Development {
+  @ Software Development
+  kernel-source
+}
+
+1 Windows Compatibility / Interoperability {
+  i386: ? X Window System {
+    i386: wine
+  i386: }
+  dosfstools
+  dos2unix
+  mc
+  mtools
+  lha
+  ? Network Support {
+    pam_smb
+    samba-client
+    samba-common
+  }
+  unix2dos
+  unzip
+  unarj
+  zip
+}
+
+0 Games and Entertainment {
+  ? X Window System {
+    (arch !s390 and arch !s390x): Maelstrom
+    Mesa-demos
+    (arch !s390 and arch !s390x): SDL
+    (arch !s390 and arch !s390x): SDL_image
+    (arch !s390 and arch !s390x): SDL_mixer
+    (arch !s390 and arch !s390x): SDL_net
+    (arch !s390 and arch !s390x): chromium
+    (arch !s390 and arch !s390x): freeciv
+    gnuchess
+    libogg
+    (arch !s390 and arch !s390x): smpeg
+    (arch !s390 and arch !s390x): tuxracer
+    libvorbis
+    xbill
+    xboard
+    (arch !s390 and arch !s390x): xpilot
+    xsnow
+  }
+  ? GNOME {
+    gnome-games
+  }
+  ? KDE {
+    kdegames
+    kdetoys
+  }
+  fortune-mod
+  (arch !s390 and arch !s390x): joystick
+}
+
+0 --hide Everything Include {
+  Canna-libs
+  Wnn6-SDK
+  (arch !s390 and arch !s390x): specspo
+  ttfm
+  freetype
+}
+
+0 --hide Workstation Common {
+  @ Network Support
+  @ Dialup Support
+  @ Printing Support
+  @ X Window System
+  @ Messaging and Web Tools
+  @ Windows Compatibility / Interoperability
+  @ Utilities
+  @ Graphics and Image Manipulation
+  @ Sound and Multimedia Support
+  @ Authoring and Publishing
+  @ Emacs
+}
+
+0 --hide Server {
+  @ Network Server
+  @ Printing Support
+  @ Messaging and Web Tools
+  @ Dialup Support
+  @ Network Managed Workstation
+  @ Emacs
+  @ Software Development
+  @ Utilities
+}

@@ -1,0 +1,11 @@
+comps
+=====
+
+Red Hat stores the set of packages that get installed in a text file.
+This text file is stored on the Red Hat 7.2 installation CD number 1,
+at /RedHat/base/comps.
+
+The file in this directory is very similar to the module list described
+in the "Select Individual Packages" (see website/rh72packages.shtml)
+document. You just don't too select and delect so much when you create
+your own installation CD with this file.
