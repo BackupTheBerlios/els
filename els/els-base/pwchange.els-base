@@ -1,8 +1,9 @@
 #!/bin/bash
-
-test "$INTERACTIVE" = "interactive" && echo -en "\nChanging Linux password ... "
+LOGIN="$1"
+PASSWD="$2"
+INTERACTIVE="$3"
 
 # Enable the login, in case it was previously disabled:
-/usr/sbin/usermod -U "$1"
+/usr/sbin/usermod -U "$LOGIN"
 
-echo "$2" | passwd -f --stdin "$1"
+echo "$PASSWD" | passwd -f --stdin "$LOGIN" && echo
