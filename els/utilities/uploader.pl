@@ -90,7 +90,7 @@ foreach (sort @Upload) {
       open FILE, ">/dev/stdout" if $debug;
       $_ = "sftp -1 -s /usr/lib/ssh/sftp-server $SshLogin";
       print "$_\n";
-      open FILE, $debug ? ">/dev/stdout" : "|$_";
+      open FILE, $debug ? ">/dev/stdout" : "|$_ >/dev/null";
       print FILE "cd $HomeDir\n";
       $first = 0;
    }
@@ -100,6 +100,7 @@ foreach (sort @Upload) {
       $_ = $dir;
       s{[^/\.]+}{..}g;
       print FILE $_ ? "lcd $_/$newdir\n" : "lcd $newdir\n";
+      print FILE "mkdir $HomeDir/$newdir\n";
       print FILE "cd $HomeDir/$newdir\n";
       $dir = $newdir
    }
