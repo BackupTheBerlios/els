@@ -1,5 +1,5 @@
 # HTML 4.01 verification:
-export SGML_CATALOG_FILES=/usr/lib/sgml/html401/HTML4.cat
+export SGML_CATALOG_FILES=../utilities/sgml/HTML4.cat
 
 
 # SHTML -> HTML transformation
