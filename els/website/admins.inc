@@ -5,9 +5,10 @@
 <A HREF="admins.shtml" CLASS="menubar"><FONT COLOR="#ffffff">Adminstration</FONT></A></TD>
 </TR>
 <TR ALIGN="right" BGCOLOR="#FFCC33"><TD>
+<A CLASS="menus" HREF="download.shtml">Download</A><BR>
 <A CLASS="menus" HREF="installation.shtml">Installation</A><BR>
 <A CLASS="menus" HREF="modules.shtml">Modules</A><BR>
-<A CLASS="menus" HREF="sysadm/index.shtml">Sysadm</A><BR>
+<A CLASS="menus" HREF="sysadm.shtml">Sysadm</A><BR>
 <A CLASS="menus" HREF="faq.shtml">FAQ</A><BR>
 </TD>
 </TR></TABLE>
