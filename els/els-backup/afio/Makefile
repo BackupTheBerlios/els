@@ -1,3 +1,4 @@
+ROOT = ../..
 include $(ROOT)/Makefile.inc
 
 ALL = afio.spec afio.patch \
