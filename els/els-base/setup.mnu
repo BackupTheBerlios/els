@@ -13,8 +13,8 @@ case "$1" in
         Title "System" "Setup" "Fine tune system setup"
 	Option "Info"  "Info on available setup scripts"
 	Option "Run"   "Run specific setup script"
-	Option "All"   "Run all existing setup script"
 	Option "Rerun" "Run all existing setup script that have run once"
+	Option "All"   "Run all existing setup script"
 	;;
 
      info)
@@ -24,5 +24,24 @@ case "$1" in
 	sysadm-base.pl --scriptinfo "$CHOICE" >$ELS_TEMP
 	$ELS_DIALOG --textbox $ELS_TEMP 23 76
 	;;
+
+     run)
+	SelectScript "to run"
+	test -z "$CHOICE" && return
+
+	sysadm-setup.pl --verbose "$CHOICE" >$ELS_TEMP 2>&1
+	test -s $ELS_TEMP && $ELS_DIALOG --textbox $ELS_TEMP 23 76
+	;;
+
+     rerun)
+	sysadm-setup.pl --verbose --rerun >$ELS_TEMP 2>&1
+	test -s $ELS_TEMP && $ELS_DIALOG --textbox $ELS_TEMP 23 76
+	;;
+
+     all)
+	Question "Do you really want to run ALL setup scripts?" && sysadm-setup.pl --verbose --all >$ELS_TEMP 2>&1
+	test -s $ELS_TEMP && $ELS_DIALOG --textbox $ELS_TEMP 23 76
+	;;
+
 
 esac

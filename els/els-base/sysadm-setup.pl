@@ -7,7 +7,7 @@
 #
 #########################################################################
 #
-# $Id: sysadm-setup.pl,v 1.5 2001/11/29 15:39:55 holgerschurig Exp $
+# $Id: sysadm-setup.pl,v 1.6 2001/12/04 15:13:43 holgerschurig Exp $
 #
 
 use strict;
@@ -79,7 +79,7 @@ of documentation:
   # Longer description, may include paragraphs seperated by an
   # empty line.
   #DescEnd
-  #Id $Id: sysadm-setup.pl,v 1.5 2001/11/29 15:39:55 holgerschurig Exp $
+  #Id $Id: sysadm-setup.pl,v 1.6 2001/12/04 15:13:43 holgerschurig Exp $
 
   perl code
 
@@ -113,6 +113,7 @@ my $laptop = 0;
 my $server = 0;
 my $all = 0;
 my $rerun = 0;
+my $setupdir = $ENV{ELS_MENULIB} || '/usr/lib/els';
 
 use Getopt::Long;
 GetOptions('quiet' => \$quiet,
@@ -149,8 +150,8 @@ sub ProcessScript($)
 
    unless (open FILE, $file) {
       unless (open FILE, "$file.setup") {
-         unless (open FILE, "/usr/lib/els/$file") {
-             unless (open FILE, "/usr/lib/els/$file.setup") {
+         unless (open FILE, "$setupdir/$file") {
+             unless (open FILE, "$etupdir/$file.setup") {
                  print "Setup script $file not found.\n";
                  return;
              }
@@ -201,7 +202,7 @@ sub ProcessScript($)
 
 # Process all scripts (when --all on cmdline)
 if ($all) {
-   my @files = glob('*.setup') || glob('/usr/lib/els/*.setup');
+   my @files = glob('*.setup') || glob('$setupdir/*.setup');
    foreach (@files) {
       ProcessScript $_;
    }

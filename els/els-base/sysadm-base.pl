@@ -433,7 +433,8 @@ sub UserIntoGroups ()
 
 sub ListScripts
 {
-    chdir '/usr/src/els';
+    $_ = $ENV{ELS_MENULIB} || "/usr/lib/els";
+    chdir $_;
     foreach my $script (sort glob '*.setup') {
 	loadfile "$script\n";
 	$script =~ s{.setup$}{};
@@ -455,7 +456,8 @@ sub ScriptInfo
 {
     $ScriptInfo =~ s{.setup$}{};
 
-    loadfile "/usr/src/els/$ScriptInfo.setup";
+    $_ = $ENV{ELS_MENULIB} || "/usr/lib/els";
+    loadfile "$_/$ScriptInfo.setup" ;
     my $Title  = '<missing>';
     my $Author = '<missing>';
     my $Group  = 'none';
