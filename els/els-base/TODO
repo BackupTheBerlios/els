@@ -1,5 +1,7 @@
 Sysadm:
   check all *.mnu files
+  write menu for sysadm-setup.pl
+  add help texts
 
 Setup:
   check description texts
