@@ -233,12 +233,18 @@ sub Verify
     foreach (glob('*'), glob('.*')) {
         next if $_ eq '.';
         next if $_ eq '..';
-        next if $_ eq 'do';
+        next if $_ eq 'a';
         next if $_ eq 'CVS';
         next if $_ eq 'html';
-        next if $_ eq 'a';
+        next if $_ eq 'INSTALL';
+        next if $_ eq 'Makefile';
+        next if $_ eq 'README';
+        next if $_ eq 'TODO';
         next if $_ eq '.cvsignore';
+        next if $_ eq '.docs';
+        next if $_ eq '.rpms';
         next if /\.spec$/;
+        next if -d $_;
         $FOUND{$_} = 1;
     }
     foreach (keys %FILES) {
