@@ -75,10 +75,8 @@ echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment
 %attr(0600,root,root) /usr/lib/els/mountpoints.setup
 %attr(0600,root,root) /usr/lib/els/movehome.setup
 %attr(0600,root,root) /usr/lib/els/nscd.setup
-%attr(0600,root,root) /usr/lib/els/profile.setup
 %attr(0600,root,root) /usr/lib/els/rclocal.setup
 %attr(0600,root,root) /usr/lib/els/syslog.setup
-%attr(0600,root,root) /usr/lib/els/sysrq.setup
 %attr(0600,root,root) /usr/lib/els/tcptimestamps.setup
 %attr(0600,root,root) /usr/lib/els/tcpwrappers.setup
 %attr(0600,root,root) /usr/lib/els/unneededdaemons.setup
@@ -110,6 +108,7 @@ echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment
 %attr(0644,root,root) /etc/diralias.d/els-base.dirs
 
 # ENVIRONMENT PROFILES
+%attr(0644,root,root) /etc/profile/els-base.sh
 %if %{withjoe}
 %attr(0644,root,root) /etc/profile.d/els-q.sh
 %endif
