@@ -16,7 +16,8 @@ check:: .docs
 clean::
 	rm -f *.html
 
-install:: .rpm
+install:: .rpms
+	rm -f $(REDHAT_CD)/els-backup*.rpm
 	cp -v /usr/src/redhat/RPMS/i386/els-backup*.rpm $(REDHAT_CD)/RedHat/RPMS
 
 
