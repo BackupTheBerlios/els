@@ -49,8 +49,9 @@ mkdir html
 cd -
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/usr/doc/%{name}-%{vers}
+ln -sf joe q
 ../utilities/rpmhelper.pl --prefix=$RPM_BUILD_ROOT --install
-
+rm q
 
 %clean
 # Clean up after ourselves, but be careful in case someone sets a bad buildroot
