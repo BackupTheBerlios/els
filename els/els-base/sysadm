@@ -242,7 +242,7 @@ while [ true ]; do
             test -n "$HELPFILE" && echo -n '"Help" "Help for $ELS_MENU menu"'>>$ELS_TEMP.dialog  
 
             # prepend this with the dialog command
-            echo -n "$ELS_DIALOG --menu \"$ELS_MENUNAME\" 21 76 13 " >$ELS_TEMP.exec
+            echo -n "$ELS_DIALOG --menu \"$ELS_MENUNAME\" 22 76 14 " >$ELS_TEMP.exec
             if [ ! -s $ELS_TEMP.dialog ]; then
 		rm -f $ELS_TEMP*
 		break
