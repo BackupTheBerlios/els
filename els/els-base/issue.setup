@@ -11,37 +11,41 @@
 # legal reasons we add also a note that only authorited people are allowed
 # to use the system.
 #DescEnd
-#Id $Id: issue.setup,v 1.6 2002/02/12 08:38:30 holgerschurig Exp $
+#Id $Id: issue.setup,v 1.7 2002/02/19 16:52:51 holgerschurig Exp $
 
 
-chomp(my $hostname = `/bin/hostname`);
-loadfile '/etc/issue';
-unless ($insideanaconda || (search($hostname) and $version =~ /^rh/)) {
-    deleteall;
-    append '';
-    append 'Easy Linux Server at ' . $hostname;
-    append 'Authorized use only!';
-    append '';
-    writefile;
-    logit "/etc/issue: changed\n";
-}
+unless ($insideanaconda) {
 
 
-#
-# Patch /etc/issue.net
-#
-# This file contains a text that is displayed before the user enters his
-# username/password from the network, e.g. via telnet.
-#
-loadfile '/etc/issue.net';
-unless ($insideanaconda || search($hostname)) {
-    deleteall;
-    append '';
-    append 'Easy Linux Server at ' . $hostname;
-    append 'Authorized use only!';
-    append '';
-    writefile;
-    logit "/etc/issue.net: changed\n";
+    chomp(my $hostname = `/bin/hostname`);
+    loadfile '/etc/issue';
+    unless (search($hostname)) {
+        deleteall;
+        append '';
+        append 'Easy Linux Server at ' . $hostname;
+        append 'Authorized use only!';
+        append '';
+        writefile;
+        logit "/etc/issue: changed\n";
+    }
+
+
+    #
+    # Patch /etc/issue.net
+    #
+    # This file contains a text that is displayed before the user enters his
+    # username/password from the network, e.g. via telnet.
+    #
+    loadfile '/etc/issue.net';
+    unless (search($hostname)) {
+        deleteall;
+        append '';
+        append 'Easy Linux Server at ' . $hostname;
+        append 'Authorized use only!';
+        append '';
+        writefile;
+        logit "/etc/issue.net: changed\n";
+    }
 }
 
 1;
