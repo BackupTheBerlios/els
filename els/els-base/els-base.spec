@@ -85,6 +85,9 @@ echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment
 %attr(0600,root,root) /usr/lib/els/tcptimestamps.setup
 %attr(0600,root,root) /usr/lib/els/tcpwrappers.setup
 %attr(0600,root,root) /usr/lib/els/unneededdaemons.setup
+%if "%{_vendor}" != "MandrakeSoft"
+%attr(0600,root,root) /usr/lib/els/less.setup
+%endif
 
 # SYSADM AND ITS HELPERS
 %attr(0700,root,root) /usr/sbin/sysadm
@@ -106,9 +109,7 @@ echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment
 %attr(0600,root,root) /usr/lib/els/system.mnu
 %attr(0600,root,root) /usr/lib/els/usermod.mnu
 %attr(0600,root,root) /usr/lib/els/users.mnu
-%if "%{_vendor}" == "MandrakeSoft"
-%attr(0600,root,root) /usr/lib/els/less.mnu
-%else
+%if "%{_vendor}" != "MandrakeSoft"
 %attr(0600,root,root) /usr/lib/els/cdrom.mnu
 %attr(0600,root,root) /usr/lib/els/floppy.mnu
 %endif
