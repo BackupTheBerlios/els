@@ -1,7 +1,9 @@
 #Title Link linux home dir to samba home dir
 #Author Holger Schurig
+#Group els-samba
 #Desc
 #DescEnd
+#Id $Id: smbhomedirs.setup,v 1.2 2001/11/30 15:26:48 holgerschurig Exp $
 
 
 # Variables:
