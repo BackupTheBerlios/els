@@ -36,17 +36,17 @@ while (defined($_ = <FILE>)) {
 # Read /etc/samba/smbpasswd into the %users hash
 #
 
-open FILE, "</etc/samba/smbpasswd";
-while (defined ($_ = <FILE>)) {
-    chomp;
-    @_ = split /:/, $_;
-    $name = shift @_;
-    next unless $users{$name};
-    $users{$name}[6] = $_[1];
-    $users{$name}[7] = $_[2];
+if (open FILE, "</etc/samba/smbpasswd") {
+    while (defined ($_ = <FILE>)) {
+        chomp;
+        @_ = split /:/, $_;
+        $name = shift @_;
+        next unless $users{$name};
+        $users{$name}[6] = $_[1];
+        $users{$name}[7] = $_[2];
+    }
+    close FILE;
 }
-close FILE;
-
 
 
 #
