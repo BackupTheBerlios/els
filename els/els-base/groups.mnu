@@ -44,11 +44,11 @@ case "$1" in
         #Desc
         # Shows you all current groups as well as the members in the group.
 	#TextBox
-	#  Id Group name   Users
-	# 115 finance      jutta,oliver,silke,chris,guenther
-	# 102 leaders      fritz,immanuel
-	# 104 mailroom     sylvia
-	# 111 prinfo       holger,detlef
+	# Group name   Users
+	# finance      jutta,oliver,silke,chris,guenther
+	# leaders      fritz,immanuel
+	# mailroom     sylvia
+	# prinfo       holger,detlef
 	# ...
 	#TextBoxEnd
 	#Item Usage
@@ -56,6 +56,10 @@ case "$1" in
         #DescEnd
 
         sysadm-user.pl --groups >$ELS_TEMP
+	if [ ! -s $ELS_TEMP ]; then
+	     $ELS_DIALOG --msgbox "There are no groups defined yet." 5 37
+	     return
+	fi
         $ELS_DIALOG --textbox $ELS_TEMP 23 76
         ;;
 
@@ -85,12 +89,12 @@ case "$1" in
         }
 
 	# check for samba directory
-	if [ -d /usr/samba/dat -a ! -d /usr/samba/dat/$CHOICE ]; then
-	    Question "Should I create a directory g:\\$CHOICE for you?" && {
-		test -d /usr/samba/dat/$CHOICE || mkdir /usr/samba/dat/$CHOICE
-		chgrp $CHOICE /usr/samba/dat/$CHOICE
-		chmod g+rwx,o-rwx /usr/samba/dat/$CHOICE
-		chmod g+s /usr/samba/dat/$CHOICE
+	if [ -d /var/samba/dat -a ! -d /var/samba/dat/$CHOICE ]; then
+	    Question "Should I create a directory i:\\$CHOICE for you?" && {
+		test -d /var/samba/dat/$CHOICE || mkdir /var/samba/dat/$CHOICE
+		chgrp $CHOICE /var/samba/dat/$CHOICE
+		chmod g+rwx,o-rwx /var/samba/dat/$CHOICE
+		chmod g+s /var/samba/dat/$CHOICE
 	    }
 	fi
         ;;
