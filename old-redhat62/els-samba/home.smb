@@ -1,0 +1,4 @@
+comment=Your home directory
+path=/usr/samba/dat/users/%u
+#force group=%u
+browseable=no

@@ -1,0 +1,6 @@
+#!/bin/bash
+LOGIN=$1
+PW=$2
+
+# Enable account in case it was previously disables 
+/usr/bin/smbpasswd -a $LOGIN $PW >/dev/null

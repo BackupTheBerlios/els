@@ -1,0 +1,114 @@
+case "$1" in
+
+    Query)
+	Title "Samba" "SambaSetup" "Setup internal SAMBA parameters"
+
+	NAME=${SMB_NETBIOSNAME:-LINUX}
+	LOGON=${SMB_DOMAINLOGON:-yes}
+        PRNT=${SMB_PRINTERDRIVERS:-no}
+        CHAR=${SMB_TRANSLATION:--none-}
+        PAGE=${SMB_CODEPAGE:-850}
+	DEBUG=${SMB_DEBUGLEVEL:-1}
+	NULL=${SMB_NULLPASSWORDS:-no}
+
+	Option "Server"      "Set SAMBA server name                (now $NAME)"
+	Option "Domain"      "Allow domain logons                  (now $LOGON)"
+	Option "Null"        "Allow null (empty) passwords         (now $NULL)"
+	Option "Auto"        "Auto-installation of printer drivers (now $PRNT)"
+	Option "Translation" "Character set translation            (now $CHAR)"
+	test "$CHAR" != "-none-" &&
+	Option "Page"        "Client code page                     (now $PAGE)"
+	Option "LogLevel"    "Debug level                          (now $DEBUG)"
+	;;
+
+    server)
+	InputString "Enter name of your SAMBA server. This has nothing to do with your\ne-mail system name. Example: LINUX"
+	test -z "$CHOICE" && return
+	NAME=`echo $CHOICE | tr a-z A-Z`
+	SetOpt SMB_NETBIOSNAME "$NAME"
+	test "$SMB_NETBIOSNAME" != "LINUX" -a "$SMB_DOMAINLOGON" = "yes" && dialog --msgbox "Use this name also in your domain logon batch file:\n\nsysadm -> Network -> Samba -> Batch" 7 60
+	/usr/sbin/sysadm-samba.pl --updateconfig
+	;;
+
+    domain)
+	if Question "Only one SAMBA server in a network can be a primary domain\ncontroller. Set this option to 'NO' on your secondary servers\nHint: normally set to 'yes'." ; then
+	    SetOpt SMB_DOMAINLOGON "yes"
+	else
+	    SetOpt SMB_DOMAINLOGON "no"
+ 	fi
+	/usr/sbin/sysadm-samba.pl --updateconfig
+	;;
+
+    null)
+	if Question "Do you want to allow empty (null) passwords?\n\nHint: you almost always want to say 'no' here" ; then
+	    SetOpt SMB_NULLPASSWORDS "yes"
+	else
+	    SetOpt SMB_NULLPASSWORDS "no"
+	fi
+	/usr/sbin/sysadm-samba.pl --updateconfig
+	;;
+
+    auto)
+	if Question "You can automate the installation of printer drivers. Read\n/usr/doc/samba/PRINTER_DRIVER.txt for more info. It's a little\nbit tricky, but also very handy. Do you want this feature?" ; then
+	    SetOpt SMB_PRINTERDRIVERS "yes"
+	else
+	    SetOpt SMB_PRINTERDRIVERS "no"
+	fi
+	/usr/sbin/sysadm-samba.pl --updateconfig
+	;;
+
+    translation)
+	dialog --menu "Select filename translation" 12 58 5 \
+		"none"   "no filename translation" \
+		"iso8859-1" "Western european filename translation" \
+		"iso8859-2" "Easter european filename translation" \
+		"iso8859-9" "Cyrillic" \
+		"koi8-r"    "Cyrillic (proprietary)" 2>$TMPFILE || return
+	case `cat $TMPFILE` in
+	    none)      SetOpt SMB_TRANSLATION "";          SetOpt SMB_CODEPAGE ""    ;;
+	    iso8859-1) SetOpt SMB_TRANSLATION "iso8859-1"; SetOpt SMB_CODEPAGE "850" ;;
+	    iso8859-2) SetOpt SMB_TRANSLATION "iso8859-2"; SetOpt SMB_CODEPAGE "852" ;;
+	    iso8859-5) SetOpt SMB_TRANSLATION "iso8859-5"; SetOpt SMB_CODEPAGE "866" ;;
+	    koi8-r)    SetOpt SMB_TRANSLATION "koi8-r";    SetOpt SMB_CODEPAGE "866" ;;
+	esac
+	/usr/sbin/sysadm-samba.pl --updateconfig
+	;;
+
+    page)
+	dialog --menu "Select code page of your Win95 client" 15 43 8 \
+		"437" "MS-DOS Latin US" \
+		"737" "MS-DOS Greek" \
+		"850" "MS-DOS Latin 1 (common setting)" \
+		"852" "MS-DOS Latin 2" \
+		"861" "MS-DOS Icelandic" \
+		"866" "MS-DOS Cyrillic" \
+		"932" "MS-DOS Japanese SJIS" \
+		"936" "MS-DOS Simplified Chinese" \
+		"949" "MS-DOS Korean Hangul" \
+		"950" "MS-DOS Traditional Chinese" \
+		2>$TMPFILE || return
+        SetOpt SMB_CODEPAGE "`cat $TMPFILE`"
+	/usr/sbin/sysadm-samba.pl --updateconfig
+	;;
+
+    loglevel)
+	dialog --menu "Log level for /var/log/samba" 12 43 5 \
+		"1" "normal" \
+		"2" "gives file open info" \
+		"3" "detailed info" \
+		"4" "very verbose" \
+		"9" "do you need THAT MUCH?" \
+		2>$TMPFILE || return
+	CHOICE=`cat $TMPFILE`
+	case $CHOICE in
+	    3|4|9) dialog --msgbox "\
+This log level produces huge log files. Please reset the\n\
+loglevel as soon as you resolved your problem, otherwise\n\
+your hard disk will overflow." 7 60 ;;
+	esac
+
+        SetOpt SMB_DEBUGLEVEL "$CHOICE"
+	/usr/sbin/sysadm-samba.pl --updateconfig
+	;;
+
+esac

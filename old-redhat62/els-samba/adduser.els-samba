@@ -1,0 +1,18 @@
+#!/bin/bash
+LOGIN=$1
+FULLNAME=$2
+INTERACTIVE=$3
+
+test "$INTERACTIVE" = "interactive" && echo -en "\nAdding user to Samba ... "
+
+
+# create home directory
+mkdir /usr/samba/dat/users/$LOGIN
+chown $1.$1 /usr/samba/dat/users/$LOGIN
+chmod u=rwx,g=rwxs,o-rwx /usr/samba/dat/users/$LOGIN
+
+# Make backlink into the Linux home directory
+ln -s /home/$LOGIN /usr/samba/dat/users/$LOGIN/linux
+
+
+test "$INTERACTIVE" = "interactive" && echo "done."

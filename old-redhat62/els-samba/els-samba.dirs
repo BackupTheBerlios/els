@@ -1,0 +1,6 @@
+local samba=/usr/samba
+local app=/usr/samba/app
+local arc=/usr/samba/arc
+local dat=/usr/samba/dat
+local users=/usr/samba/dat/users
+local netlogon=/usr/samba/netlogon

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+. /usr/lib/process-watcher
+
+TestProcess smbd smb
+TestProcess nmbd smb

@@ -1,0 +1,5 @@
+path=/usr/samba/netlogon
+comment=Domain logon script
+browseable=no
+read only=yes
+write list=root

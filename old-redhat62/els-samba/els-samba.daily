@@ -1,0 +1,14 @@
+#!/bin/sh
+TMPFILE=/var/tmp/samba.cleanup
+rm -f $TMPFILE
+
+/usr/sbin/sysadm-samba.pl --checkpws >TMPFILE
+
+test -s $TMPFILE && {
+    echo "The system found some problems with SAMBA users:"
+    echo
+    cat $TMPFILE
+} | mail -s "els-samba: Please check your users" operator
+
+
+rm -f $TMPFILE
