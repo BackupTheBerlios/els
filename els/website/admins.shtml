@@ -3,11 +3,14 @@
 <!--#include file="admins.inc"-->
 <!--#include file="logos.inc"-->
 
+<H2>Audience</H2>
 <P>
-  If you are a system administrator,
-  then you can read here how to install an Easy Linux Server, how <A
-  HREF="sysadm/index.shtml">configure</A> the server and
-  your windows workstations.
+  As a System Administrator you want to get a
+  departmental file server up and running. So you need only to know
+  how to install and operate an Easy Linux Server.
+</P><P>
+  For further info, click on the links below "Administration" on
+  in the menu on the left side.
 </P>
 
 <!--#include file="bottom.inc"-->
