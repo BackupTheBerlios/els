@@ -34,7 +34,8 @@
 </TR>
 <TR ALIGN="right" BGCOLOR="#FFCC33"><TD>
 <A CLASS="menus" HREF="history.shtml">History</a><BR>
-<A TARGET="_new" CLASS="menus" HREF="http://developer.berlios.de/news/?group_id=204">News</A><BR>
+<A CLASS="menus" HREF="news.shtml">News</A><BR>
+<A CLASS="menus" HREF="download.shtml">Download</A><BR>
 </TD>
 </TR></TABLE>
 
