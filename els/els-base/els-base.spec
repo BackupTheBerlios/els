@@ -80,6 +80,7 @@ echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment
 %attr(0600,root,root) /usr/lib/els/mc-root.setup
 %attr(0600,root,root) /usr/lib/els/mountpoints.setup
 %attr(0600,root,root) /usr/lib/els/movehome.setup
+%attr(0600,root,root) /usr/lib/els/moveopt.setup
 %attr(0600,root,root) /usr/lib/els/rclocal.setup
 %attr(0600,root,root) /usr/lib/els/syslog.setup
 %attr(0600,root,root) /usr/lib/els/tcptimestamps.setup
