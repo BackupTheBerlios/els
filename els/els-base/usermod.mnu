@@ -28,7 +28,7 @@ function SelectGroup ()
 case "$1" in
 
     Query)
-        Title "internal to Users" "User modification" "Parameters for user '$LOGIN'"
+        Title "internal to Users" "User modification" "Parameters for user $LOGIN"
         sysadm-base.pl -getuserdata $LOGIN >$ELS_TEMP
         . $ELS_TEMP
 	test "$USER_SHELL" = "/bin/false" && SHELLSTATE="disabled" || SHELLSTATE="enabled"

@@ -5,7 +5,7 @@ case "$1" in
 	MYPATH=${SMB_PATH:--none-}
 	VOLUME=${SMB_VOLUME:--none-}
 	WRITELIST=${SMB_WRITELIST:--none-}
-	Title "Internal to SAMBA" "Share modification" "Parameters for share '$SMB_SHARE'"
+	Title "Internal to SAMBA" "Share modification" "Parameters for share $SMB_SHARE"
 	Option "Path"        "Server path          ($MYPATH)"
 	Option "Description" "Share description    ($COMMENT)"
 	Option "Volume"      "Volume label         ($VOLUME)"
