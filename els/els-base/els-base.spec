@@ -119,8 +119,6 @@ echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment
 # Clear the screen and ring the bell
 %attr(0755,root,root) /usr/bin/cls
 %attr(0755,root,root) /usr/bin/bell
-# hex
-# .startup
 # Editor
 %if %{withjoe}
 /usr/bin/q
@@ -128,5 +126,5 @@ echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment
 
 # DOCUMENTATION
 %if %{withdoc}
-%doc $OLDPWD/html/*
+%doc $OLDPWD/README $OLDPWD/html/*
 %endif
