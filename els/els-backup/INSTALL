@@ -11,9 +11,10 @@ Log in as root and go into a temporary directory. Then install the RPM:
    server:/var/tmp# mcopy a:els-backup*.rpm a:afio*.rpm .
    server:/var/tmp# rpm -Uv afio*.rpm els-base*.rpm
 
-Now enter "sysadm -> Backup -> Automatic" (see website/sysadm/backup.html#automatic)
-and decide at which time in the the night the backup should happen.
+Test of your backup is working with
 
-You might also want to define your
-"backup sets" (see website/sysadm/sets.html) to exclude or include specific
-areas of your hard disk.
+"sysadm -> Backup -> Manual" (see website/sysadm/backup.html#manual).
+
+When everything is ok, go to
+"sysadm -> Backup -> Automatic" (see website/sysadm/backup.html#automatic)
+and decide at which time in the the night the backup should happen.

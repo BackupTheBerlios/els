@@ -1,0 +1,4 @@
+tape did not eject after manual backup
+remove /var/tmp/sysadm.backuplog after backup
+remove /var/tmp/sysadm.filelist after backup
+root backup-set should came first in SelectSets()
