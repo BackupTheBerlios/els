@@ -1,15 +1,16 @@
 #Title Create a backup set definition for each partition
-#Mandatory
 #Author Holger Schurig
+#Group els-backup
 #Desc
 #DescEnd
+#Id $Id: backupsets.setup,v 1.2 2001/11/30 14:11:33 holgerschurig Exp $
 
 
 open MOUNTS, "</proc/mounts";
 while (defined ($_ = <MOUNTS>)) {
     my($dev, $dir, $fs, $flags) = split / /, $_;
-    next if $flags eq "ro";
-    next if $fs ne "ext2";
+    next if $flags eq 'ro';
+    next if $fs ne 'ext2' && $fs ne 'ext3';
 
     # transform "/usr/samba/app" into "app":
     $dir =~ /([^\/]*$)/;
