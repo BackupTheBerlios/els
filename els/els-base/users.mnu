@@ -2,7 +2,7 @@ function SelectUser ()
 {
     echo -n "$DIALOG --menu \"Select user $1\" 23 65 15 " >$TMPFILE.dialog
     sysadm-user.pl --listusers $2 $3 >>$TMPFILE.dialog
-    { . $TMPFILE.dialog } 2>$TMPFILE
+    { . $TMPFILE.dialog; } 2>$TMPFILE
     CHOICE=`cat $TMPFILE`
 }
 
@@ -79,7 +79,7 @@ case "$1" in
         test -z "$CHOICE" && return
 
         # ask a program to actually enter the user
-        /usr/sbin/useradd -c "$CHOICE" $LOGIN >$TMPFILE 2>&1 || {
+        /usr/sbin/useradd -c "$CHOICE" -G users -m -s /bin/false $LOGIN >$TMPFILE 2>&1 || {
             # bail out if there was an error
             $DIALOG --textbox $TMPFILE 10 60
             return
@@ -91,7 +91,7 @@ case "$1" in
 	sleep 1
 
 	# call the "Modify User" sub-menu
-        $0 usermod
+        #$0 usermod
         ;;
 
     delete)
