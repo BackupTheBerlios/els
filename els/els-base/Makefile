@@ -24,7 +24,8 @@ install:: .rpms
 
 .rpms: $(ALL)
 	rm -f /usr/src/redhat/RPMS/i386/els-base*.rpm
-	rpm -bb els-base.spec && touch .rpms
+	rpm -bb els-base.spec
+	touch .rpms
 
 .docs: $(wildcard *.mnu)
 	../els-base/sysadm-makedoc.pl --verbose *.mnu && touch .docs
