@@ -1,0 +1,21 @@
+#Title no . in PATH
+#Author Holger Schurig
+#Group els-base
+#Desc
+# Disables . in the current path (which is a security problem!)
+#DescEnd
+#Id $Id: nodotinpath.setup,v 1.1 2002/04/29 13:39:04 holgerschurig Exp $
+
+
+my $mod = 0;
+
+loadfile '/etc/profile';
+if ((getopt(':\.') ne '0')) {
+    replace(':\.', '');
+    $mod = 1;
+    writefile;
+    logit "/etc/profile: removed . from PATH\n";
+}
+
+
+1;
