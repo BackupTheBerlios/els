@@ -79,6 +79,7 @@ lesskey -o .less lesskey
 %attr(0600,root,root) /usr/lib/els/bashrc.setup
 %attr(0600,root,root) /usr/lib/els/bootmessages.setup
 %attr(0600,root,root) /usr/lib/els/ctrlaltdel.setup
+%attr(0600,root,root) /usr/lib/els/devpts.setup
 %attr(0600,root,root) /usr/lib/els/dircolors.setup
 %attr(0600,root,root) /usr/lib/els/inputrc.setup
 %attr(0600,root,root) /usr/lib/els/issue.setup
