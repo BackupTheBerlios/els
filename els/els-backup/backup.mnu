@@ -20,7 +20,7 @@ case "$1" in
 	# when the backup should take place.
 	#DescEnd
 
-        # the following options make only sense once you have a tape defined
+	# the following options make only sense once you have a tape defined
         if [ ! -z "$TAPE" -a "$TAPE" != "/dev/null" ]; then
 
             Option "Manual"    "Manually backup now!"
@@ -58,7 +58,7 @@ case "$1" in
 	# Insert a tape and select "Manual". You will see a screen like this:
 	#CheckList Select back up sets to backup
 	# [x] root
-        # [x] usr
+	# [x] usr
 	# [x] var
 	#CheckListEnd
 	#Macro CheckList
@@ -79,7 +79,7 @@ case "$1" in
 	;;
 
     automatic)
-        #Desc
+	#Desc
 	# Doing backups during the day is somewhat inconvenient, because
 	# you always have to start it manually and no one should be using
 	# the server. Wouldn't it be nice if this could all happen
@@ -90,20 +90,20 @@ case "$1" in
 	# sent to you by e-mail.
 	# 
 	#Item Usage
-        # First you may select the time for the backup to take place:
-        #Menu Select time for backup
-        # a 20:00
-        # b 21:00
-        # c 22:00
-        # d 23:00
-        # e 00:00
-        # f 01:00
-        # g 02:00
-        # h 03:00
-        # i 04:00
-        # j 05:00
-        # k kill previously configured schedule
-        #MenuEnd
+	# First you may select the time for the backup to take place:
+	#Menu Select time for backup
+	# a 20:00
+	# b 21:00
+	# c 22:00
+	# d 23:00
+	# e 00:00
+	# f 01:00
+	# g 02:00
+	# h 03:00
+	# i 04:00
+	# j 05:00
+	# k kill previously configured schedule
+	#MenuEnd
 	#Macro Menu
 	#Macro Cancel
 	#
@@ -179,21 +179,21 @@ case "$1" in
 	;;
 
     exclude)
-        #Desc
-        # It's usually not necessary to back up all files
-        # or directories. Some of them are temporary, some will be
-        # automatically re-created etc. So you can exclude specific
+	#Desc
+	# It's usually not necessary to back up all files
+	# or directories. Some of them are temporary, some will be
+	# automatically re-created etc. So you can exclude specific
 	# files and/or directories. Please try this option on your
 	# system. The default exclusion list is heavily documented
 	# and should give you an idea on what can be done.
 	#
 	# After you modified that file, you might want to execute
-	# <A HREF="sets.htm#files">sysadm -&gt; Backup -&gt; Sets -&gt; Files</A>
+	# <A HREF="sets.html#files">sysadm -&gt; Backup -&gt; Sets -&gt; Files</A>
 	# to check what files get saved.
 	#
 	#Item Usage
-        #Macro Editor
-        #DescEnd
+	#Macro Editor
+	#DescEnd
 
 	ExpertWarning || return
 

@@ -24,10 +24,10 @@ case "$1" in
     Query)
         Title "Backup" "Position" "Position tape"
 
-        #Desc
+	#Desc
 	# This menu allows to navigate to different backup sets on one
 	# tape.
-        #DescEnd
+	#DescEnd
 
         Option "Report"   "Report current position"
         Option "Next"     "Skip to next backup set"
@@ -37,15 +37,15 @@ case "$1" in
         ;;
 
     report)
-        #Desc
-        # "Report" read the header of the current backup set and displays it, e.g.:
-        #Msgbox Current tape position
+	#Desc
+	# "Report" read the header of the current backup set and displays it, e.g.:
+	#Msgbox Current tape position
 	# Backup set:      /root
-        # Backup date:     1997-05-30 16:48:55
+	# Backup date:     1997-05-30 16:48:55
 	# Backups set no:  1
 	# Files in set:    66
 	# Bytes in set:    295
-        #MsgboxEnd
+	#MsgboxEnd
 	# The position can only be displayed if the first file on the tape contains
 	# the position information. If the tape is blank, you might get an error
 	# telling you that the tape has not been used from OM BACKUP or that the
@@ -64,19 +64,19 @@ case "$1" in
 	#
 	# <B>Bytes in set</B>: total number of all bytes in this backup set. The
 	# number of bytes on the tape can be smaller if compression is enabled.
-        #DescEnd
+	#DescEnd
 
 	ShowPosition
         ;;
 
     next)
-        #Desc
-        # "Next" advances the tape to the next backup set. Displays the new
+	#Desc
+	# "Next" advances the tape to the next backup set. Displays the new
 	# position or "End of tape reached." at the end of the tape.
 	#
 	# You get a <A HREF="#report">position report</A> after the tape has
 	# been re-positioned.
-        #DescEnd
+	#DescEnd
 
  	$ELS_DIALOG --infobox "One moment ... skipping to next backup set ..." 3 50
 	sysadm-backup.pl --nexttapeset >$ELS_TEMP || {
@@ -88,13 +88,13 @@ case "$1" in
         ;;
 
     previous)
-        #Desc
-        # Rewinds the tape to the previous backup set. Displays the new
+	#Desc
+	# Rewinds the tape to the previous backup set. Displays the new
 	# position or "Already at start of tape." if that is true.
 	#
 	# You get a <A HREF="#report">position report</A> after the tape has
 	# been re-positioned.
-        #DescEnd
+	#DescEnd
 
  	$ELS_DIALOG --infobox "One moment ... rewinding to previous backup set ..." 3 55
 	sysadm-backup.pl --prevtapeset >$ELS_TEMP || {
@@ -106,12 +106,12 @@ case "$1" in
         ;;
 
     begin)
-        #Desc
-        # This rewinds the tape to the first backup set on the tape.
+	#Desc
+	# This rewinds the tape to the first backup set on the tape.
 	#
 	# You get a <A HREF="#report">position report</A> after the tape has
 	# been re-positioned.
-        #DescEnd
+	#DescEnd
 
         $ELS_DIALOG --infobox "One moment ... rewinding ..." 3 32
         mt rewind >$ELS_TEMP 2>&1
@@ -125,14 +125,14 @@ case "$1" in
         ;;
 
     end)
-        #Desc
-        # Advances the tape after the last backup set. This allows you
-        # to write another backup set onto a tape that is already used.
+	#Desc
+	# Advances the tape after the last backup set. This allows you
+	# to write another backup set onto a tape that is already used.
 	#
 	# This option doesn't present you a position report like all the other
 	# options. If you are at the end of the tape data, there is no header
 	# to read and to display.
-        #DescEnd
+	#DescEnd
 
         $ELS_DIALOG --infobox "One moment ... skipping to end of data ..." 3 46
         mt eod >$ELS_TEMP 2>&1

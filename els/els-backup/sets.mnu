@@ -21,7 +21,7 @@ case "$1" in
 	#DescEnd
 
 
-        # the following options make only sense once you have a tape defined
+	# the following options make only sense once you have a tape defined
         if [ ! -z "$TAPE" -a "$TAPE" != "/dev/null" ]; then
             Option "List"     "Display backup sets"
 	    Option "Add"      "Add backup set"

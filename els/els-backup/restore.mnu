@@ -183,7 +183,7 @@ files in use, you could damage your system!" 17 66
 	# look into files or have very tight control of what file to copy back to the
 	# user or not.
 	# Please be sure that your /var/tmp file system does not overflow (you
-	# can use <A HREF="hardware.htm#space">sysadm -&gt; Hardware -&gt; Space</A>
+	# can use <A HREF="hardware.html#space">sysadm -&gt; Hardware -&gt; Space</A>
 	# to get an overview of used and free hard disk space.
 	#
 	# <B>Overwrite</B>: normally an existing file is not overwritten during the
@@ -196,7 +196,7 @@ files in use, you could damage your system!" 17 66
 	# This option is only visible if a file list has been imported.
 	#DescEnd
 
-        # calculate number of files to restore
+	# calculate number of files to restore
         RESTOREFILES=`cat $FILELIST | wc --lines | tr -d " "`
         Question "\nDo you really want to restore $RESTOREFILES files?" || return
 
