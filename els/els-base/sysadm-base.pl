@@ -414,13 +414,14 @@ sub UserIntoGroups ()
 	open FILE, $ENV{ELS_TEMP};
 	$_ = <FILE> || '';
 	close FILE;
+        s/" "/","/g;
         s/"//g;
 	s/ $//;
 	$_ = ",$_" if $_;
 
+        #system('/bin/echo', '/usr/sbin/usermod', '-G', "$UserIntoGroups,users$_", $UserIntoGroups);
         system('/usr/sbin/usermod', '-G', "$UserIntoGroups,users$_", $UserIntoGroups);
     }
-
     exit 0;
 }
 
