@@ -5,7 +5,7 @@
 # Note that each user can have his own, private directory
 # aliases in ~/.diralias
 #
-# $Id: els-base.dirs,v 1.3 2002/02/12 09:01:31 holgerschurig Exp $
+# $Id: els-base.dirs,v 1.4 2002/02/15 10:15:58 holgerschurig Exp $
 #
 
 # often needed for module developers:
@@ -44,5 +44,5 @@ local doc=/usr/share/doc
 local info=/usr/share/info
 local home=/home
 local log=/var/log
-local tmp=/var/tmp
+local tmp=${TMPDIR:-/var/tmp}
 local mail=/var/spool/mail
