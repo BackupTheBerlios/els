@@ -9,7 +9,6 @@ Name: %{name}
 Version: %{vers}
 Release: %{rel}
 Copyright: GPL
-Group: System Environment/Base
 Vendor: Easy Linux Server
 Requires: redhat-release => 7.2, dialog, findutils, grep, gawk, textutils
 Requires: util-linux, mtools, e2fsprogs, shadow-utils, perl
@@ -17,8 +16,11 @@ Requires: util-linux, mtools, e2fsprogs, shadow-utils, perl
 Requires: joe
 %endif
 %if "%{_vendor}" == "MandrakeSoft"
+Group: System/Base
 # Get this from Cooker
 Requires: cdialog >= 0.9a-8mdk
+%else
+Group: System Environment/Base
 %endif
 Provides: sysadm
 BuildArch: noarch
@@ -110,12 +112,12 @@ echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment
 %endif
 
 # DIRECTORY ALIASES
-%attr(0644,root,root) /etc/diralias.d/els-base.dirs
+%attr(0644,root,root) %config(noreplace) /etc/diralias.d/els-base.dirs
 
 # ENVIRONMENT PROFILES
-%attr(0755,root,root) /etc/profile.d/els-base.sh
+%attr(0755,root,root) %config(noreplace) /etc/profile.d/els-base.sh
 %if %{withjoe}
-%attr(0755,root,root) /etc/profile.d/els-q.sh
+%attr(0755,root,root) %config(noreplace) /etc/profile.d/els-q.sh
 %endif
 
 # OTHER FILES
