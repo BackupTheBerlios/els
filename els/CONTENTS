@@ -16,7 +16,7 @@ old			old modules for Red Hat 6.2, kept here as
 			a development aid
 
 utilities		various utilities needed to build the site
-utilities/sgml		SGML DTD's for to check website files against
+utilities/sgml		SGML DTDs for to check website files against
 			HTML 4.01 standard
 
 website			general website
