@@ -1,9 +1,29 @@
-This is the basic module that all others depend on.
+Purpose
+=======
 
-It provides (or will provide)
+This is the basic module that all others depend on. <B>els-base</B> provides:
 
-- standard environment (mostly for developers of els-* modules)
-- sysadm menu (mostly for users and other modules)
+Sysadm
+------
+
+The sysadm (see website/sysadm/index.shtml) menu basically consists of shell
+scripts stored in <TT>/usr/lib/els/*.mnu</TT> and are rather simple to
+create. All menu files together define the available options in the sysadm
+menu.
 
 
-$Id: README,v 1.1 2001/11/22 09:38:16 holgerschurig Exp $
+Standard environment
+--------------------
+
+By way of setup scripts we change (or can change) various configuration
+files of Red Hat. This creates a common environment.
+
+
+Misc programs
+-------------
+
+With <B>els-base</B> you also get various little programs, e.g. an
+easier to use editor as <B>vi</B>.
+
+
+$Id: README,v 1.2 2001/12/05 09:16:04 holgerschurig Exp $
