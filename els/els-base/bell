@@ -1,0 +1,7 @@
+#! /bin/bash
+
+echo -en "\07"
+usleep 500000
+echo -en "\07"
+usleep 500000
+echo -en "\07"
