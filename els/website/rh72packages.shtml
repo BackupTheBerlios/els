@@ -77,6 +77,8 @@
 <TR><TD>-ypbind</TD><TD>ypbind is only needed for YP clients, but we install a server</TD></TR>
 <TR><TD>(-ypserv)</TD><TD>to use YP with Easy Linux Server you would have to add adduser/deluser/pwchange scripts to /usr/lib/els manually</TD></TR>
 
+<TR><TD>System Environment/Shells</TD><TD>+mc</TD><TD>the Midnight Commander is like Norton Commander, just better</TD></TR>
+
 </TABLE>
 
 <!--#include file="bottom.inc"-->
