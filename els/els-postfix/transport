@@ -20,7 +20,7 @@
 #             foo.org      :[gateway.foo.org]
 #             .foo.org     :[gateway.foo.org]
 #             foo.org      smtp:bar.org:2025
-#             .foo.org      error:mail for *.foo.org is not deliverable
+#             .foo.org     error:mail for *.foo.org is not deliverable
 #
 ####################################################################
 #
@@ -28,3 +28,4 @@
 # "postmap hash:/etc/postfix/transport" after editing.
 #
 ####################################################################
+
