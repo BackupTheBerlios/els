@@ -16,7 +16,7 @@ function SelectGroup ()
 {
     echo -n "$DIALOG --menu \"Select a group $1\" 23 55 15 " >$TMPFILE.dialog
     if sysadm-user.pl --listgroups $2 $3 >>$TMPFILE.dialog 2>$TMPFILE; then
-        { . $TMPFILE.dialog } 2>$TMPFILE
+        { . $TMPFILE.dialog; } 2>$TMPFILE
         CHOICE=`cat $TMPFILE`
     else
         $DIALOG --textbox $TMPFILE 5 50
@@ -33,8 +33,6 @@ case "$1" in
         . $TMPFILE
         Option "Name"     "Set full name            (now $USER_FULLNAME)"
         Option "Password" "Set password             $USER_PASSWORD"
-        test "$USER_PASSWORD" != "(no password, login disabled)" &&
-        Option "Inhibit"  "Inhibit user temporarily"
 	test "$LOGIN" != "root" &&
 	Option "Delete"   "Delete this user"
 	Option "Member"   "Set groups this user is a member of"
@@ -88,24 +86,6 @@ case "$1" in
 	}
 
         $DIALOG --msgbox "Password changed." 5 30
-        ;;
-
-    inhibit)
-	#Desc
-	# This will inhibit a user from logging in into the system. The
-	# user will not be deleted nor any one of his files. E-mail will
-	# still be received under his user id.
-	#
-	#Item Visibility
-	# This entry is only displayed if the user is not already disabled.
-	# That makes sense, doesn't it?
-	#DescEnd
-
-        /usr/sbin/usermod -L "$LOGIN" 2>$TMPFILE || {
-            $DIALOG --textbox $TMPFILE 10 60
-            return
-        }
-        $DIALOG --msgbox "User '$LOGIN' is now disabled.\nPlease set a new password to re-enable." 6 50
         ;;
 
     delete)
