@@ -9,40 +9,30 @@ to mind:
 
 - file server (for windows workstations)
 - e-mail server
-- caching DNS name server
 - backup subsystem
 
-However, most Linux distributions are meant to be general. To use one
-distribution and set up a file server needs considerable time and skill.
-
-
-Integration
------------
-
-Now suppose you have your file server. You add a user to Samba, so
-that the user can connect to it. And now you have to add the user
-a second time to another subsystem so that the user has a POP3 mailbox.
-And yet another entry if you want the user reachable not just by
-peter@somewhere but by peter.schneider@somewhere too.
-
-
-Simplicity
-----------
-
-OK, you are keen to do all of the steps above. But when you use
-a tool like 'linuxconf' or 'useradd' to add a user, you suddenly have
-to know about things like user id, group id, home directory and shell.
-You simply don't care about technical details, the system has to work.
-
-Speed
------
-
-Install els-base and els-samba on an already running Red Hat 7.2 system
-and you have a file server within 5 minutes !
-
+I don't know any Linux distribution where you can have this very easily.
+With every distribution you have to to have a considerable amount of
+knowledge before you can enjoy the services above.
 
 Solution
 --------
 
-The solution to have a working, integrated and yet easy departmental
-server is the Easy Linux Server (a.k.a. ELS) framework.
+But not so when you <A HREF"installation.shtml">install</A> the Easy Linux
+Server modules on top of Red Hat 7.2. Then you can, <B>within 5-15 Minutes</B>,
+all of the above working.
+
+This works because we define a rather strict environment. If the files for
+the file server part are only stored at one specific place in the file
+system, then we can configure Samba automatically. No need to hassle with
+those issues manually.
+
+A word of caution ...
+---------------------
+
+The Easy Linux modules have recently been ported to Red Hat 7.2. Because of
+this, we are not yet that bullet-proof as the older ones for Red Hat 6.2.
+
+Currently we are in Alpha-Stage. Things work pretty well, especially if you
+make your own RPMs from CVS. But don't expect that every bug has been nailed
+down already.
