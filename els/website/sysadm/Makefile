@@ -6,7 +6,7 @@ include $(ROOT)/Makefile.inc
 
 
 all:: getmenufiles
-	./sysadmdoc.pl *.mnu
+	$(ROOT)/els-base/sysadm-makedoc.pl *.mnu
 
 clean::
 	rm -f *.mnu *.html
