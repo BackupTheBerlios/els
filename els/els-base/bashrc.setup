@@ -36,7 +36,7 @@
 # have a subdirectory 'log' then you will be put into '/var/log', wherever
 # you have been before.
 #DescEnd
-#Id $Id: bashrc.setup,v 1.7 2002/02/12 08:38:30 holgerschurig Exp $
+#Id $Id: bashrc.setup,v 1.8 2002/02/15 10:31:33 holgerschurig Exp $
 
 
 loadfile '/etc/bashrc';
@@ -51,7 +51,7 @@ elsif ($version =~ /^mdk/) {
 print FILE <<EOF;
 
 # Better Prompt
-PROMPT_COMMAND='PS1=`test "\$UID" = 0 && echo "\\h:\\w# " || echo "\\h:\\w\$ "`'
+PROMPT_COMMAND=$PROMPT_COMMAND'; PS1=`test "$UID" = 0 && echo "\h:\w# " || echo "\h:\w$ "`'
 
 # make it more like dos
 alias copy="cp -i"
