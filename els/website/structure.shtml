@@ -3,6 +3,60 @@
 <!--#include file="developers.inc"-->
 <!--#include file="logos.inc"-->
 
-to be written
+<H2>How things are connected</H2>
+<P>
+  Look for example at the RPM spec file <B>els-base.spec</B>.
+  In the <B>%files</B> section you will see several comments. And by a
+  strange co-incidence this are the main parts that define the
+  anatomy of Easy Linux Server modules.
+</P>
+
+<H3>Preset Configuration Files</H3>
+<P>
+  The job of a Developer is to make the life for the Admins easier.
+  Sometimes it's as simple as finding out the best options for a
+  configuration file and including this in the RPM.
+</P>
+
+<H3>Config File Changer</H3>
+<P>
+  However, this is sometimes not possible. For example, if the
+  config file <TT>/etc/inittab</TT> is in Red Hat's <B>sysvinit</B> RPM
+  then Easy Linux Server's <B>els-base</B> can't contain it, too.
+  One file can only belong to one application (this is enforced at
+  RPM installation time.
+</P><P>
+  Instead we have little perl scripts <B>*.setup</B> that are executed
+  by <B>sysadm-setup.pl</B>. The scripts can use all the functions
+  in <B>ConfigFiles.pm</B>, a perl module specifically written to
+  deal easily with text based configuration files.
+</P>
+
+<H3>Sysadm</H3>
+<P>
+  You might already have guessed that <A HREF="sysadm.shtml">sysadm</A>
+  and it's <A HREF="sysadm/index.shtml">menus</A> play an important role,
+  too.
+</P>
+
+<H3>Directory aliases</H3>
+<P>
+  When someone has to check things from the command line,  the directory
+  aliasing can help considerable time. Specify the most often needed
+  directories for your module in <B>*.dirs</B> files.
+</P>
+
+<H3>Environment profiles</H3>
+<P>
+  Some programs need environment variables to work correctly or optimal.
+  Any Easy Linux Module can easily add system-wide environment variables.
+</P>
+
+<H3>Documentation</H3>
+<P>
+  If you place proper comments into your <B>*.mnu</B> sysadm menu file
+  then <A HREF="sysadm/index.shtml">documentation like this</A> for your
+  menus can be automatically generated.
+</P>
 
 <!--#include file="bottom.inc"-->
