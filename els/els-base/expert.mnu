@@ -6,7 +6,10 @@ case "$1" in
 	test -f $ELS_CONF && . $ELS_CONF
 	EXPERTMODE=${EXPERTMODE:-no}
 
+        test -z "$TYPE" && TYPE="workstation"
+
 	Option "ExpertMode"     "Toggle expert mode     (now $EXPERTMODE)"
+	Option "Type"           "Type of server         (now $TYPE)"
         ;;
 
      expertmode)
@@ -25,4 +28,21 @@ case "$1" in
 	fi
 	;;
 
+    type)
+	#Desc
+	# You can install the Easy Linux Servers as a Server, a Workstation or on a
+	# Laptop. This has mostly consequences for started services.
+	#
+	# For example, on a laptop we want to have APM enabled. On a server, we
+	# don't want to sleep, because a user may connect at any time.
+	#DescEnd
+
+	$ELS_DIALOG --menu "Select server type" 18 70 10 \
+		"server"      "Running as a file server" \
+		"workstation" "Running on a workstation" \
+		"laptop"      "Running as a lap top" 2>$ELS_TEMP
+	test $? = 0 || return
+	CHOICE=`cat $ELS_TEMP`
+	SetOpt "TYPE" "$CHOICE"
+	;;
 esac
