@@ -12,4 +12,4 @@ Setup:
 Editor:
   is there a better editor as the joe-based q?
   fix the help texts in 'qrc'
-  Consider e3 as an editor instead of q
+  Consider e3 as an editor instead of q (can it handle large files?)
