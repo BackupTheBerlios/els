@@ -1,0 +1,50 @@
+<!--#set var="title" value="Easy Linux Server - Development cycle"-->
+<!--#include file="top.inc"-->
+<!--#include file="admins.inc"-->
+<!--#include file="logos.inc"-->
+
+<P>
+  The modules can be in one of the following development stages:
+</P>
+
+<H2><A NAME="p"></A>Planning</H2>
+<P>
+  Someone is planning to create a module. There might be anything in the
+  CVS, but it will normally not usable, not even for developers.
+</P>
+
+<H2><A NAME="d"></A>Development</H2>
+<P>
+  The module is in development. There is something in the CVS and it should
+  be usable, but it may contain bugs, have not all features or eat your hard
+  disk. But reporting should be done via the develepers mailing list.
+</P>
+
+<H2><A NAME="a"></A>Alpha</H2>
+<P>
+  Something is downloadable. The code may still contain bugs or eat your
+  hard disk, but it should give developers (or other brave people) an idea
+  on the general direction of the modules.  Therefore it might be the case
+  that not all planned features have been implemented. Bug reporting should
+  be done via the develepers mailing list. Usually the CVS version is more
+  advanced then the downloadable alpha.
+</P>
+
+<H2><A NAME="b"></A>Beta</H2>
+<P>
+  Something is downloadable. It is even assumed to be bug less. However, it
+  might still eat your hard disk. Hey, EVERY software can eat your hard disk
+  ...  that should not hinder you from installing this software. The CVS
+  version might or might not be more advanced.
+</P>
+
+<H2><A NAME="r"></A>Released</H2>
+<P>
+  Once a module has been blessed to be "Released" it should blink and shine
+  with all if it's bits. Go, install it immediately. Your reward will be
+  eternally ...  And, by the way: it may still eat your hard disk. All of
+  this software comes free of charge and without any guarantee :-)
+</P>
+
+
+<!--#include file="bottom.inc"-->

@@ -1,6 +1,7 @@
 <!--#set var="title" value="Easy Linux Server - Available Modules" -->
 <!--#include file="top.inc"-->
 <!--#include file="admins.inc"-->
+<!--#include file="modules.inc"-->
 <!--#include file="logos.inc"-->
 
 <H2>Main modules</H2>
@@ -21,23 +22,26 @@
 </TR><TR>
   <TD>els-base</TD>
   <TD>The basis for all other modules</TD>
-  <TD CLASS="small">Alpha<BR>the CVS-version works</TD>
-  <TD COLSPAN=5>to be written</TD>
-</TR><TR>
-  <TD>els-backup</TD>
-  <TD>Backup and Restore</TD>
-  <TD CLASS="small">Alpha<BR>the CVS-version works</TD>
-  <TD COLSPAN=5>to be written</TD>
+  <TD CLASS="small"><A HREF="stages.shtml#a">Alpha</A><BR>the CVS-version works</TD>
+  <TD><A HREF="els-base/index.shtml">Intro</A></TD>
+  <TD COLSPAN=4 ALIGN="center">to be written</TD>
 </TR><TR>
   <TD>els-samba</TD>
   <TD>File server</TD>
-  <TD CLASS="small">Alpha<BR>feature complete<BR>the CVS-version works</TD>
-  <TD COLSPAN=5>to be written</TD>
+  <TD CLASS="small"><A HREF="stages.shtml#a">Alpha</A><BR>feature complete<BR>the CVS-version works</TD>
+  <TD><A HREF="els-samba/index.shtml">Intro</A></TD>
+  <TD COLSPAN=4 ALIGN="center">to be written</TD>
 </TR><TR>
   <TD>els-postfix</TD>
   <TD>E-mail system</TD>
-  <TD CLASS="small">Development<BR>the CVS-version works</TD>
-  <TD COLSPAN=5>to be written</TD>
+  <TD CLASS="small"><A HREF="stages.shtml#d">Development</A><BR>the CVS-version works</TD>
+  <TD COLSPAN=5 ALIGN="center">to be written</TD>
+</TR><TR>
+  <TD>els-backup</TD>
+  <TD>Backup and Restore</TD>
+  <TD CLASS="small"><A HREF="stages.shtml#a">Alpha</A><BR>the CVS-version works</TD>
+  <TD><A HREF="els-backup/index.shtml">Intro</A></TD>
+  <TD COLSPAN=4 ALIGN="center">to be written</TD>
 </TR>
 </TABLE>
 
@@ -60,45 +64,15 @@
 </TR><TR>
   <TD>els-dialin</TD>
   <TD>Allow some users modem and PPP dialin</TD>
-  <TD CLASS="small">Planning</TD>
-  <TD COLSPAN=5>to be written</TD>
+  <TD CLASS="small"><A HREF="stages.shtml#p">Planning</A></TD>
+  <TD COLSPAN=5 ALIGN="center">to be written</TD>
 </TR><TR>
   <TD>els-dialout</TD>
   <TD>Make your server dial out (e.g. for internet access)</TD>
-  <TD CLASS="small">Planning</TD>
-  <TD COLSPAN=5>to be written</TD>
+  <TD CLASS="small"><A HREF="stages.shtml#p">Planning</A></TD>
+  <TD COLSPAN=5 ALIGN="center">to be written</TD>
 </TR>
 </TABLE>
-
-
-<H2>Description</H2>
-<P>
-  I am using the following terms:
-</P><UL>
-
-<LI><B>Planning</B>: I am planning to create such a module. There might be
-anything in the CVS, but it will normally not usable, not even for
-developers.
-<LI><B>Development</B>: the module is in development. There is something in
-the CVS and it should be usable, but it may contain bugs, have not all features
-or eat your hard disk. But reporting should be done via the develepers mailing
-list.
-<LI><B>Alpha</B>: Something is downloadable. The code may still contain bugs
-or eat your hard disk, but it should give developers (or other brave people)
-an idea on the general direction of the modules. Therefore it might be the
-case that not all planned features have been implemented. Bug reporting
-should be done via the develepers mailing list. Usually the CVS version is
-more advanced then the downloadable alpha.
-<LI><B>Beta</B>: Something is downloadable. It is even assumed to be bug less.
-However, it might still eat your hard disk. Hey, EVERY software can eat your
-hard disk ...   that should not hinder you from installing this software. The CVS
-version might or might not be more advanced.
-<LI><B>Released</B>: once a module has been blessed to be "Released" it should
-blink and shine with all if it's bits. Go, install it immediately. Your reward
-will be eternally ...   And, by the way: it may still eat your hard disk. All of
-this software comes free of charge and without any guarantee :-)
-</UL>
-
 
 <H2>Where to go?</H2>
 <P>
