@@ -7,12 +7,11 @@ ALL = *.mnu *.setup *.pl *.spec \
 
 
 
-rpms:: .rpm
+rpms:: .rpms
 
-docs::
-	../utilities/sysadmdoc.pl --verbose
+docs:: .docs
 
-check:: html
+check:: .docs
 
 clean::
 	rm -f *.html
@@ -22,13 +21,9 @@ install:: .rpm
 
 
 
-
 .rpm: $(ALL)
 	rm -f /usr/src/redhat/RPMS/i386/els-backup*.rpm
-	rpm -bb els-backup.spec && touch .rpm
+	rpm -bb els-backup.spec && touch .rpms
 
-
-
-
-
-	
+.docs: $(wildcard *.mnu)
+	../els-base/sysadm-makedoc.pl --verbose *.mnu && touch .docs
