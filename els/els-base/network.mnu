@@ -8,7 +8,7 @@ case "$1" in
 	test -x /bin/netstat &&
 	Option "Usage"    "Display network usage"
 
-        #include Network sysadm -> Network
+	#include Network sysadm -> Network
         perl -nw - $ELS_MENULIB/*.mnu 2>/dev/null >>$ELS_TEMP.dialog <<-"EOF"
 	if ( /^\s+Title\s+"Network"\s+"(.*)"\s+"(.*)"/ ) {
 	    print "\"$1\" \"$2\" ";
@@ -16,10 +16,10 @@ case "$1" in
 	EOF
         ;;
 
-        #Desc
+	#Desc
 	# This menu contains all sorts of modules that connect your OM
 	# Standard Linux Server to the outside world.
-        #DescEnd
+	#DescEnd
 
 
     name)
@@ -28,16 +28,16 @@ case "$1" in
 	#
 	#Item Background
 	# The host name of the main server should be your domain. Let's
-        # assume that your domain is "company.de". In this case, name
-        # your server just "company.de", not something like "linux.company.de"
-        # or "server.company.de". The latter will backfire and make things
-        # somewhat more complicated when you're installing e-mail services.
+	# assume that your domain is "company.de". In this case, name
+	# your server just "company.de", not something like "linux.company.de"
+	# or "server.company.de". The latter will make things
+	# somewhat more complicated when you're installing e-mail services.
 	#
 	# Additional servers (e.g. for testing or learning) should be
 	# below the main name. For example "test.company.de". Do not
-        # name them "test.de". That's because you have no naming authority
-        # for the domain "de", but full naming authority for the domain
-        # "company.de".
+	# name them "test.de". That's because you have no naming authority
+	# for the domain "de", but full naming authority for the domain
+	# "company.de".
 	#
 	#Item Usage
 	# After selection of this option you can enter the new name into
@@ -72,8 +72,8 @@ case "$1" in
 	#Edit
 	# 127.0.0.1      localhost localhost.localdomain
 	# 192.168.1.200  company.de company
-	# 192.168.1.1    tobias.company.de tobias
-	# 192.168.1.32   fritz.company.de fritz
+	# 192.168.1.1    sapdb.company.de sapdb
+	# 192.168.1.32   laserjet.company.de laserjet
 	#EditEnd
 	#Macro Editor
 	#
@@ -81,19 +81,13 @@ case "$1" in
 	# At the left, you see the IP address. On the right side, you
 	# see all names for this address. The leftmost name of this
 	# names is the primary name. Always use fully qualified names
-	# here. That means: use "fritz.company.de" and not "fritz" or
+	# here. That means: use "sapdb.company.de" and not "sapdb" or
 	# "scrumpy" or whatever.
-	#
-	# The reason is that this names might find their way to computers
-	# in the outside. These computers don't know "fritz" or "scrumpy"
-	# and can't send e-mail to them. But because of our special ELS-DNS
-	# setup any e-mail for "fritz.company.de" would be sent to
-	# "company.de". Or, more exactly, to the provider of "company.de".
 	#DescEnd
 
 	EditFile /etc/hosts
 
-        # When els-named is installed, recompile hosts into the DNS lookup tables
+	# When els-named is installed, recompile hosts into the DNS lookup tables
 	test -x /usr/sbin/els-dns.pl && /usr/sbin/els-dns.pl
 	;;
 
@@ -114,12 +108,15 @@ case "$1" in
 	rm -f $ELS_TEMP
 
 	netstat -eva --interfaces	>>$ELS_TEMP 2>/dev/null && echo -e "\n" >>$ELS_TEMP
-	netstat -eva --netlink   	>>$ELS_TEMP 2>/dev/null && echo -e "\n" >>$ELS_TEMP
-	netstat -eva --route		>>$ELS_TEMP 2>/dev/null && echo -e "\n" >>$ELS_TEMP
 	netstat -eva --masquerade	>>$ELS_TEMP 2>/dev/null && echo -e "\n" >>$ELS_TEMP
+	echo "---------------------------- TCP ----------------------------"    >>$ELS_TEMP
 	netstat -eva --tcp		>>$ELS_TEMP 2>/dev/null && echo -e "\n" >>$ELS_TEMP
+	echo "---------------------------- UDP ----------------------------"    >>$ELS_TEMP
 	netstat -eva --udp		>>$ELS_TEMP 2>/dev/null && echo -e "\n" >>$ELS_TEMP
+	echo "---------------------------- RAW ----------------------------"    >>$ELS_TEMP
 	netstat -eva --raw		>>$ELS_TEMP 2>/dev/null && echo -e "\n" >>$ELS_TEMP
+	echo "--------------------------- ROUTE ---------------------------"    >>$ELS_TEMP
+	netstat -eva --route		>>$ELS_TEMP 2>/dev/null && echo -e "\n" >>$ELS_TEMP
 
 	$ELS_DIALOG --textbox $ELS_TEMP 23 76
 	;;
