@@ -11,7 +11,7 @@ Copyright: GPL
 Vendor: Easy Linux Server
 Group: Applications/System
 BuildArch: noarch
-Requires: els-base, samba-common, samba, /etc/init.d/smb
+Requires: els-base, samba-common, samba, /etc/rc.d/init.d/smb
 Requires: dos2unix, unix2dos
 BuildRoot: /var/tmp/%{name}-%{vers}-%{rel}
 
