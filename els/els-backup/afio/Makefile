@@ -27,7 +27,7 @@ install:: .rpms
 	cp -p afio.patch /usr/src/redhat/SOURCES/afio.patch
 
 /usr/src/redhat/SOURCES/afio-2.4.7.tgz: afio-2.4.7.tgz
-	cp -p $@ /usr/src/redhat/SOURCES/$<
+	cp -p $< /usr/src/redhat/SOURCES
 
 afio-2.4.7.tgz:
 	wget http://www.ibiblio.org/pub/linux/system/backup/afio-2.4.7.tgz
