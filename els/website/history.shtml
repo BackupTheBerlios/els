@@ -9,7 +9,7 @@
 <H2>How it began</H2>
 <P>
   If I remember things right, then this project started in 1996 or 1997, way
-  before the Linux hype. One of the developers (Holger) was working at that
+  before the Linux hype. One of the developers was working at that
   time at a christian missionary organization named <A
   HREF="http://www.om.org">Operation Mobilization</A> as the computer guy
   for a home country office. OM had little to medium offices in about 60
@@ -64,5 +64,45 @@
   the project was adopted and so began the era of the "OM Standard Linux Server".
 </P>
 
+
+<H2>How it continued</H2>
+<P>
+  Throught the years the modules were installed in quite a number of
+  offices, with 5 to 60 computers. We had several meetings where we talked
+  about the future, people learned how to program shell and perl and added
+  modules on their own.
+</P><P>
+  Then in late 1999 an external developer came to the project. Technically
+  he was (and is) brilliant, but he started to change things "the right way"
+  without even trying to understand the underlying problem. And sometimes
+  there is no "right" way. Different people have different styles. Pressing
+  your own style into an existing project is not really stylish :-)
+</P><P>
+  He began to make nasty comments in public documentations, e.g. "How useful
+  this really is to OM system admins worldwide is very unclear". He took
+  sourcecode written by others and placed his "Author XYZ" on top of it (it
+  would have been ok to write an "Modified by XYZ", credit where credit is
+  due!).  At some point communication was costing more than it was worth, so
+  some developers retreated from the project, including the original main
+  develeper.
+</P><P>
+  However, you can't kill open source software that way. One of the original
+  developers left OM and started to work at a commercial company. And when a
+  file server was needed, he a took somewhat older version (unmodified by
+  person XYZ from above) and installed it. This version was later
+  re-christened from "OM Standard Linux Server" to "Easy Linux Server"
+  because it was not developed outside OM and was really of a wider audience
+  than just OM's offices. In the year 2000 it got occasional bug fixes and a
+  move from sendmail to postfix. It was deliberately not ported Red Hat 7.0
+  and 7.1 because of their strange C compiler.
+</P><P>
+  But when Red Hat 7.2 came (with a working C compiler, smile) the next
+  development cycle was started. A decision was made by this single developer
+  to make a new web page, in the hope to attract other developers and
+  to bring the modules to a wider audience.
+</P><P>
+  And, by a strange coincidence, you are just now reading a web
+  page from this new site!  :-)
+</P>
 
 <!--#include file="bottom.inc"-->
