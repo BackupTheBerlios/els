@@ -5,12 +5,17 @@
 
 <H2>Audience</H2>
 <P>
-  As a System Administrator you want to get a
-  departmental file server up and running. So you need only to know
-  how to install and operate an Easy Linux Server.
-</P><P>
-  For further info, click on the links below "Administration" on
-  in the menu on the left side.
+  As a System Administrator you want to get a departmental file server
+  up and running. So you need only to know how to install and operate an
+  Easy Linux Server. This section of the web site is for you!
 </P>
+
+<H2>What next?</H2>
+<P>
+  You should by starting <A HREF="download.shtml">downloading</A> the
+  needed stuff.
+</P>
+
+
 
 <!--#include file="bottom.inc"-->

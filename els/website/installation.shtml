@@ -5,7 +5,7 @@
 
 <H2>Preface</H2>
 <P>
-  Here is walk-throught on how to install an Easy Linux Server. Keep in mind
+  Here is walk-through on how to install an Easy Linux Server. Keep in mind
   that we don't install a general Linux Server, or a workstation --- we're
   installing a boring server that will sit in the corner and just does
   file server, e-mail and backup. This special-purpose influences some of
@@ -15,13 +15,18 @@
 </P>
 
 <H2>Step by Step</H2>
+<P>
+  The Red Hat Installer presents you various screens where you may enter
+  the wanted data. It start with ...
+</P>
+
 <H3>Choose a Language</H3>
 <P>
   Select "english".
 </P><P>
   Of course you could select your local language, but then you have to
   think in two languages for the rest of the document. By keeping this
-  document in english and the texts on your screen in english, there
+  document in English and the texts on your screen in English, there
   is less chance of confusion.
 </P>
 
@@ -29,12 +34,14 @@
 <P>
   It's up to you what you select.
 </P><P>
-  Tip: when you life in Germany, don't select "de" but "de-latin-nodeadkeys".
+  Tip: when you life in Germany, don't select "de-latin1" but
+  "de-latin1-nodeadkeys". The former is better for document writers,
+  the latter for command line heroes and programmers.
 </P>
 
 <H3>Installation Method</H3>
 <P>
-  You install from CDROM, do you?
+  You install from CD ROM, do you?
 </P>
 
 <H3>Configure TCP/IP</H3>
@@ -50,7 +57,7 @@
 </TR><TR>
   <TD>Default gateway:</TD><TD>(keep this empty)</TD>
 </TR><TR>
-  <TD>Primary nameserver:</TD><TD>(keep this empty)</TD>
+  <TD>Primary name server:</TD><TD>(keep this empty)</TD>
 </TR></TABLE>
 
 <H3>Mouse Configuration</H3>
@@ -68,12 +75,31 @@
 
 <H3>Disk Partition Setup</H3>
 <P>
-  Select "Have the installer automatically decide on partitions".
+  Select "Have the installer automatically partition for you".
 </P>
 
 <H3>Automatic Partitioning</H3>
 <P>
-  to be written
+  Please select "Remove all partitions on this system". That is,
+  select this only if you don't do a test installation at your
+  workstation ... :-)
+</P><P>
+  Be sure to have the "Review" check box at the bottom of the screen
+  checked.
+<P>
+
+<H3>Disk Setup</H3>
+<P>
+  Now you are presented with the "Disk Druid", a software tool
+  that allows you to configure your partitions. You should only
+  see three partitions, "/", "/boot" and "swap".
+</P><P>
+  We recommend that you add at least two other partitions, "/home"
+  with about 500 MB and "/var/samba" with all the rest. Then you can
+  restrict "/" to 2000 MB.
+</P><P>
+  And because the topic of partition choosing is a complex one, we have
+  an extra paper on <A HREF="partitioning.shtml">the art of partitioning</A>.
 </P>
 
 <H3>Boot Loader Configuration</H3>
@@ -96,7 +122,7 @@
 
 <H3>Additional Language Support</H3>
 <P>
-  Many people recommend to keep the texts of all programs in english. Usually
+  Many people recommend to keep the texts of all programs in English. Usually
   they are much more concise. And if you ever have a problem, you can ask in
   any international mailing list or search the web.
 </P>
@@ -105,8 +131,9 @@
 <P>
   Select your capital town. This sets the timezone accordingly.
 </P><P>
-  Tip: in the upper right corner you can select submaps, e.g. the
-  european one. This makes it much easier to find the proper capital city.
+  Tip: in the upper right corner there is a button named "View". Use
+  this button to select sub maps, e.g. the European one. This makes it much
+  easier to find the proper capital city.
 </P>
 
 <H3>Account configuration</H3>
@@ -114,7 +141,7 @@
   Enter a good root password.
 </P><P>
   Don't create additional user accounts. Any user created here would only exist
-  for command line logon, but not for network logon to the file server.
+  for command line login, but not for network login to the file server.
 </P>
 
 <H3>Package Group Selection</H3>
@@ -128,9 +155,26 @@
 <LI>Router / Firewall
 <LI>Utilities
 <LI>Windows Compatibility / Interoperability
-</UL>
+</UL><P>
+  Unfortunately, some needed programs for the Easy Linux Server are not yet
+  installed, so be sure to check the "Select individual packages" check box
+  at the bottom of the screen.
+</P><P>
+  Then you need at least add <B>joe</B> from "Applications/Editors" and
+  <B>dialog</B> from "Applications/System".
+</P><P>
+  Tip: this default Red Hat installation install a lot of cruft that you
+  don't need and that might be even a security problem if left unconfigured.
+  If you can spend the time, then you might select <A HREF="rh72packages.shtml">individual
+  packages</A>.
+</P>
 
-<H2>Where to go</H2>
+<H3>Authentication Configuration</H3>
+<P>
+  Just keep the settings on this screen as they are.
+</P>
+
+<H2>What next?</H2>
 <P>
   After all you have done this, Red Hat 7.2 installs on your server. Once this is finished,
   you can reboot the system and start Red Hat 7.2 Linux for the first time.

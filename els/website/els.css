@@ -11,11 +11,11 @@ H6 { font-family: verdana,arial,helvetica,sans-serif; }
 
 PRE,TT { font-family: courier,sans-serif }
 
-A { text-decoration: none; color: #6666FF; }
-A:visited { text-decoration: none; color: #6666AA; }
-A:link { text-decoration: none; color: #6666AA; }
-A:active { text-decoration: none; color: #6666AA; }
-A:hover { text-decoration: underline; color: #FF6666 }
+A { text-decoration: none; color: #0000FF; }
+A:visited { text-decoration: none; color: #0000FF; }
+A:link { text-decoration: none; #0000FF; }
+A:active { text-decoration: none; color: #0000FF; }
+A:hover { text-decoration: underline; color: #FF0000; }
 
 A.menubar { color: #FFFFFF; font-weight: bold }
 A.menubar:visited { color: #FFFFFF; font-weight: bold }
@@ -32,4 +32,5 @@ SPAN.boxspace { font-size: 2pt; }
 
 TH { text-align: left; }
 
+TR { vertical-align: top; }
 TD.small { font-size: smaller; }

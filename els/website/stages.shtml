@@ -17,22 +17,22 @@
 <P>
   The module is in development. There is something in the CVS and it should
   be usable, but it may contain bugs, have not all features or eat your hard
-  disk. But reporting should be done via the develepers mailing list.
+  disk. But reporting should be done via the developers mailing list.
 </P>
 
 <H2><A NAME="a"></A>Alpha</H2>
 <P>
-  Something is downloadable. The code may still contain bugs or eat your
+  Something is download-able. The code may still contain bugs or eat your
   hard disk, but it should give developers (or other brave people) an idea
   on the general direction of the modules.  Therefore it might be the case
   that not all planned features have been implemented. Bug reporting should
-  be done via the develepers mailing list. Usually the CVS version is more
-  advanced then the downloadable alpha.
+  be done via the developer's mailing list. Usually the CVS version is more
+  advanced then the download-able alpha.
 </P>
 
 <H2><A NAME="b"></A>Beta</H2>
 <P>
-  Something is downloadable. It is even assumed to be bug less. However, it
+  Something is download-able. It is even assumed to be bug less. However, it
   might still eat your hard disk. Hey, EVERY software can eat your hard disk
   ...  that should not hinder you from installing this software. The CVS
   version might or might not be more advanced.

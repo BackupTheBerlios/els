@@ -5,27 +5,28 @@
 
 <H2>Download CVS</H2>
 <P>
-  Currently (Nov 2001) ELS 2.x is still in ALPHA stage. So the
+  Currently (Nov 2001) Easy Linux Server 2.x is still in ALPHA stage. So the
   most preferred method to get the software is by <A TARGET="_new" 
   HREF="http://developer.berlios.de/cvs/?group_id=204">CVS</A>. You
-  will get the most complete version and it's much easier for you to
-  send <A HREF="patches.shtml">patches</A>
+  will get the most complete version.
 </P><P>
-  There is an INSTALL file that gives you instructions on how to
-  proceed.
+  There is an <A HREF="install.shtml">INSTALL</A> file
+  that gives you instructions on how to proceed.
 </P>
 
-<H2>File Download</H2>
+<H2>Download RPMs</H2>
 <P>
   If you really want almost-finished modules, then you also can
   <A TARGET="_new" HREF="http://developer.berlios.de/project/filelist.php?group_id=204">download</A>
-  pre-packaged RPMs.
+  pre-packaged RPMs. Currently (Nov 2001) they don't have achieve a good quality.
 </P>
 
-<H2>Where to go</H2>
+<H2>What next?</H2>
 <P>
-  Then you should proceed to the <A HREF="installation.shtml">Red Hat Installation</A>
-  instructions.
+  Before you can install the Easy Linux Server modules, you must
+  have a properly installed version of Red Hat 7.2. Therefore
+  please proceed to the <A HREF="installation.shtml">Red Hat
+  installation</A> instructions.
 </P>
 
 <!--#include file="bottom.inc"-->

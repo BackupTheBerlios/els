@@ -35,7 +35,6 @@
 <TR ALIGN="right" BGCOLOR="#FFCC33"><TD>
 <A CLASS="menus" HREF="index.shtml">Home</A><BR>
 <A CLASS="menus" HREF="news.shtml">News</A><BR>
-<A CLASS="menus" HREF="download.shtml">Download</A><BR>
 <A CLASS="menus" HREF="maillists.shtml">Mailing lists</A><BR>
 <A CLASS="menus" HREF="history.shtml">History</a><BR>
 </TD>

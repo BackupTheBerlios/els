@@ -1,5 +1,5 @@
 ROOT    = ..
-SUBDIRS = sysadm els-base
+SUBDIRS = sysadm els-base els-backup els-samba
 
 docs::
 
@@ -30,7 +30,7 @@ lint:: .docs
 .docs: $(SRC) $(DST)
 	touch .docs
 
-%.html:	%.shtml top.inc logos.inc bottom.inc
+%.html:	%.shtml
 	$(ROOT)/utilities/shtml2html.pl $< >$@
 
 index.shtml: ../README
