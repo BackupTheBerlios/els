@@ -1,0 +1,40 @@
+<!--#set var="title" value="Easy Linux Server - Mailing Lists"-->
+<!--#include file="top.inc"-->
+<!--#include file="logos.inc"-->
+
+<H2>els-users</H2>
+<P>
+  This mailing list is for users (or, more correctly, for system administrators)
+  of Easy Linux Servers. Here we talk about issues regarding setup and operation.
+</P><UL>
+<LI><A TARGET="_new" HREF="http://lists.berlios.de/mailman/listinfo/els-users">Subscribe</A> (or subscribe via
+    <A TARGET="_new" HREF="https://lists.berlios.de/mailman/listinfo/els-users">https</A>)
+<LI>Read the <A TARGET="_new" HREF="http://lists.berlios.de/pipermail/els-users">archive</A>
+<LI><A TARGET="_new" HREF="https://lists.berlios.de/mailman/admin/els-users">Administrate</A> the list (only for list administrators)
+</UL>
+
+<H2>els-development</H2>
+<P>
+  This list is for people that want to help with develop. Here we talk about
+  needed features, how to solve something in the possibly best, share info on
+  RPMs, sysadm menu and other internal things.
+</P><UL>
+<LI><A TARGET="_new" HREF="http://lists.berlios.de/mailman/listinfo/els-development">Subscribe</A> (or subscribe via
+    <A TARGET="_new" HREF="https://lists.berlios.de/mailman/listinfo/els-development">https</A>)
+<LI>Read the <A TARGET="_new" HREF="http://lists.berlios.de/pipermail/els-development">archive</A>
+<LI><A TARGET="_new" HREF="https://lists.berlios.de/mailman/admin/els-development">Administrate</A> the list (only for list administrators)
+</UL>
+
+<H2>els-cvs-commit</H2>
+<P>
+  Whenever a developer makes a change to the Easy Linux Server, an automatic
+  message will be sent into this mailing list. Therefore subscribers are always
+  up to date and know what's going on.
+</P><UL>
+<LI><A TARGET="_new" HREF="http://lists.berlios.de/mailman/listinfo/els-cvs-commit">Subscribe</A> (or subscribe via
+    <A TARGET="_new" HREF="https://lists.berlios.de/mailman/listinfo/els-cvs-commit">https</A>)
+<LI>Read the <A TARGET="_new" HREF="http://lists.berlios.de/pipermail/els-cvs-commit">archive</A>
+<LI><A TARGET="_new" HREF="https://lists.berlios.de/mailman/admin/els-cvs-commit">Administrate</A> the list (only for list administrators)
+</UL>
+
+<!--#include file="bottom.inc"-->
