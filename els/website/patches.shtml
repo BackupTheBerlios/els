@@ -21,14 +21,14 @@
   You can try them. Once you killed all obvious errors you should
   do a
 </P><PRE>
-  CVS diff >my-new-feature.patch
+  cvs diff -u >my-new-feature.patch
 </PRE><P>
   and submit this to the <A TARGET="_new"
   HREF="http://developer.berlios.de/patch/?group_id=204">patch
   manager</A>.
 </P>
 
-<H2>Becoming developer</H2>
+<H2>Becoming a developer</H2>
 <P>
   This project is open --- that means: our <A TARGET="_new"
   HREF="http://developer.berlios.de/project/memberlist.php?group_id=204">
