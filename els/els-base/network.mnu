@@ -57,7 +57,7 @@ case "$1" in
 	hostname $CHOICE
 
 	# the following set's the login "issue" text
-	/usr/sbin/sysadm-setup.pl --rerun issue.setup
+	/usr/sbin/sysadm-setup.pl --rerun issue
 	;;
 
 
