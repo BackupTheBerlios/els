@@ -1,25 +1,21 @@
 The following are the still-in-development modules for Red Hat 7.2:
 
-els-base/*
-els-dialin/*
-els-backup/*
+els-base		base module (system setup, sysadm menu)
 
+els-backup		(UNTESTED) automatic backup
+els-backup/afio		cpio-like backup tool, can compress on-the-fly
 
+els-dialin		(UNFINISHED) support for dial in by modem
 
-The following are modules that are designed for Red Hat 6.2, they
-are here for reference only.
+els-postfix		(UNFINISHED) support for e-mail
+els-postfix/postfix	SMTP mailer
 
-old/*
+old			old modules for Red Hat 6.2
 
+utilities		various utilities needed to build the site
+utilities/sgml		SGML DTD's for to check website files against
+			HTML 4.01 standard
 
-
-The web site at http://els.berlios.de is stored here:
-
-website/*
-
-
-
-I need some utilities for the creation of the *.rpm files
-and for the website. They are stored in:
-
-utilities/*
+website			general website
+website/images		images for the website
+website/sysadm		documentation for all sysadm modules
