@@ -3,6 +3,23 @@
 <!--#include file="admins.inc"-->
 <!--#include file="logos.inc"-->
 
-to be written
+<H2>Installing Red Hat Linux</H2>
+<P>
+  The Easy Linux Server runs on top of Red Hat 7.2. So you must first
+  install Red Hat. As Red Hat comes with a very good installer and
+  installation manual, we don't really want to repeat that here.
+</P><P>
+  However, we have some tips that aide you in installation, e.g.
+  tips for a good hard disk partition scheme or tips on the selection
+  if modules.
+</P><P>
+  Unfortunately, all of this is yet to be written. :-(
+</P>
+
+<H2>Where to go</H2>
+<P>
+  After you installed Red Hat Linux you should install the desired
+  Easy Linux Server <A HREF="modules.shtml">modules</A>.
+</P>
 
 <!--#include file="bottom.inc"-->
