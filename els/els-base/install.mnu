@@ -45,7 +45,7 @@ function MountDevice ()
 	mount /dev/zip /mnt/zip
 	;;
     CD-ROM|RedHat-CD)
-        mount $CDROM /mnt/cdrom >/dev/null 2>&1
+        mount /mnt/cdrom >/dev/null 2>&1
         # mount may fail if already mounted, which will harm the test at
         # the caller. So we grep for the all mounted devices to look if
         # if a /mnt/cdrom is there. This gives us a zero errorlevel even
@@ -152,7 +152,7 @@ case "$1" in
         Option "Filelist"    "Display list of files contained in a module"
         Option "Source"      "Select source for installation (now $INSTALLFROM)"
 
-        test "$INSTALLFROM" = "Floppy" || \
+        test "$INSTALLFROM" = "Floppy" || test "$INSTALLFROM" = "RedHat-CD" || \
         Option "Path"        "For experts: source path (now $SOURCE)"
 
         Option "Test"        "Check out if an installation would work"
@@ -303,8 +303,8 @@ case "$1" in
      path)
         #Desc
 	# As you migth have noticed, the <a href="#source">Source</A> option
-	# already changed the path for you. But sometimes you want to an RPM
-	# from a total weird path, e.g. from
+	# already changed the path for you. But sometimes you want to install
+	# from another path, e.g. from
 	# <TT>/mnt/cdrom/sunsite/infosystems/apache-1.3.0.i486.rpm</TT>. So
 	# you need a way to change the installation path from the normal
 	# "<TT>/mnt/cdrom</TT>" to
@@ -318,7 +318,7 @@ case "$1" in
 	#
 	#Item Visibility
 	# You can change the path only if the current
-	# <A HREF="#source">Source</A> is not set to "Floppy".
+	# <A HREF="#source">Source</A> is not set to "Floppy" or "RedHat-CD".
         #DescEnd
 
         InputString "Enter path to RPMs"
@@ -330,8 +330,9 @@ case "$1" in
      test)
         #Desc
         # "Test" displays information for arbitrary modules. It also tests
-	# if the selected module would be installable. In case of a problem
-	# it gives you detailed information of what is wrong.
+	# if the selected module would be installable (e.g. if all
+	# dependencies are fulfilled). In case of a problem it gives you
+	# detailed information of what is wrong.
         #DescEnd
 
         if MountDevice; then
@@ -363,21 +364,14 @@ case "$1" in
         #Desc
         # This will actually do the installation. The installation process
         # itself works without any user-intervention. There is no way to
-	# modify the behavior of a module during installation time. You can
-	# do this later, e.g. with Sysadm.
-	#
-	# It might also be the case the the installation log asks you to
-	# check configuration file. This happens when the sample configuration
-	# file (brought to you by the maintainers of the various modules)
-	# are different from your configuration files. If you are techy
-	# enought to actually do this, use the <A HREF="#new">New</A>
-	# option of this menu.
+	# modify the behavior of a module during installation time, we're not
+	# on windows where it's virtually impossible to auto-install applications.
         #DescEnd
 
         if MountDevice; then
             SelectPackage "install"
             if [ ! -z "$CHOICE" ]; then
-		cls
+		clear
                 echo -e "Please wait ... installing ...\n"
 		{
 		    echo -e "rpm -Uhv $SOURCE/$CHOICE\n"
