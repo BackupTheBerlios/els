@@ -31,6 +31,7 @@ case "$1" in
 	#Item Usage
 	# You will see a screen similar to the following:
 	#TextBox
+	# +++
 	#TextBoxEnd
 	# Because there is no <TT>/mnt/floppy</TT> entry you see that
 	# no floppy is mounted.
