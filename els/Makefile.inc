@@ -11,7 +11,7 @@ rpms::
 docs::
 
 check:: docs
-	nsgmls -s -wall -B $(wildcard *.html)
+	nsgmls -s -wall -B *.html
 
 clean::
 	rm -f a .rpms .docs
