@@ -353,6 +353,7 @@ sub MenuEntry ($$$)
 
     # samba global setup
     $text =~ s:\$NAME:LINUX: ;
+    $text =~ s:\$WG:ELS: ;
     $text =~ s:\$LOGON:no: ;
     $text =~ s:\$NULL:yes: ;
     $text =~ s:\$PRNT:no: ;
