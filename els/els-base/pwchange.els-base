@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Enable the login, in case it was previously disabled:
+/usr/sbin/usermod -U "$1"
+
+echo "$2" | passwd -f --stdin "$1"

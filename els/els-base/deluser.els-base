@@ -1,0 +1,11 @@
+#!/bin/bash
+LOGIN=$1
+INTERACTIVE=$2
+
+test "$INTERACTIVE" = "interactive" && echo -en "\nDeleting user from Linux ... "
+
+# Delete home directory and e-mail mailbox
+rm -rf /home/$LOGIN
+rm -rf /var/spool/mail/$LOGIN
+
+test "$INTERACTIVE" = "interactive" && echo "done."

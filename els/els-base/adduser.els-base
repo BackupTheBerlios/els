@@ -1,0 +1,11 @@
+#!/bin/bash
+LOGIN=$1
+FULLNAME=$2
+INTERACTIVE=$3
+
+test "$INTERACTIVE" = "interactive" && echo -en "\nAdding user to Linux ... "
+
+# SGID bit on home directory is unusual, but forces files there to be owned by this users UPG.
+chmod u=rwx,g=rwxs,o-rwx /home/$LOGIN
+
+test "$INTERACTIVE" = "interactive" && echo "done."
