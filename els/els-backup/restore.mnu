@@ -48,7 +48,7 @@ case "$1" in
 	# After you've done this, import the file list again.
 	#DescEnd
 
-	$ELS_DIALOG --infobox "One moment ... reading info from tape ..." 3 45
+	$ELS_DIALOG --infobox "One moment ... reading info from tape ..." 3 46
 	sysadm-backup.pl --getposition >$ELS_TEMP || {
 	    $ELS_DIALOG --title "Tape access problem" --textbox 23 76 $ELS_TEMP
 	    return
@@ -58,7 +58,7 @@ case "$1" in
 	. $ELS_TEMP
 	test -z "$DESC" && DESC="$INCLUDE"
 
-	$ELS_DIALOG --infobox "Moment ... reading file list ..." 3 36
+	$ELS_DIALOG --infobox "Moment ... reading file list ..." 3 37
 	sysadm-backup.pl --getfilelist >$ELS_TEMP || {
 	     --title "Tape access problem" --textbox $ELS_TEMP 23 76
 	    return
@@ -69,7 +69,7 @@ Backup set:    $DESC
 Backup date:   $DATE
 Backup set no: $[BACKUPSET+1]
 Files in set:  $TAPEFILES
-Bytes in set:  $TAPESIZE" 11 60
+Bytes in set:  $TAPESIZE" 11 61
         ;;
 
     list)
@@ -150,7 +150,7 @@ CTRL-KK   mark end of a block
 CTRL-KY   delete complete block
 
 Please be careful what you are restoring. If you restore
-files in use, you could damage your system!" 17 65
+files in use, you could damage your system!" 17 66
 
         $EDITOR $FILELIST
 	;;
@@ -210,7 +210,7 @@ files in use, you could damage your system!" 17 65
 
  	sysadm-backup.pl $RESULT --mail --eject --restore &
 
-	$ELS_DIALOG --msgbox "Restore has been started. Result will be sent as e-mail." 5 60
+	$ELS_DIALOG --msgbox "Restore has been started. Result will be sent as e-mail." 5 61
         ;;
 
     *)
