@@ -16,6 +16,10 @@ Requires: util-linux, mtools, e2fsprogs, shadow-utils, perl
 %if %{withjoe}
 Requires: joe
 %endif
+%if "%{_vendor}" == "MandrakeSoft"
+# Get this from Cooker
+Requires: cdialog >= 0.9a-8mdk
+%endif
 Provides: sysadm
 BuildArch: noarch
 BuildRoot: /var/tmp/%{name}-%{vers}-%{rel}
@@ -27,7 +31,6 @@ easy-to-administer and easy-to-enhance Linux server system.
 
 %prep
 # There is nothing to prepare ...
-
 
 %build
 %if %{withdoc}
@@ -87,9 +90,7 @@ echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment
 %attr(0700,root,root) /usr/lib/els/adduser.els-base
 %attr(0700,root,root) /usr/lib/els/deluser.els-base
 %attr(0700,root,root) /usr/lib/els/pwchange.els-base
-%attr(0600,root,root) /usr/lib/els/cdrom.mnu
 %attr(0600,root,root) /usr/lib/els/expert.mnu
-%attr(0600,root,root) /usr/lib/els/floppy.mnu
 %attr(0600,root,root) /usr/lib/els/groups.mnu
 %attr(0600,root,root) /usr/lib/els/hardware.mnu
 %attr(0600,root,root) /usr/lib/els/install.mnu
@@ -103,6 +104,10 @@ echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment
 %attr(0600,root,root) /usr/lib/els/system.mnu
 %attr(0600,root,root) /usr/lib/els/usermod.mnu
 %attr(0600,root,root) /usr/lib/els/users.mnu
+%if "%{_vendor}" != "MandrakeSoft"
+%attr(0600,root,root) /usr/lib/els/cdrom.mnu
+%attr(0600,root,root) /usr/lib/els/floppy.mnu
+%endif
 
 # DIRECTORY ALIASES
 %attr(0644,root,root) /etc/diralias.d/els-base.dirs
