@@ -1,6 +1,5 @@
 Sysadm:
   check all *.mnu files
-  why does install.mnu suddenly not work (bash2 incompatibility?)
 
 Setup:
   check description texts

@@ -2,7 +2,7 @@ function SelectGroup ()
 {
     echo -n "$DIALOG --menu \"Select group $1\" 23 55 15 " >$TMPFILE.dialog
     if sysadm-user.pl --listgroups $2 $3 >>$TMPFILE.dialog 2>$TMPFILE; then
-        { . $TMPFILE.dialog } 2>$TMPFILE
+        { . $TMPFILE.dialog; } 2>$TMPFILE
         CHOICE=`cat $TMPFILE`
     else
         $DIALOG --textbox $TMPFILE 5 50
@@ -15,7 +15,7 @@ function SelectUser ()
 {
     echo -n "$DIALOG --menu \"Select user $1\" 23 65 15 " >$TMPFILE.dialog
     sysadm-user.pl --listusers $2 $3 >>$TMPFILE.dialog
-    { . $TMPFILE.dialog } 2>$TMPFILE
+    { . $TMPFILE.dialog; } 2>$TMPFILE
     CHOICE=`cat $TMPFILE`
 }
 
