@@ -1,3 +1,6 @@
+a
 *.html
 index.*
 .docs
+index.shtml
+install.shtml
