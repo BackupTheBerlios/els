@@ -11,7 +11,7 @@ Copyright: GPL
 Group: Applications/System
 Vendor: Easy Linux Server
 BuildArch: noarch
-Requires: els-base, postfix, procmail
+Requires: els-base, postfix >= 20010228-20mdk, procmail
 BuildRoot: /var/tmp/%{name}-%{vers}-%{rel}
 
 %description 
@@ -49,8 +49,6 @@ rm -rf $RPM_BUILD_ROOT
 # Postfix needs the canonical.db file, otherwise it would complain
 touch /etc/postfix/canonical
 postmap /etc/postfix/canonical >/dev/null
-postmap /etc/postfix/relocated >/dev/null
-postmap /etc/postfix/transport >/dev/null
  
 
 %files
