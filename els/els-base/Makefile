@@ -26,4 +26,4 @@ check: html
 	nsgmls -s -wall -B *.html
 	
 clean:
-	rm -f *.html a
+	rm -f *.html a q
