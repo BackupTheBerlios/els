@@ -3,6 +3,11 @@ case "$1" in
     Query)
         Title "Main" "Network" "Configure local network and/or internet access"
 
+	Option "Name"     "Set name of this computer (now $HOSTNAME)"
+	Option "Hosts"    "Edit list of known computers"
+	test -x /bin/netstat &&
+	Option "Usage"    "Display network usage"
+
         #include Network sysadm -> Network
         perl -nw - $ELS_MENULIB/*.mnu 2>/dev/null >>$ELS_TEMP.dialog <<-"EOF"
 	if ( /^\s+Title\s+"Network"\s+"(.*)"\s+"(.*)"/ ) {
@@ -15,6 +20,109 @@ case "$1" in
 	# This menu contains all sorts of modules that connect your OM
 	# Standard Linux Server to the outside world.
         #DescEnd
+
+
+    name)
+	#Desc
+	# Enables you to change your hostname.
+	#
+	#Item Background
+	# The host name of the main server should be your domain. Let's
+        # assume that your domain is "company.de". In this case, name
+        # your server just "company.de", not something like "linux.company.de"
+        # or "server.company.de". The latter will backfire and make things
+        # somewhat more complicated when you're installing e-mail services.
+	#
+	# Additional servers (e.g. for testing or learning) should be
+	# below the main name. For example "test.company.de". Do not
+        # name them "test.de". That's because you have no naming authority
+        # for the domain "de", but full naming authority for the domain
+        # "company.de".
+	#
+	#Item Usage
+	# After selection of this option you can enter the new name into
+	# an input mask:
+	#Input
+	# Enter new hostname, e.g.<BR>
+	# test.company.de
+	#InputEnd
+	# Enter the new name and press [Enter].
+	#Macro Cancel
+ 	# You should also restart your server.
+	#DescEnd
+
+	InputString "Enter new hostname, e.g.\ntest.company.de"
+	test -z "$CHOICE" && return
+	SetOpt "HOSTNAME" "$CHOICE" "/etc/sysconfig/network" "normal"
+	hostname $CHOICE
+
+	# the following set's the login "issue" text
+	/usr/sbin/sysadm-setup.pl --rerun issue.setup
+	;;
+
+
+    hosts)
+	#Desc
+	# Sometimes it is hard for humans to remember that
+	# <TT>192.168.1.32</TT> is the IP address for Fritz' computer. So
+	# you can enter all this numbers in the file <TT>/etc/hosts</TT>
+	# and later use the convenient names.
+	#
+	# Here is an example:
+	#Edit
+	# 127.0.0.1      localhost localhost.localdomain
+	# 192.168.1.200  company.de company
+	# 192.168.1.1    tobias.company.de tobias
+	# 192.168.1.32   fritz.company.de fritz
+	#EditEnd
+	#Macro Editor
+	#
+	#Item Important
+	# At the left, you see the IP address. On the right side, you
+	# see all names for this address. The leftmost name of this
+	# names is the primary name. Always use fully qualified names
+	# here. That means: use "fritz.company.de" and not "fritz" or
+	# "scrumpy" or whatever.
+	#
+	# The reason is that this names might find their way to computers
+	# in the outside. These computers don't know "fritz" or "scrumpy"
+	# and can't send e-mail to them. But because of our special ELS-DNS
+	# setup any e-mail for "fritz.company.de" would be sent to
+	# "company.de". Or, more exactly, to the provider of "company.de".
+	#DescEnd
+
+	EditFile /etc/hosts
+
+        # When els-named is installed, recompile hosts into the DNS lookup tables
+	test -x /usr/sbin/els-dns.pl && /usr/sbin/els-dns.pl
+	;;
+
+
+    usage)
+	#Desc
+	# "Usage" shows a rather detailed usage report of the TCP/IP
+	# network. It covers interfaces, routing entries, TCP connections,
+	# UDP ports and RAW ports. This is only for technicians (and
+	# curious people), so don't bother if you don't understand what
+	# this all means. :-)
+	#
+	#Item Usage
+	# The usage statistics are presented in a normal text box.
+	#Macro Textbox
+	#DescEnd
+
+	rm -f $ELS_TEMP
+
+	netstat -eva --interfaces	>>$ELS_TEMP 2>/dev/null && echo -e "\n" >>$ELS_TEMP
+	netstat -eva --netlink   	>>$ELS_TEMP 2>/dev/null && echo -e "\n" >>$ELS_TEMP
+	netstat -eva --route		>>$ELS_TEMP 2>/dev/null && echo -e "\n" >>$ELS_TEMP
+	netstat -eva --masquerade	>>$ELS_TEMP 2>/dev/null && echo -e "\n" >>$ELS_TEMP
+	netstat -eva --tcp		>>$ELS_TEMP 2>/dev/null && echo -e "\n" >>$ELS_TEMP
+	netstat -eva --udp		>>$ELS_TEMP 2>/dev/null && echo -e "\n" >>$ELS_TEMP
+	netstat -eva --raw		>>$ELS_TEMP 2>/dev/null && echo -e "\n" >>$ELS_TEMP
+
+	$ELS_DIALOG --textbox $ELS_TEMP 23 76
+	;;
 
 
     *)
