@@ -1,6 +1,5 @@
 Sysadm:
-  check all *.mnu files
-  write menu for sysadm-setup.pl
+  write setup.mnu (menu for sysadm-setup.pl)
   check URL paths in help texts
 
 Setup:
