@@ -6,9 +6,9 @@ case "$1" in
         Option "Greeting" "Edit login greeting"
         Option "MOTD"     "Edit message of the day (displayed after login)"
         if [ -f /etc/nologin ]; then
-            Option "Allow"    "Allow logins"
+            Option "Enable"   "Allow shell logins"
 	else
-            Option "Disable"  "Disable logins"
+            Option "Disable"  "Prevent shell logins"
 	fi
         ;;
 
@@ -78,9 +78,9 @@ case "$1" in
         EditFile /etc/motd
         ;;
 
-    allow)
+    enable)
 	#Desc
-	# This re-enables login after it has been disabled with
+	# This allows shell logins after it has been disabled with
 	# "<A HREF="#disable">Disable</A>".
 	#
 	#Item Visibility
@@ -93,7 +93,7 @@ case "$1" in
 
     disable)
 	#Desc
-	# This disables login to the computer for all users.
+	# This prevents shell login to the server for all users.
 	# User "root" can always log in. The login will be disabled
 	# until the next reboot or until you re-enable it with the
 	# <A HREF="#enable">Enable</A> option.
