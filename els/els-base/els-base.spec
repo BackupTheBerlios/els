@@ -67,8 +67,6 @@ echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment
 %attr(0700,root,root) /usr/lib/els/bashrc.setup
 %attr(0700,root,root) /usr/lib/els/bootmessages.setup
 %attr(0700,root,root) /usr/lib/els/ctrlaltdel.setup
-%attr(0700,root,root) /usr/lib/els/detectmodem.setup
-%attr(0700,root,root) /usr/lib/els/detecttape.setup
 %attr(0700,root,root) /usr/lib/els/dircolors.setup
 %attr(0700,root,root) /usr/lib/els/inputrc.setup
 %attr(0700,root,root) /usr/lib/els/issue.setup
