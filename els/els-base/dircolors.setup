@@ -3,9 +3,11 @@
 #Desc
 # Patch /etc/DIR_COLORS because some colors are nearly unvisible
 #DescEnd
+#Id $Id: dircolors.setup,v 1.2 2001/11/26 13:11:02 holgerschurig Exp $
+
 
 loadfile '/etc/DIR_COLORS';
-if (search 'EXEC 01;32' || $force) {
+if (search 'EXEC 01;32') {
     comment 'LINK';
     comment 'FIFO';
     comment 'SOCK';

@@ -4,11 +4,12 @@
 # This file contains a text that is displayed before the user enters his
 # username/password at the console.
 #DescEnd
+#Id $Id: issue.setup,v 1.2 2001/11/26 13:11:02 holgerschurig Exp $
+
 
 chomp(my $hostname = `/bin/hostname`);
 loadfile '/etc/issue';
-if (!$insideanaconda &&
-    (!search($hostname) || $force)) {
+unless ($insideanaconda || search($hostname)) {
     deleteall;
     append '';
     append 'Easy Linux Server at ' . $hostname;
@@ -26,8 +27,7 @@ if (!$insideanaconda &&
 # username/password from the network, e.g. via telnet.
 #
 loadfile '/etc/issue.net';
-if (!$insideanaconda &&
-    (!search($hostname) || $force)) {
+unless ($insideanaconda || search($hostname)) {
     deleteall;
     append '';
     append 'Easy Linux Server at ' . $hostname;

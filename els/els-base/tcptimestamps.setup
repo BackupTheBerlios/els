@@ -3,9 +3,11 @@
 #Desc
 # Patch /etc/sysctl.conf
 #DescEnd
+#Id $Id: tcptimestamps.setup,v 1.2 2001/11/26 13:11:02 holgerschurig Exp $
+
 
 loadfile '/etc/sysctl.conf';
-if ((getopt('net.ipv4.tcp_timestamps = ') ne '0') || $force) {
+if ((getopt('net.ipv4.tcp_timestamps = ') ne '0')) {
     appendonce '# Disable TCP timestamps';
     setopt 'net.ipv4.tcp_timestamps = ', '0';
     writefile;

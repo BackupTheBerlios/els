@@ -2,6 +2,8 @@
 #Author Holger Schurig
 #Desc
 #DescEnd
+#Id $Id: profile.setup,v 1.2 2001/11/26 13:11:02 holgerschurig Exp $
+
 
 loadfile '/etc/profile';
 unless (search('LESS')) {

@@ -6,6 +6,8 @@
 # If a config file already exists, nothing will be changed, created
 # or overwritten. Isn't it nice to be on the safe side?  :-)
 #DescEnd
+#Id $Id: mc-root.setup,v 1.2 2001/11/26 13:11:02 holgerschurig Exp $
+
 
 unless (-f '/root/.mc/ini') {
     mkdir '/root/.mc', 0755;

@@ -3,8 +3,10 @@
 #Desc
 # If we want to stop workstation, we dont want it to boot again.
 #DescEnd
+#Id $Id: ctrlaltdel.setup,v 1.2 2001/11/26 13:11:02 holgerschurig Exp $
 
-if (!$server && (!search('-h now') || $force)) {
+
+unless ($server || search('-h now')) {
     replace '-r now', '-h now';
     writefile;
     logit "/etc/inittab: halt system on C-A-D, don't reboot\n";

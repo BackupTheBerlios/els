@@ -9,6 +9,8 @@
 # command line history. Try to type some text and the the PgUp
 # key ...
 #DescEnd
+#Id $Id: inputrc.setup,v 1.2 2001/11/26 13:11:02 holgerschurig Exp $
+
 
 loadfile '/etc/inputrc';
 unless (search 'history.search.backward') {

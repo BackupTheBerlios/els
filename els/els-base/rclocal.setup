@@ -6,9 +6,11 @@
 # executed automatically. So if you need special SCSI setup, just
 # place a rc.scsi file in this directory and it gets automatically executed.
 #DescEnd
+#Id $Id: rclocal.setup,v 1.2 2001/11/26 13:11:02 holgerschurig Exp $
+
 
 loadfile '/etc/rc.d/rc.local';
-if (!search('rc.serial') || $force) {
+unless (search('rc.serial')) {
     deleteall;
     append '#!/bin/sh';
     append '#';

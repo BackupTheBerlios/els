@@ -5,9 +5,11 @@
 # the user for the username. This way possible error messages from the
 # boot process stay visible on the screen.
 #DescEnd
+#Id $Id: bootmessages.setup,v 1.2 2001/11/26 13:11:02 holgerschurig Exp $
+
 
 loadfile '/etc/inittab';
-if (!search('noclear') || $force) {
+unless (search('noclear')) {
     replace 'mingetty tty1$', 'mingetty --noclear tty1';
     writefile;
     logit "/etc/inittab: keep console 1 contents after booting\n";

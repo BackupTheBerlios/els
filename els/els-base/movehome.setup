@@ -9,6 +9,8 @@
 # Note that /root, roots home directory, will not be moved. This makes
 # sure that root can still log in in single-user mode ...
 #DescEnd
+#Id $Id: movehome.setup,v 1.2 2001/11/26 13:11:02 holgerschurig Exp $
+
 
 if (-d '/home' && -f '/etc/fstab' && !-l '/home' && (`mount | grep /home` eq "")) {
     #my @lines;

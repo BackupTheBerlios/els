@@ -4,6 +4,8 @@
 # This disables several daemons (background processes) that are not really
 # needed for a file server:
 #DescEnd
+#Id $Id: unneededdaemons.setup,v 1.2 2001/11/26 13:11:02 holgerschurig Exp $
+
 
 open CHKCONFIG, "chkconfig --list|";
 my @lines = <CHKCONFIG>;

@@ -5,6 +5,8 @@
 # This script creates mount points for cdrom, floppy, nfs, samba, dos
 # and zip drives/shares/filesystems in the /mnt directory.
 #DescEnd
+#Id $Id: mountpoints.setup,v 1.2 2001/11/26 13:11:02 holgerschurig Exp $
+
 
 my $madedir=0;
 unless (-d '/mnt/cdrom')  { mkdir '/mnt/cdrom', 0755;  $madedir++; }

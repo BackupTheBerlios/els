@@ -4,12 +4,14 @@
 #NeedFile /usr/bin/wvdialconf
 #Desc
 # This script uses wvdialconf to detect a modem. It will then create
-# a /dev/modem link and an entry in /etc/sysadm. A correct modem
+# a /dev/modem link and an entry in /etc/els.conf. A correct modem
 # entry is necessary for the for modem-dial-in support.
 #DescEnd
+#Id $Id: detectmodem.setup,v 1.2 2001/11/26 13:11:02 holgerschurig Exp $
+
 
 if ( -x '/usr/bin/wvdialconf' && (! -f '/etc/wvdial.conf')) {
-    loadfile '/etc/sysconfig/sysadm';
+    loadfile '/etc/els.conf';
     if (getopt('MODEM=') eq '"/dev/null"') {
 	if (-l '/dev/mouse') { # Move out the way if necessary to see ttyS0
 	    open FILE, '/bin/ls -l /dev/mouse|';
@@ -28,7 +30,7 @@ if ( -x '/usr/bin/wvdialconf' && (! -f '/etc/wvdial.conf')) {
  	    chown $uid, $gid, $modem;
  	    chmod 0660, $modem;
 	    writefile;
-	    logit "/etc/sysconfig/sysadm: set MODEM to $modem\n";
+	    logit "/etc/els.conf: set MODEM to $modem\n";
 	}
     }
 }

@@ -7,6 +7,8 @@
 # debug messages should end up in what file. Here I define that console 12
 # (switch to it with Alt-F12) get all notifications or worse.
 #DescEnd
+#Id $Id: syslog.setup,v 1.2 2001/11/26 13:11:02 holgerschurig Exp $
+
 
 loadfile '/etc/syslog.conf';
 unless (search('tty12')) {

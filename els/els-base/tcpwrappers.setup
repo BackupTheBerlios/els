@@ -14,9 +14,11 @@
 # must ensure security with other tools, e.g. proper configuration in
 # /etc/sendmail.cf or /etc/printcap.
 #DescEnd
+#Id $Id: tcpwrappers.setup,v 1.2 2001/11/26 13:11:02 holgerschurig Exp $
+
 
 loadfile '/etc/hosts.deny';
-if (!search('ALL') || $force) {
+unless (search('ALL')) {
     setopt 'ALL: ', 'ALL';
     deleteline '# The portmap';
     deleteline '# the new secure';
@@ -26,7 +28,7 @@ if (!search('ALL') || $force) {
 }
 
 loadfile '/etc/hosts.allow';
-if (!search('ALL') || $force) {
+unless (search('ALL')) {
     setopt 'ALL: ', '127.0.0.1';
     setopt 'sshd: ', 'ALL';
     writefile;
