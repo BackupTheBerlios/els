@@ -99,8 +99,8 @@ echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment
 %attr(0600,root,root) /usr/lib/els/messages.mnu
 %attr(0600,root,root) /usr/lib/els/network.mnu
 %attr(0600,root,root) /usr/lib/els/runlevel.mnu
+%attr(0600,root,root) /usr/lib/els/setup.mnu
 %attr(0600,root,root) /usr/lib/els/system.mnu
-#%attr(0600,root,root) /usr/lib/els/tcpip.mnu
 %attr(0600,root,root) /usr/lib/els/usermod.mnu
 %attr(0600,root,root) /usr/lib/els/users.mnu
 
@@ -108,7 +108,7 @@ echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment
 %attr(0644,root,root) /etc/diralias.d/els-base.dirs
 
 # ENVIRONMENT PROFILES
-%attr(0644,root,root) /etc/profile/els-base.sh
+%attr(0644,root,root) /etc/profile.d/els-base.sh
 %if %{withjoe}
 %attr(0644,root,root) /etc/profile.d/els-q.sh
 %endif
@@ -126,5 +126,6 @@ echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment
 
 # DOCUMENTATION
 %if %{withdoc}
-%doc $OLDPWD/README $OLDPWD/html/*
+%doc $OLDPWD/html/*
+#%doc $OLDPWD/README $OLDPWD/INSTALL
 %endif
