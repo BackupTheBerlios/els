@@ -56,7 +56,6 @@
   indexhtml
   info
   initscripts
-  ipchains
   iproute
   iputils
   iptables
@@ -75,7 +74,6 @@
   libstdc++
   libtermcap
   logrotate
-  lokkit
   losetup
   mailcap
   mailx
@@ -583,7 +581,6 @@ i386: }
   make
   mtr
   ncftp
-  nfs-utils
   nmap
   nscd
   nss_ldap
@@ -706,6 +703,7 @@ i386: }
 
 0 NFS File Server {
   @ Network Server
+  portmap
   nfs-utils
 }
 
@@ -779,13 +777,9 @@ i386: }
   ? X Window System {
     mtr-gtk
   }
-  ? GNOME {
-    gnome-lokkit
-  }
   ethtool
   iptables-ipv6
   iptraf
-  mrtg
   mtr
 }
 
