@@ -98,7 +98,7 @@ Bytes in set:  $TAPESIZE" 11 60
 
     edit)
 	#Desc
-	# This is similar to <A HREF="#list>List</A>. It displays all files
+	# This is similar to <A HREF="#list">List</A>. It displays all files
 	# that are in the current backup set.
 	#
 	# However, most of the time you won't restore all files. However, the
