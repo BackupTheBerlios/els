@@ -106,7 +106,9 @@ echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment
 %attr(0600,root,root) /usr/lib/els/system.mnu
 %attr(0600,root,root) /usr/lib/els/usermod.mnu
 %attr(0600,root,root) /usr/lib/els/users.mnu
-%if "%{_vendor}" != "MandrakeSoft"
+%if "%{_vendor}" == "MandrakeSoft"
+%attr(0600,root,root) /usr/lib/els/less.mnu
+%else
 %attr(0600,root,root) /usr/lib/els/cdrom.mnu
 %attr(0600,root,root) /usr/lib/els/floppy.mnu
 %endif

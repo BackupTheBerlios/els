@@ -1,0 +1,32 @@
+#Title use our LESS options
+#Author Holger Schurig
+#Group els-base
+#Group Convenience
+#Group Mandrake
+#Desc
+# Mandrake overwrites the LESS variable that get's defined in
+# /etc/profile.d/els-base.sh in the file /etc/profile.d/initrc.sh.
+#DescEnd
+#Id $Id: less.setup,v 1.1 2002/02/22 09:01:36 holgerschurig Exp $
+
+
+my $mod = 0;
+
+loadfile '/etc/profile.d/inputrc.sh';
+if (search 'MM') {
+    deleteline 'LESS=-MM';
+    $mod = 1;
+    writefile;
+}
+
+loadfile '/etc/profile.d/inputrc.csh';
+if (search 'MM') {
+    deleteline 'LESS=-MM';
+    $mod = 1;
+    writefile;
+}
+
+logit "/etc/profile.d/inputrc.c?sh: overwrite options for less\n" if $mod;
+
+
+1;
