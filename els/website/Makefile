@@ -1,24 +1,23 @@
-# HTML 4.01 verification:
-export SGML_CATALOG_FILES=../utilities/sgml/HTML4.cat
-
+include $(ROOT)/Makefile.inc
 
 # SHTML -> HTML transformation
 ALL = $(patsubst %.shtml,%.html,$(wildcard *.shtml))
+
+
 
 %.html:	%.shtml top.inc logos.inc bottom.inc admins.inc developers.inc
 	../utilities/makehtml.pl $< >$@
 
 
-all: $(ALL) top.inc bottom.inc admins.inc developers.inc
+all:: docs
 
-check: all
+docs:: all
+
+check:: all
 	nsgmls -s -wall -B ${ALL}
 
-update: all
-	scp *.html holgerschurig@els.berlios.de:/home/groups/els/htdocs/
-
-#../utilities/weblint -x Microsoft -d mailto-link ${ALL}
-#../utilities/linklint ${ALL}
-
-clean:
+clean::
 	rm -f ${ALL}
+
+upload:: all
+	scp *.html holgerschurig@els.berlios.de:/home/groups/els/htdocs/

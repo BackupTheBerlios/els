@@ -1,13 +1,26 @@
-# HTML 4.01 verification:
-export SGML_CATALOG_FILES=../utilities/sgml/HTML4.cat
+include $(ROOT)/Makefile.inc
 
-ALL = q *.pl *.sh *.mnu *.setup *.els-base bell cls els-base.dirs els-base.spec els.conf qrc sysadm
+ALL = *.pl *.sh *.mnu *.setup *.els-base \
+      q bell cls sysadm \
+      els-base.dirs els-base.spec els.conf qrc
+
+
+rpms:: .rpm
+
+docs::
+	../utilities/sysadmdoc.pl --verbose
+
+check:: html
+
+clean::
+	rm -f *.html q
+
+install:: .rpm
+	cp -v /usr/src/redhat/RPMS/i386/els-base*.rpm $(REDHAT_CD)/RedHat/RPMS
 
 
 
-all: rpm
 
-rpm: .rpm
 
 .rpm: $(ALL)
 	rm -f /usr/src/redhat/RPMS/i386/els-base*.rpm
@@ -15,15 +28,4 @@ rpm: .rpm
 
 q:
 	ln -s /usr/bin/joe q
-
-install: rpm
-	cp -v /usr/src/redhat/RPMS/i386/els-base*.rpm /u1/redhat72/RedHat/RPMS
-
-html:
-	../utilities/sysadmdoc.pl --verbose
-
-check: html
-	nsgmls -s -wall -B *.html
 	
-clean:
-	rm -f *.html a q
