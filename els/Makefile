@@ -1,5 +1,5 @@
 ROOT    = .
-SUBDIRS = utilities els-base els-backup website
+SUBDIRS = utilities els-base els-backup els-postfix website
 
 # Trick so that not 'all::' is the default target but 'help::'
 help::
@@ -15,8 +15,5 @@ help::
 	@echo "  check       check docs"
 	@echo "  clean       tidy all"
 	@echo "  install     install RPMs to your $(REDHAT_CD)/RedHat/RPMS"
-	@echo "  upload      upload files to berlios.de"
+	@echo "  upload      upload website to berlios.de"
 	@echo
-
-all rpms docs check clean install upload::
-	@for i in $(SUBDIRS); do echo "Entering $$i"; make -C $$i $@ || break; echo "Leaving $$i"; done

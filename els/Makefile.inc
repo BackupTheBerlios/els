@@ -1,6 +1,6 @@
 ROOT ?= .
 
-SGML_CATALOG_FILES=../utilities/sgml/HTML4.cat
+SGML_CATALOG_FILES=$(ROOT)/utilities/sgml/HTML4.cat
 REDHAT_CD ?= /u1/redhat72
 export SGML_CATALOG_FILES
 
@@ -10,15 +10,15 @@ rpms::
 
 docs::
 
-check::
+check:: docs
 	nsgmls -s -wall -B $(wildcard *.html)
 
 clean::
-	rm -f a
+	rm -f a .rpms .docs
 
 install::
 
 upload::
 
 all rpms docs check clean install upload::
-	@for i in $(SUBDIRS); do echo "Entering $$i"; make -C $$i $@ ROOT=$(ROOT)/.. || exit 1; echo "Leaving $$i"; done
+	@for i in $(SUBDIRS) .; do test "$$i" = "." && continue; make -C $$i $@ ROOT=$(ROOT)/.. || exit 1; done

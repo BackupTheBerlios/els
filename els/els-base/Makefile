@@ -6,12 +6,11 @@ ALL = *.pl *.sh *.mnu *.setup *.els-base \
       els-base.dirs els-base.spec els.conf qrc
 
 
-rpms:: .rpm
+rpms:: .rpms
 
-docs::
-	../utilities/sysadmdoc.pl --verbose
+docs:: .docs
 
-check:: html
+check:: .docs
 
 clean::
 	rm -f *.html q
@@ -23,10 +22,12 @@ install:: .rpm
 
 
 
-.rpm: $(ALL)
+.rpms: $(ALL)
 	rm -f /usr/src/redhat/RPMS/i386/els-base*.rpm
-	rpm -bb els-base.spec && touch .rpm
+	rpm -bb els-base.spec && touch .rpms
+
+.docs: $(wildcard *.mnu)
+	../els-base/sysadm-makedoc.pl --verbose *.mnu && touch .docs
 
 q:
 	ln -s /usr/bin/joe q
-	
