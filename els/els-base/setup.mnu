@@ -13,11 +13,57 @@ case "$1" in
         Title "System" "Setup" "Fine tune system setup"
 	Option "Info"  "Info on available setup scripts"
 	Option "Run"   "Run specific setup script"
-	Option "Rerun" "Run all existing setup script that have run once"
-	Option "All"   "Run all existing setup script"
+	Option "Rerun" "Re-Run setup script that have run once"
+	Option "All"   "Run ALL existing setup script"
 	;;
 
+	#Desc
+	# Any linux system comes with lot's of applications that bear their own
+	# configuration file. Unfortunately, those config files are not always
+	# optimal. There's just one problem: it's hard to decide what is optimal
+	# and what not. Some setups are more convenient, some are more secure.
+	# Some settings are mandatory for every server, some make only sense for
+	# developers a.k.a. 'command line heros'. Some are helpful for servers,
+	# some for workstations.
+	#
+	# These scripts detect if they have already been executed, they usually won't
+	# change anything in this case. Therefore it is save to re-run them as often
+	# as needed. This is helpful if you installed an updated RPM and want to make
+	# sure that your configuration is still optimal to your taste.
+	#
+	# Therefore, the setup script can be run individually or en gros.
+	#DescEnd
+
      info)
+	#Desc
+	# This gives you first a list of all available setup scripts:
+	#Menu Select script to get info about
+	# bashrc         prompt, aliases and magic cd
+	# bootmessages   keep boot messages
+	# ctrlaltdel     make Ctrl-Alt-Del halt the system
+	# dircolors      nicer colors for ls
+	# ...            ...
+	#MenuEnd
+	#Macro Menu
+	# When you select one, e.g. bootmessages, you will get the following info:
+	#TextBox
+	# Script:    bootmessages.setup
+	# Title:     keep boot messages
+	# Group(s):  els-base, Convenience
+	# Author:    Holger Schurig
+	# 
+	# When Red Hat Linux boots, it will display various boot messages. Then it
+	# calls a program ('mingetty') that asks you for the user name and password.
+	# 
+	# Mingetty unfortunately clears the screen by default, so you can no longer
+	# see the boot messages. This patch makes mingetty on console 1 not to clear
+	# the screen. This way possible error messages from the boot process stay
+	# visible on the screen.
+	#TextBoxEnd
+	#Item Usage
+	#Macro Textbox
+	#DescEnd
+
 	SelectScript "to get info about"
 	test -z "$CHOICE" && return
 
@@ -26,6 +72,28 @@ case "$1" in
 	;;
 
      run)
+	#Desc
+	# This option allows you to run one script at a time. At first you will be
+	# presented with the same script list as above:
+	#Menu Select script to get info about
+	# bashrc         prompt, aliases and magic cd
+	# bootmessages   keep boot messages
+	# ctrlaltdel     make Ctrl-Alt-Del halt the system
+	# dircolors      nicer colors for ls
+	# ...            ...
+	#MenuEnd
+	#Macro Menu
+	#
+	# When you select one, e.g. bootmessages, the script will execute. Scripts
+	# normally don't output very much, you may only see one line of output.
+	#TextBox
+	# /etc/inittab: keep console 1 contents after booting
+	#TextBoxEnd
+	# In case the script decided that nothing useful is to be done you
+	# might not see any output at all. This behavior may change in the
+	# future.
+	#DescEnd
+
 	SelectScript "to run"
 	test -z "$CHOICE" && return
 
@@ -34,12 +102,31 @@ case "$1" in
 	;;
 
      rerun)
+	#Desc
+	# Over the time you may have have run some of the scripts and have
+	# your preferred configurations applied.
+	#
+	# Now you install an upgraded Red Hat RPM which overwrites your
+	# configuration. You could manually search which setup script
+	# changes it back to default Easy Linux Server behavior --- or
+	# you can simply use this menu option.
+	#
+	# Rerun will run all scripts that have been run in the past,
+	# but no other scripts.
+	#DescEnd
+
 	sysadm-setup.pl --verbose --rerun >$ELS_TEMP 2>&1
 	test -s $ELS_TEMP && $ELS_DIALOG --textbox $ELS_TEMP 23 76
 	;;
 
      all)
-	Question "Do you really want to run ALL setup scripts?" && sysadm-setup.pl --verbose --all >$ELS_TEMP 2>&1
+	#Desc
+	# Some people want it all. This option executes simply all available
+	# scripts. You will be asked if you really want to do this, thought :-)
+	#DescEnd
+
+	Question "Do you really want to run ALL setup scripts?" || return
+	sysadm-setup.pl --verbose --all >$ELS_TEMP 2>&1
 	test -s $ELS_TEMP && $ELS_DIALOG --textbox $ELS_TEMP 23 76
 	;;
 
