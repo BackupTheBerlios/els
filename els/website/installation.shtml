@@ -1,31 +1,140 @@
-<!--#set var="title" value="Easy Linux Server - Installation" -->
+<!--#set var="title" value="Easy Linux Server - Red Hat Installation"-->
 <!--#include file="top.inc"-->
 <!--#include file="admins.inc"-->
 <!--#include file="logos.inc"-->
 
-<H2>Installing Red Hat Linux</H2>
+<H2>Preface</H2>
 <P>
-  The Easy Linux Server runs on top of Red Hat 7.2. So you must first
-  install Red Hat. As Red Hat comes with a very good installer and
-  installation manual, we don't really want to repeat that here.
+  Here is walk-throught on how to install an Easy Linux Server. Keep in mind
+  that we don't install a general Linux Server, or a workstation --- we're
+  installing a boring server that will sit in the corner and just does
+  file server, e-mail and backup. This special-purpose influences some of
+  our decisions on how to install the server.
 </P><P>
-  However, we have some tips that aide you in installation, e.g.
-  tips for a good hard disk partition scheme or tips on the selection
-  if modules.
-</P><P>
-  Unfortunately, all of this is yet to be written. :-(
+  However, your mileage may vary. :-)
 </P>
 
-<H2>Installing the Easy Linux Server Modules</H2>
+<H2>Step by Step</H2>
+<H3>Choose a Language</H3>
 <P>
-  Here we have at least some documentation already online, e.g. the
-  <A HREF="install.shtml">INSTALL</A> file in the CVS.
+  Select "english".
+</P><P>
+  Of course you could select your local language, but then you have to
+  think in two languages for the rest of the document. By keeping this
+  document in english and the texts on your screen in english, there
+  is less chance of confusion.
 </P>
+
+<H3>Keyboard type</H3>
+<P>
+  It's up to you what you select.
+</P><P>
+  Tip: when you life in Germany, don't select "de" but "de-latin-nodeadkeys".
+</P>
+
+<H3>Installation Method</H3>
+<P>
+  You install from CDROM, do you?
+</P>
+
+<H3>Configure TCP/IP</H3>
+<P>
+  You need a TCP/IP address for your server and workstations. You may
+  enter
+</P><TABLE BORDER=0 CELLSPACING=4><TR>
+  <TH>Prompt</TH><TH>You enter</TH>
+</TR><TR>
+  <TD>IP address:</TD><TD>192.168.233.1</TD>
+</TR><TR>
+  <TD>Netmask:</TD><TD>255.255.255.0</TD>
+</TR><TR>
+  <TD>Default gateway:</TD><TD>(keep this empty)</TD>
+</TR><TR>
+  <TD>Primary nameserver:</TD><TD>(keep this empty)</TD>
+</TR></TABLE>
+
+<H3>Mouse Configuration</H3>
+<P>
+  Select your mouse.
+</P><P>
+  Tip: the Red Hat installer does not always recognize wheel-mice correctly.
+  To fix this, first click on "Microsoft", then on "Intellimouse (PS/2)".
+</P>
+
+<H3>Installation Type</H3>
+<P>
+  Select "Custom".
+</P>
+
+<H3>Disk Partition Setup</H3>
+<P>
+  Select "Have the installer automatically decide on partitions".
+</P>
+
+<H3>Automatic Partitioning</H3>
+<P>
+  to be written
+</P>
+
+<H3>Boot Loader Configuration</H3>
+<P>
+  You can keep all data on this screen as is ...  but ...
+</P><P>
+  Tip: if you ever decide to compile your own kernel from source, then please select
+  "Use Lilo as the boot loader". This makes things easier for you later on.
+</P>
+
+<H3>Network Configuration</H3>
+<P>
+  You can keep ll data on this screen as is.
+</P>
+
+<H3>Firewall Configuration</H3>
+<P>
+  Select "high" and enable the SSH check box.
+</P>
+
+<H3>Additional Language Support</H3>
+<P>
+  Many people recommend to keep the texts of all programs in english. Usually
+  they are much more concise. And if you ever have a problem, you can ask in
+  any international mailing list or search the web.
+</P>
+
+<H3>Time Zone Selection</H3>
+<P>
+  Select your capital town. This sets the timezone accordingly.
+</P><P>
+  Tip: in the upper right corner you can select submaps, e.g. the
+  european one. This makes it much easier to find the proper capital city.
+</P>
+
+<H3>Account configuration</H3>
+<P>
+  Enter a good root password.
+</P><P>
+  Don't create additional user accounts. Any user created here would only exist
+  for command line logon, but not for network logon to the file server.
+</P>
+
+<H3>Package Group Selection</H3>
+<P>
+  Select the following groups (and make sure that all other groups are unselected):
+</P><UL>
+<LI>Printing Support
+<LI>Network Support
+<LI>Dialup Support
+<LI>Windows File Server
+<LI>Router / Firewall
+<LI>Utilities
+<LI>Windows Compatibility / Interoperability
+</UL>
 
 <H2>Where to go</H2>
 <P>
-  After you installed Red Hat Linux you should install the desired
-  Easy Linux Server <A HREF="modules.shtml">modules</A>.
+  After all you have done this, Red Hat 7.2 installs on your server. Once this is finished,
+  you can reboot the system and start Red Hat 7.2 Linux for the first time.
+</P><P>
+  Now you should install the desired Easy Linux Server <A HREF="modules.shtml">modules</A>.
 </P>
-
 <!--#include file="bottom.inc"-->
