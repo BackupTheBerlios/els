@@ -34,6 +34,13 @@ a tool like 'linuxconf' or 'useradd' to add a user, you suddenly have
 to know about things like user id, group id, home directory and shell.
 You simply don't care about technical details, the system has to work.
 
+Speed
+-----
+
+Install els-base and els-samba on an already running Red Hat 7.2 system
+and you have a file server within 5 minutes !
+
+
 Solution
 --------
 
