@@ -3,6 +3,11 @@
 <!--#include file="admins.inc"-->
 <!--#include file="logos.inc"-->
 
-to be written
+<P>
+  If you are a system administrator,
+  then you can read here how to install an Easy Linux Server, how <A
+  HREF="sysadm/index.shtml">configure</A> the server and
+  your windows workstations.
+</P>
 
 <!--#include file="bottom.inc"-->
