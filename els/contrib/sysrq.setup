@@ -1,0 +1,25 @@
+#Title enable sysrq key
+#Author Holger Schurig
+#Group contrib
+#Group Developers
+#Desc
+# From the Linux 2.4. kernel documentation:
+#
+# ... you will have some control over the system even
+# if the system crashes for example during kernel debugging (e.g., you
+# will be able to flush the buffer cache to disk, reboot the system
+# immediately or dump some status information).
+#DescEnd
+#Id $Id: sysrq.setup,v 1.1 2001/12/05 17:49:56 holgerschurig Exp $
+
+
+loadfile '/etc/sysctl.conf';
+if (getopt('kernel.sysrq = ') eq '0') {
+    replace 'Disables the magic', 'Enables the magic';
+    setopt 'kernel.sysrq = ', '1';
+    writefile;
+    logit "/etc/sysctl.conf: allowed sysrq key\n";
+}
+
+
+1;
