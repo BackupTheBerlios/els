@@ -30,7 +30,7 @@ sub ProcessFile ($)
     $lines = "\n$lines\n";
 
     # CVS ID				-> delete
-    $lines =~ s{\$Id.+?\$}{}g;
+    $lines =~ s{\$Id.*?\$}{}g;
 
     # Lines underlined by ====		->  H2
     # Lines underlined by ----		->  H3
@@ -62,6 +62,8 @@ sub ProcessFile ($)
     # "words" (seet website/url)	-> A HREF
     $lines =~ s{([^"\s]+)\s+\(see website/(.+?)\)}{<A HREF="$rel$2">$1</A>}g;
     $lines =~ s{"(.+?)"\s+\(see website/(.+?)\)}{<A HREF="$rel$2">$1</A>}g;
+    $lines =~ s{([^"\s]+)\s+\(see (http://.+?)\)}{<A HREF="$2">$1</A>}g;
+    $lines =~ s{"(.+?)"\s+\(see (http://.+?)\)}{<A HREF="$2">$1</A>}g;
 
     # Newline at start and end		-> get rid of it
     $lines =~ s{^\s+}{}g;
