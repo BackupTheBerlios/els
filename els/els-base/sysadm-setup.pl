@@ -7,7 +7,7 @@
 #
 #########################################################################
 #
-# $Id: sysadm-setup.pl,v 1.3 2001/11/26 14:36:40 holgerschurig Exp $
+# $Id: sysadm-setup.pl,v 1.4 2001/11/27 09:42:34 holgerschurig Exp $
 #
 
 use strict;
@@ -22,7 +22,6 @@ els-base.pl - system setup scriptlet engine
 
 =head1 SYNOPSIS
 
-  els-base.pl [options] --all
   els-base.pl [options] [scriptname ..]
   els-base.pl [options] 
 
@@ -33,6 +32,7 @@ els-base.pl - system setup scriptlet engine
   --laptop	taylor script behavior to laptop mode
   ­-server      taylor script behavior to server mode
   --all		execute all script files that can be found
+  --rerun	only re-run specified script if it were run already
 
 =head1 DESCRIPTION
 
@@ -60,6 +60,12 @@ scripts, e.g. after a system update, then just run B<els-base.pl> without
 and command line parameter at all. It will then only re-execute you special
 choice of setup scripts.
 
+=head2 Rerun executed installation scripts
+
+When you specify '--rerun' then only scripts that have been executed will
+be re-executed again. So you can specify savely 'sysadm-setup.pl --all --rerun'
+and be sure that no yet un-approved install script will be executed.
+
 =head1 SCRIPTS
 
 Scripts are name B<*.script>. The head of the script should have some
@@ -73,7 +79,7 @@ of documentation:
   # Longer description, may include paragraphs seperated by an
   # empty line.
   #DescEnd
-  #Id $Id: sysadm-setup.pl,v 1.3 2001/11/26 14:36:40 holgerschurig Exp $
+  #Id $Id: sysadm-setup.pl,v 1.4 2001/11/27 09:42:34 holgerschurig Exp $
 
   perl code
 
@@ -106,13 +112,15 @@ my $verbose = 0;
 my $laptop = 0;
 my $server = 0;
 my $all = 0;
+my $rerun = 0;
 
 use Getopt::Long;
 GetOptions('quiet' => \$quiet,
            'verbose' => \$verbose,
            'laptop' => \$laptop,
            'server' => \$server,
-           'all' => \$all);
+           'all' => \$all,
+           'rerun' => \$rerun);
 $quiet = 0 if $verbose;
 
 
@@ -150,15 +158,25 @@ sub ProcessScript($)
    $/ = "\n";
    unless ($script =~ /#Desc/) {
       print "File $file is not a valid setup script.\n";
-      next;
+      return;
+   }
+
+
+   # Check if script has been executed already and bail out if not
+   if ($rerun) {
+      loadfile '/etc/els.conf';
+      my $scripts = getopt('BASE_SCRIPTS=');
+      return unless ($scripts =~ /$file/);
    }
 
    print "$file\n" if $verbose;
    if (eval $script) {
       # Add executed script to configuration files
+      $file =~ s:^.+/([^/]+)$:$1:;      # basename without a slow 'use ...'
+      # we don't load the config file only once because there might be a slight
+      # chance that the evaled script changed it:
       loadfile '/etc/els.conf';
       my $scripts = getopt('BASE_SCRIPTS=');
-      $file =~ s:^.+/([^/]+)$:$1:;      # basename without a slow 'use ...'
       unless ($scripts =~ /$file/) {
          $scripts .= ',' if $scripts;
          $scripts .= $file;
