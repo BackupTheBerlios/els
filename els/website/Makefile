@@ -21,7 +21,7 @@ clean::
 	rm -f $(DST) .docs
 
 upload:: all
-	scp *.css *.html holgerschurig@els.berlios.de:/home/groups/els/htdocs/
+	$(ROOT)/utilities/uploader.pl *.css *.html sysadm/*.html
 
 lint:: .docs
 	$(ROOT)/utilities/linklint -quiet -error /@

@@ -2,5 +2,6 @@ a
 *.html
 index.*
 .docs
+.uploader
 index.shtml
 install.shtml

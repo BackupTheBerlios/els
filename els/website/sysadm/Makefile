@@ -12,9 +12,6 @@ docs:: .docs
 clean::
 	rm -f *.mnu *.html *.shtml $(INC) .files .docs
 
-upload:: all
-	scp *.html holgerschurig@els.berlios.de:/home/groups/els/htdocs/sysadm
-
 
 
 
