@@ -1,4 +1,12 @@
-RPM spec file
-sysadm based on whiptail
+Sysadm:
+  check all *.mnu files
+  why does install.mnu suddenly not work (bash2 incompatibility?)
 
-$Id: TODO,v 1.1 2001/11/22 09:38:16 holgerschurig Exp $
+Setup:
+  check description texts
+  generate tool for auto-documentation for the setup scripts
+  generate sysadm menu
+  decide on mandatory scripts
+
+General:
+  is there a better editor as the joe-based q?
