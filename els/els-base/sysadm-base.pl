@@ -427,6 +427,71 @@ sub UserIntoGroups ()
 
 ########################################################################
 #
+# Functions for script handling
+#
+########################################################################
+
+sub ListScripts
+{
+    chdir '/usr/src/els';
+    foreach my $script (sort glob '*.setup') {
+	loadfile "$script\n";
+	$script =~ s{.setup$}{};
+	my $title = search '#Title' or next;
+	my $need = search '#NeedFile';
+	if ($need && $need =~ /#NeedFile\s+(.+)\n/ ) {
+	    next unless -f $1;
+        }
+	chomp($title);
+	$title =~ s{^#Title\s+}{};
+	$title =~ s{"}{};
+        print "\"$script\" \"$title\" ";
+    }
+    exit 0;
+}
+
+
+sub ScriptInfo
+{
+    $ScriptInfo =~ s{.setup$}{};
+
+    loadfile "/usr/src/els/$ScriptInfo.setup";
+    my $Title  = '<missing>';
+    my $Author = '<missing>';
+    my $Group  = 'none';
+    my $File   = '';
+    my $output = 0;
+
+    foreach (@ConfigFiles::lines) {
+	next unless /^#/;
+	if    ( /^#Title\s+(.+)\n/ ) { $Title = $1; }
+	elsif ( /^#Author\s+(.+)\n/ ) { $Author = $1; }
+ 	elsif ( /^#Group\s+(.+)\n/ ) { $Group = $1; }
+ 	elsif ( /^#NeedFile\s+(.+)\n/ ) { $File = $1; }
+ 	elsif ( /^#DescEnd/ ) { last; }
+ 	elsif ( /^#Desc/ ) {
+	    $output = 1;
+	    print "Script:    $ScriptInfo.setup\n";
+	    print "Title:     $Title\n";
+ 	    print "Group:     $Group\n";
+ 	    print "Needs:     $File\n" if $File;
+	    print "Author:    $Author\n\n";
+        }
+	elsif ( /^#[a-z0-9]/i ) { print "Unsupported line: $_\n"; }
+        else {
+	    next unless $output;
+	    s{^# ?}{};
+	    print $_;
+	}
+    }
+    exit;
+}
+
+
+
+
+########################################################################
+#
 # Functions for command-line handling
 #
 ########################################################################
@@ -450,6 +515,10 @@ sub ShowUsage ()
 		    "listgroups" => \$ListGroups,
 		    "usersintogroup:s" => \$UsersIntoGroup,
 
+		    # for "setup.mnu"
+		    "listscripts" => \$ListScripts,
+		    "scriptinfo:s" => \$ScriptInfo,
+
 		    # various flags
 		    "all" => \$FlagAll,
 		    "withupg" => \$FlagWithUPG,
@@ -465,6 +534,9 @@ UserIntoGroups if $UserIntoGroups;
 ShowGroups if $ShowGroups;    # formatted for humans
 ListGroups if $ListGroups;    # formatted for dialog
 UsersIntoGroup if $UsersIntoGroup;
+
+ListScripts if $ListScripts;  # formatted for dialog
+ScriptInfo if $ScriptInfo;    # formatted for humans
 
 ShowUsage();
 exit 1;
