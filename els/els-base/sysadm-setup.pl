@@ -7,7 +7,7 @@
 #
 #########################################################################
 #
-# $Id: sysadm-setup.pl,v 1.6 2001/12/04 15:13:43 holgerschurig Exp $
+# $Id: sysadm-setup.pl,v 1.7 2001/12/05 14:47:13 holgerschurig Exp $
 #
 
 use strict;
@@ -79,7 +79,7 @@ of documentation:
   # Longer description, may include paragraphs seperated by an
   # empty line.
   #DescEnd
-  #Id $Id: sysadm-setup.pl,v 1.6 2001/12/04 15:13:43 holgerschurig Exp $
+  #Id $Id: sysadm-setup.pl,v 1.7 2001/12/05 14:47:13 holgerschurig Exp $
 
   perl code
 
@@ -111,6 +111,7 @@ my $quiet = 0;
 my $verbose = 0;
 my $laptop = 0;
 my $server = 0;
+my $workstation = 0;
 my $all = 0;
 my $rerun = 0;
 my $setupdir = $ENV{ELS_MENULIB} || '/usr/lib/els';
@@ -120,6 +121,7 @@ GetOptions('quiet' => \$quiet,
            'verbose' => \$verbose,
            'laptop' => \$laptop,
            'server' => \$server,
+           'workstation' => \$workstation,
            'all' => \$all,
            'rerun' => \$rerun);
 $quiet = 0 if $verbose;
@@ -127,10 +129,12 @@ $quiet = 0 if $verbose;
 
 # Save persistent data
 loadfile '/etc/els.conf';
-if    ($laptop) { setopt 'TYPE=', '"laptop"' }
-elsif ($server) { setopt 'TYPE=', '"server"' }
-$laptop = (getopt('TYPE=') =~ /laptop/i);
-$server = (getopt('TYPE=') =~ /server/i);
+if    ($laptop)      { setopt 'TYPE=', '"laptop"' }
+elsif ($server)      { setopt 'TYPE=', '"server"' }
+elsif ($workstation) { setopt 'TYPE=', '"workstation"' }
+$laptop      = (getopt('TYPE=') =~ /laptop/i);
+$server      = (getopt('TYPE=') =~ /server/i);
+$workstation = (getopt('TYPE=') =~ /workstation/i);
 writefile;
 
 
@@ -151,7 +155,7 @@ sub ProcessScript($)
    unless (open FILE, $file) {
       unless (open FILE, "$file.setup") {
          unless (open FILE, "$setupdir/$file") {
-             unless (open FILE, "$etupdir/$file.setup") {
+             unless (open FILE, "$setupdir/$file.setup") {
                  print "Setup script $file not found.\n";
                  return;
              }
@@ -178,7 +182,7 @@ sub ProcessScript($)
       return unless ($scripts =~ /$file/);
    }
 
-   print "$file\n" if $verbose;
+   print "$file\n" if $verbose > 1;
    if (eval $script) {
       # Add executed script to configuration files
       $file =~ s:^.+/([^/]+)$:$1:;      # basename without a slow 'use ...'
@@ -202,7 +206,7 @@ sub ProcessScript($)
 
 # Process all scripts (when --all on cmdline)
 if ($all) {
-   my @files = glob('*.setup') || glob('$setupdir/*.setup');
+   my @files = glob('*.setup') || glob("$setupdir/*.setup");
    foreach (@files) {
       ProcessScript $_;
    }
