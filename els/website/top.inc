@@ -30,7 +30,7 @@
 <TR BGCOLOR="#000000">
 <TD ALIGN="center">
 <IMG SRC="images/blank.gif" HEIGHT="1" WIDTH="135" BORDER=0 ALT=""><BR>
-<SPAN CLASS="titlebar"><FONT COLOR="#ffffff">General</FONT></SPAN></TD>
+<A HREF="index.shtml" CLASS="menubar"><FONT COLOR="#ffffff">General</FONT></A></TD>
 </TR>
 <TR ALIGN="right" BGCOLOR="#FFCC33"><TD>
 <A CLASS="menus" HREF="history.shtml">History</a><BR>
@@ -42,11 +42,10 @@
 <TR BGCOLOR="#000000">
 <TD ALIGN="center">
 <IMG SRC="images/blank.gif" HEIGHT="1" WIDTH="135" BORDER=0 ALT=""><BR>
-<SPAN CLASS="titlebar"><FONT COLOR="#ffffff">Audience</FONT></SPAN></TD>
+<A HREF="audience.shtml" CLASS="menubar"><FONT COLOR="#ffffff">Audience</FONT></A></TD>
 </TR>
 <TR ALIGN="right" BGCOLOR="#FFCC33"><TD>
 <A CLASS="menus" HREF="admins.shtml">Admins</A><BR>
 <A CLASS="menus" HREF="developers.shtml">Developers</A><BR>
 </TD>
 </TR></TABLE>
-

@@ -2,12 +2,12 @@
 <TR BGCOLOR="#000000">
 <TD ALIGN="center">
 <IMG SRC="images/blank.gif" HEIGHT="1" WIDTH="135" BORDER=0 ALT=""><BR>
-<SPAN CLASS="titlebar"><FONT COLOR="#ffffff">Adminstration</FONT></SPAN></TD>
+<A HREF="admins.shtml" CLASS="menubar"><FONT COLOR="#ffffff">Adminstration</FONT></A></TD>
 </TR>
 <TR ALIGN="right" BGCOLOR="#FFCC33"><TD>
 <A CLASS="menus" HREF="installation.shtml">Installation</A><BR>
 <A CLASS="menus" HREF="modules.shtml">Modules</A><BR>
-<A CLASS="menus" HREF="sysadm.shtml">Sysadm</A><BR>
+<A CLASS="menus" HREF="sysadm/index.shtml">Sysadm</A><BR>
 <A CLASS="menus" HREF="faq.shtml">FAQ</A><BR>
 </TD>
 </TR></TABLE>

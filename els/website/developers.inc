@@ -2,7 +2,7 @@
 <TR BGCOLOR="#000000">
 <TD ALIGN="center">
 <IMG SRC="images/blank.gif" HEIGHT="1" WIDTH="135" BORDER=0 ALT=""><BR>
-<SPAN CLASS="titlebar"><FONT COLOR="#ffffff">Development</FONT></SPAN></TD>
+<A HREF="developers.shtml" CLASS="menubar"><FONT COLOR="#ffffff">Development</FONT></A></TD>
 </TR>
 <TR ALIGN="right" BGCOLOR="#FFCC33"><TD>
 <A CLASS="menus" HREF="structure.shtml">Structure</A><BR>
