@@ -21,9 +21,10 @@ install:: .rpm
 
 
 
-.rpm: $(ALL)
+.rpms: $(ALL)
 	rm -f /usr/src/redhat/RPMS/i386/els-backup*.rpm
-	rpm -bb els-backup.spec && touch .rpms
+	rpm -bb els-backup.spec
+	touch .rpms
 
 .docs: $(wildcard *.mnu)
 	../els-base/sysadm-makedoc.pl --verbose *.mnu && touch .docs
