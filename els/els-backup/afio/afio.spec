@@ -3,16 +3,16 @@
 %define rel  1
 
 
-Summary:      Archiver and backup program with builtin compression
-Name:         %{name}
-Version:      %{vers}
-Release:      %{rel}
-Copyright:    LGPL
-Group:        Utilities/Archiving
-Vendor:       Easy Linux Server
-Source:       http://www.ibiblio.org/pub/linux/system/backup/afio-2.4.7.tgz
-Patch:        afio.patch
-BuildRoot:    /var/tmp/%{name}-%{vers}-%{rel}
+Summary: Archiver and backup program with builtin compression
+Name: %{name}
+Version: %{vers}
+Release: %{rel}
+Copyright: LGPL
+Group: Applications/Archiving
+Vendor: Easy Linux Server
+Source: http://www.ibiblio.org/pub/linux/system/backup/afio-2.4.7.tgz
+Patch: afio.patch
+BuildRoot: /var/tmp/%{name}-%{vers}-%{rel}
 
 
 %description
