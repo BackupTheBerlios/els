@@ -29,11 +29,11 @@ easy-to-administer and easy-to-enhance Linux server system.
 
 
 %build
-cd -
 %if %{withdoc}
+cd -
 rm -rf html
 mkdir html
-./els-makehtml.pl --destdir=html/ --srcdir=.
+../utilities/sysadmdoc.pl --destdir=html/ --srcdir=.
 %endif
 
 
