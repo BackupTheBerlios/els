@@ -5,17 +5,27 @@
 # Note that each user can have his own, private directory
 # aliases in ~/.diralias
 #
-# $Id: els-base.dirs,v 1.2 2001/12/13 09:34:56 holgerschurig Exp $
+# $Id: els-base.dirs,v 1.3 2002/02/12 09:01:31 holgerschurig Exp $
 #
 
 # often needed for module developers:
-local specs=/usr/src/redhat/SPECS
-local build=/usr/src/redhat/BUILD
-local rpms=/usr/src/redhat/RPMS/i386
-local noarch=/usr/src/redhat/RPMS/noarch
-local srpms=/usr/src/redhat/SRPMS
-local sources=/usr/src/redhat/SOURCES
+if [ -f /etc/mandrake-release ]; then
+    local specs=/usr/src/RPM/SPECS
+    local build=/usr/src/RPM/BUILD
+    local rpms=/usr/src/RPM/RPMS/i386
+    local noarch=/usr/src/RPM/RPMS/noarch
+    local srpms=/usr/src/RPM/SRPMS
+    local sources=/usr/src/RPM/SOURCES
+else
+    local specs=/usr/src/redhat/SPECS
+    local build=/usr/src/redhat/BUILD
+    local rpms=/usr/src/redhat/RPMS/i386
+    local noarch=/usr/src/redhat/RPMS/noarch
+    local srpms=/usr/src/redhat/SRPMS
+    local sources=/usr/src/redhat/SOURCES
+fi
 local els=/usr/lib/els
+
 
 # often needed for developers
 local linux=/usr/src/linux
@@ -32,7 +42,6 @@ local lib=/usr/lib
 local perl5=/usr/lib/perl5
 local doc=/usr/share/doc
 local info=/usr/share/info
-local man=/usr/share/man
 local home=/home
 local log=/var/log
 local tmp=/var/tmp
