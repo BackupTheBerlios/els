@@ -15,7 +15,7 @@ check:: .docs
 clean::
 	rm -f *.html q
 
-install:: .rpm
+install:: .rpms
 	cp -v /usr/src/redhat/RPMS/i386/els-base*.rpm $(REDHAT_CD)/RedHat/RPMS
 
 
