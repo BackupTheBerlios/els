@@ -23,6 +23,10 @@ case "$1" in
 	;;
 
     server)
+	#Desc
+	# The name of your server for Windows users.
+	#DescEnd
+
 	InputString "Enter name of your SAMBA server. This has nothing to do with your\ne-mail system name. Example: LINUX"
 	test -z "$CHOICE" && return
 	NEWNAME=`echo $CHOICE | tr a-z A-Z`
@@ -37,6 +41,7 @@ case "$1" in
 	;;
 
     workgroup)
+
 	InputString "Enter name of your Workgroup.\nExample: WORKGROUP"
 	test -z "$CHOICE" && return
 	WG=`echo $CHOICE | tr a-z A-Z`
@@ -163,12 +168,12 @@ your hard disk will overflow." 7 61 ;;
 	# This option will restart SAMBA. This is necessary if you changed
 	# either the global or the per-share settings of SAMBA. However,
 	# any user that had open files while you restarted SAMBA will have
-	# some problems, so check with <A HREF="#who">Who</A> that no one
-	# is using SAMBA before you restart it.
+	# some problems, so check with <A HREF="samba.html#who">sysadm -&gt; network
+        # -&gt; samba -&gt; Who</A> that no one is using SAMBA before you restart it.
 	#DescEnd
 
 	Question "Make sure that no one is using SAMBA. Do you want to restart SAMBA now?" || return
-	cls
+	clear
 	/usr/sbin/sysadm-setup.pl smbconfig
 	/etc/rc.d/init.d/smb restart
 	;;
