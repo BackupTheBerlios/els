@@ -1,5 +1,5 @@
 %define name els-base
-%define vers 1.95
+%define vers 1.96
 %define rel  1
 %define withdoc 1
 %define withjoe 1
@@ -10,7 +10,7 @@ Version: %{vers}
 Release: %{rel}
 Copyright: GPL
 Group: System Environment/Base
-Packager: Holger Schurig <holgerschurig@gmx.de>
+Vendor: Easy Linux Server
 Requires: redhat-release => 7.2, dialog, findutils, grep, gawk, textutils
 Requires: util-linux, mtools, e2fsprogs, shadow-utils, perl
 %if %{withjoe}
