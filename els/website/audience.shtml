@@ -3,10 +3,10 @@
 <!--#include file="logos.inc"-->
 
 <P>
-  The documentation is roughtly split into two parts:
+  The documentation on this site is roughly split into two parts:
 </P>
 
-<H2>Administrators</H2>
+<H2>For Administrators</H2>
 <P>
   If you are a <A HREF="admins.shtml">system administrator</A>,
   then you can read here how to install an Easy Linux Server, how <A
@@ -14,7 +14,7 @@
   your windows workstations.
 </P>
 
-<H2>Developers</H2>
+<H2>For Developers</H2>
 <P>
   <A HREF="developers.shtml">Developers</A> might be interested in
   the source, the overall structure, drop-in directories and RPM
