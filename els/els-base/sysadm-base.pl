@@ -458,28 +458,35 @@ sub ScriptInfo
 
     $_ = $ENV{ELS_MENULIB} || "/usr/lib/els";
     loadfile "$_/$ScriptInfo.setup" ;
-    my $Title  = '<missing>';
-    my $Author = '<missing>';
-    my @Groups = ();
-    my $File   = '';
-    my $output = 0;
+    my $Title    = '<missing>';
+    my @Ideas    = ();
+    my @Authors  = ();
+    my @Modified = ();
+    my @Groups   = ();
+    my @Files    = ();
+    my $output   = 0;
 
     foreach (@ConfigFiles::lines) {
 	next unless /^#/;
-	if    ( /^#Title\s+(.+)\n/ ) { $Title = $1; }
-	elsif ( /^#Author\s+(.+)\n/ ) { $Author = $1; }
- 	elsif ( /^#Group\s+(.+)\n/ ) { push @Groups, $1; }
- 	elsif ( /^#NeedFile\s+(.+)\n/ ) { $File = $1; }
- 	elsif ( /^#DescEnd/ ) { last; }
+	if    ( /^#Title\s+(.+)\n/ )       { $Title = $1; }
+	elsif ( /^#Author\s+([^,]+)\n/ )   { push @Authors, $1; }
+	elsif ( /^#Idea\s+([^,]+)\n/ )     { push @Ideas, $1; }
+ 	elsif ( /^#Group\s+([^,\s]+)\n/ )  { push @Groups, $1; }
+ 	elsif ( /^#NeedFile\s+([^,]+)\n/ ) { push @Files, $1; }
+	elsif ( /^#Item\s+(.+)\n/ )        { print "$1\n", "-" x length($1), "\n"; }
+ 	elsif ( /^#DescEnd/ )              { last; }
  	elsif ( /^#Desc/ ) {
 	    $output = 1;
 	    print "Script:    $ScriptInfo.setup\n";
 	    print "Title:     $Title\n";
  	    print "Group(s):  ", join(", ", @Groups), "\n" if @Groups;
- 	    print "Needs:     $File\n" if $File;
-	    print "Author:    $Author\n\n";
+	    print "Needs:     ", join(", ", @Files), "\n" if @Files;
+	    #print "Idea:      ", join(", ", @Ideas), "\n" if @Ideas;
+	    #print "Author:    ", join(", ", @Authors), "\n" if @Authors;
+	    #print "Modified:  ", join(", ", @Modified), "\n" if @Modified;
+	    print "\n";
         }
-	elsif ( /^#[a-z0-9]/i ) { print "Unsupported line: $_\n"; }
+	elsif ( /^#[a-z0-9]/i ) { die "Unsupported line: $_\n"; }
         else {
 	    next unless $output;
 	    s{^# ?}{};
