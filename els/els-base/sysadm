@@ -149,7 +149,7 @@ function SetOpt {
     fi
 
     # delete old value
-    fgrep -s -v $1= "$FILE" >$ELS_TEMP
+    fgrep -s -v "$1=" "$FILE" >$ELS_TEMP
     mv -f $ELS_TEMP "$FILE"
     # now add the new value
     if [ -z "$4" ]; then
@@ -215,7 +215,7 @@ test -r $ELS_CONF && . $ELS_CONF
 
 # look into what menu we want to go, default is "main"
 ELS_MENU="${1-main}"
-
+ELS_MENU=${ELS_MENU%%.mnu}
 
 cd $ELS_MENULIB
 while [ true ]; do
@@ -232,7 +232,7 @@ while [ true ]; do
 	fi
 
 	if [ ! -s $ELS_TEMP.dialog ]; then
-	    $ELS_DIALOG --msgbox "The '$ELS_MENUNAME' menu is empty, it will be populated when you install additional ELS modules." 7 50
+	    $ELS_DIALOG --msgbox "The '$ELS_MENU' menu is empty, it will be populated when you install additional ELS modules." 7 50
 	    ExitMenu
 	else
 
