@@ -30,13 +30,13 @@ case "$1" in
 	# out if a CDROM is already mounted. You will see a screen
 	# similar to the following:
 	#TextBox
-	# Device       Mounted to directory         File system   Flags
-	# -------------------------------------------------------------
-	# /dev/root    /                            ext2          rw 0
-	# /proc        /proc                        proc          rw 0
-	# /dev/hda3    /usr                         ext2          rw 0
-	# /dev/hda5    /var                         ext2          rw 0
-	# /dev/cdrom   /mnt/cdrom                   iso9660       ro 0
+	# Device       Mount point      Type     Flags
+	# --------------------------------------------------
+	# /dev/root    /                ext2     rw 0
+	# /proc        /proc            proc     rw 0
+	# /dev/hda3    /usr             ext2     rw 0
+	# /dev/hda5    /var             ext2     rw 0
+	# /dev/cdrom   /mnt/cdrom       iso9660  ro 0
 	#TextBoxEnd
 	# The last line contains <TT>/mnt/cdrom</TT>, so a CDROM is
 	# currently mounted.
@@ -48,16 +48,18 @@ case "$1" in
 	perl -nw - /proc/mounts >$ELS_TEMP <<-"EOF"
 
 	format STDOUT_TOP =
-	Device       Mounted to directory         File system   Flags
-	-------------------------------------------------------------
+	Device                       Mount point  Type     Flags
+	--------------------------------------------------------------------------
 	.
 	format STDOUT =
-	@<<<<<<<<<<< @<<<<<<<<<<<<<<<<<<<<<<<<<<< @<<<<<<<<<<<< @<<<<
-	$1,          $2,                          $3,           $4
+	^<<<<<<<<<<<<<<<<<<<<<<<<<<< ^<<<<<<<<<<< ^<<<<<<< ^<<<<<<<<<<<<<<<<<<<<<<
+	$dev,                        $dir,        $fs,       $flag
+	^<<<<<<<<<<<<<<<<<<<<<<<<<<< ^<<<<<<<<<<< ^<<<<<<~ ^<<<<<<<<<<<<<<<<<<<<<~
+	$dev,                        $dir,        $fs,       $flag,
 	.
 
 	/^(\S+)\s+(\S+)\s+(\S+)\s+(.+)/;
-	#print "$1 -- $2 -- $3 -- $4\n";
+	($dev,$dir,$fs,$flag) = ($1,$2,$3,$4);
 	write;
 
 	EOF
