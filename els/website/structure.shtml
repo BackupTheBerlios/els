@@ -3,7 +3,50 @@
 <!--#include file="developers.inc"-->
 <!--#include file="logos.inc"-->
 
-<H2>How things are connected</H2>
+<H2>Structure of the CVS directory layout</H2>
+<P>
+  When you checkout the module 'els' from the <A TARGET="_new"
+  HREF="http://developer.berlios.de/cvs/?group_id=204">CVS</A> you
+  will see the several directories.
+</P>
+
+<H3>Module directories</H3>
+<P>
+  Each module directory for the Easy Linux Server starts with <B>els-*</B>
+  in the name. Each directory is flat, i.e., it contains all files that
+  make up an ELS module, even if in the RPM they are scattered around the
+  whole file system. It was decided to have it this way because this
+  speeds up development, you don't have to <TT>cd</TT> into other
+  directories so often. These files build up a structure on their own
+  which is described <A HREF="#inside">below</A>.
+</P><P>
+  Some ELS modules have dependencies on external programs. If such a
+  dependency is not included in Red Hat 7.2 then we have a subdirectory
+  for this program that justs downloads the RPM (or downloads the source
+  and creates an RPM automatically).
+</P><P>
+  We might also have subdirectories named <B>html</B> that contain
+  automatically generated documentation pages for sysadm menus and for
+  setup scripts.
+</P>
+
+<H3>The website</H3>
+<P>
+  The <A HREF="http://els.berlios.de">web site</A> is also
+  partly automatically generated. The Makefiles and
+  source files for the web site are stored in this directory.
+</P>
+
+<H3>Utilities</H3>
+<P>
+  In the utilities directory we store little tools (mostly written in perl)
+  that are needed to create documentation or the RPMs. Many, if not all,
+  carry an internal documentation. You can view them with, e.g.:
+</P><P>
+<TT> &nbsp; perldoc utilities/rpmhelper.pl</TT>
+</P>
+
+<A NAME="inside"></A><H2>Inside an ELS RPM</H2>
 <P>
   Look for example at the RPM spec file <B>els-base.spec</B>.
   In the <B>%files</B> section you will see several comments. And by a
