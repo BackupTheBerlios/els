@@ -1,5 +1,5 @@
 unset CDROM
-test -f /etc/sysconfig/rc.sysadm && . /etc/sysconfig/rc.sysadm
+test -f /etc/els.conf && . /etc/els.conf
 
 case "$1" in
 
