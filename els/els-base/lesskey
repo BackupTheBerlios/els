@@ -1,0 +1,6 @@
+\eO5F	goto-end
+\eO5H	goto-line
+\e[1~  	goto-line
+\e5F	goto-end
+\e5H	goto-line
+\e[4~  	goto-end

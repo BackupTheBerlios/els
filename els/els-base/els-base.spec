@@ -1,6 +1,6 @@
 %define name els-base
 %define vers 1.96
-%define rel  3
+%define rel  4
 %define withdoc 1
 %define withjoe 1
 
@@ -56,7 +56,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment ..."
-
+cd /etc
+lesskey -o .less lesskey
 
 %files
 # DIRECTORIES
@@ -64,6 +65,7 @@ echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment
 %attr(0700,root,root) %dir /usr/lib/els
 
 # PRESET CONFIG FILES
+%attr(0600,root,root) %config(noreplace) /etc/lesskey
 %attr(0600,root,root) %config(noreplace) /etc/els.conf
 %if %{withjoe}
 %attr(0644,root,root) %config(noreplace) /etc/joe/qrc
@@ -77,6 +79,7 @@ echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment
 %attr(0600,root,root) /usr/lib/els/dircolors.setup
 %attr(0600,root,root) /usr/lib/els/inputrc.setup
 %attr(0600,root,root) /usr/lib/els/issue.setup
+%attr(0600,root,root) /usr/lib/els/less.setup
 %attr(0600,root,root) /usr/lib/els/mc-root.setup
 %attr(0600,root,root) /usr/lib/els/mountpoints.setup
 %attr(0600,root,root) /usr/lib/els/movehome.setup
