@@ -8,12 +8,13 @@
 
 <H2>How it began</H2>
 <P>
-  If I remember things right, then this project started in 1996 or 1997, way before the
-  Linux hype. One of the developers (Holger) was working at that time at a christian
-  missionary organization named <a href="www.om.org">Operation Mobilization</A> as the
-  computer guy for a home country office. OM had little to medium offices in about 60
-  countries, but only 10 computer technicians worldwide. And, living from donations,
-  there was not much money to spend.
+  If I remember things right, then this project started in 1996 or 1997, way
+  before the Linux hype. One of the developers (Holger) was working at that
+  time at a christian missionary organization named <A
+  HREF="http://www.om.org">Operation Mobilization</A> as the computer guy
+  for a home country office. OM had little to medium offices in about 60
+  countries, but only 10 computer technicians worldwide. And, living from
+  donations, there was not much money to spend.
 </P><P>
   At that time I had in my office took the SCO running software, transferred it via
   UUCP (our SCO version didn't had a TCP/IP license!) to a Linux box. I installed iBCS
