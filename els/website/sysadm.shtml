@@ -5,9 +5,9 @@
 
 <H2>Usage</H2>
 <P>
-  In sysadm, you use the up-and-down keys to select an option.
-  When the lower &lt;OK&gt; button is also selected and you press
-  enter, something will happen.
+  In <A HREF="sysadm/index.shtml">sysadm</A>, you use the up-and-down keys
+  to select an option.  When the lower &lt;OK&gt; button is also selected
+  and you press enter, something will happen.
 </P><P>
   When you instead select the lower &lt;Cancel&gt; button (with the
   left or right arrow button), then you will leave the current menu.
