@@ -1,0 +1,39 @@
+<!--#set var="title" value="Easy Linux Server - Patches" -->
+<!--#include file="top.inc"-->
+<!--#include file="developers.inc"-->
+<!--#include file="logos.inc"-->
+
+<H2>Communication</H2>
+<P>
+  Before starting submitting patches it would be helpful if you
+  join the <A TARGET="_new"
+  HREF="http://developer.berlios.de/mail/?group_id=204">developer
+  mailing list</A> and share your ideas. This can save double work.
+</P>
+
+<H2>Two steps</H2>
+<P>
+  The best option to support patches has two steps. In the first step,
+  you do a <A HREF="http://developer.berlios.de/cvs/?group_id=204"
+  TARGET="_new">CVS checkout</A>.
+</P><P>
+  Then you modify the code. The makefile help you to create test-RPMs.
+  You can try them. Once you killed all obvious errors you should
+  do a
+</P><PRE>
+  CVS diff >my-new-feature.patch
+</PRE><P>
+  and submit this to the <A TARGET="_new"
+  HREF="http://developer.berlios.de/patch/?group_id=204">patch
+  manager</A>.
+</P>
+
+<H2>Becoming developer</H2>
+<P>
+  This project is open --- that means: our <A TARGET="_new"
+  HREF="http://developer.berlios.de/project/memberlist.php?group_id=204">
+  list of developers</A> should not be static. After some patches you
+  can become a developer in the project with your own CVS access.
+</P>
+
+<!--#include file="bottom.inc"-->

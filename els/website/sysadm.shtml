@@ -1,0 +1,28 @@
+<!--#set var="title" value="Easy Linux Server - Sysadm" -->
+<!--#include file="top.inc"-->
+<!--#include file="admins.inc"-->
+<!--#include file="logos.inc"-->
+
+<H2>Usage</H2>
+<P>
+  In sysadm, you use the up-and-down keys to select an option.
+  When the lower &lt;OK&gt; button is also selected and you press
+  enter, something will happen.
+</P><P>
+  When you instead select the lower &lt;Cancel&gt; button (with the
+  left or right arrow button), then you will leave the current menu.
+</P>
+
+<H2>Details</H2>
+<P>
+  The following <A HREF="sysadm/index.shtml">Pages</A> contain
+  detailed information about available options in sysadm menus.
+</P>
+
+<H2>Where to go</H2>
+<P>
+  Do you have questions?  Please check the <A HREF="faq.shtml">FAQ</A>
+  if it already contains an answer ...
+</P>
+
+<!--#include file="bottom.inc"-->

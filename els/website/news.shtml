@@ -1,0 +1,12 @@
+<!--#set var="title" value="Easy Linux Server - News"-->
+<!--#include file="top.inc"-->
+<!--#include file="logos.inc"-->
+
+<H2>What's new</H2>
+<P>
+  We are currently using the <A TARGET="_new"
+  HREF="http://developer.berlios.de/news/?group_id=204">News
+  posting</A> system in Berlios for announcements.
+</P>
+
+<!--#include file="bottom.inc"-->
