@@ -1,0 +1,34 @@
+#Title configure rpmlint
+#Author Holger Schurig
+#Group contrib
+#Group Developers
+#Desc
+# 'rpmlint' is a package that checks RPMs for various errors.
+#
+# This setup script configures rpmlint so that it only emits useful
+# warnings.
+#DescEnd
+#Id $Id: rpmlint.setup,v 1.1 2001/12/11 10:30:20 holgerschurig Exp $
+
+
+loadfile '/etc/rpmlint/config';
+unless (search('Easy Linux Server')) {
+    appendonce "\n# Easy Linux Server";
+    appendonce 'setOption("Vendor", "Easy Linux Server")';
+    appendonce 'addFilter("invalid-distribution None")';
+    appendonce 'addFilter("els.* no-packager-tag")';
+    appendonce 'addFilter("els.* no-changelogname-tag")';
+    appendonce 'addFilter("els.* non-conffile-in-etc /etc/profile.d/els.*\.sh")';
+    appendonce 'addFilter("els.* non-conffile-in-etc /etc/diralias.d/.*")';
+    appendonce 'addFilter("els-base non-standard-dir-perm /usr/lib/els 0700")';
+    appendonce 'addFilter("els-base dangling-relative-symlink /usr/bin/q ./joe")';
+    appendonce 'addFilter("els-samba non-standard-dir-perm /var/samba")';
+    appendonce 'addFilter("els-samba non-standard-dir-in-var samba")';
+    appendonce 'addFilter("els-samba non-conffile-in-etc /etc/cron.daily/els-samba.daily")';
+    appendonce '';
+    writefile;
+    logit "/etc/rpmlint/config: added rules for els-* packages\n";
+}
+
+
+1;
