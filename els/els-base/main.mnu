@@ -2,7 +2,7 @@ case "$1" in
 
     Query)
         Title "" "Main" "Main menu"
-        #Include Main sysadm
+	#Include Main sysadm
         perl -nw - $ELS_MENULIB/*.mnu 2>/dev/null >>$ELS_TEMP.dialog <<-"EOF"
         if ( /^\s+Title\s+"Main"\s+"(.*)"\s+"(.*)"/ ) {
             print "\"$1\" \"$2\" ";
@@ -11,12 +11,12 @@ case "$1" in
         ;;
 
 
-        #Desc
+	#Desc
 	# What you see above is the main menu of <I>Sysadm</I>, the
 	# system administration tool of the Easy Linux Server.
 	#
 	#Item Start
-        # To start sysadm, log in as user &quot;root&quot; and enter
+	# To start sysadm, log in as user &quot;root&quot; and enter
 	# "<TT>sysadm</TT>" at the command prompt.
 	#
 	#Item Usage

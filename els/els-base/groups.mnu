@@ -41,8 +41,8 @@ case "$1" in
 
 
     list)
-        #Desc
-        # Shows you all current groups as well as the members in the group.
+	#Desc
+	# Shows you all current groups as well as the members in the group.
 	#TextBox
 	# Group name   Users
 	# finance      jutta,oliver,silke,chris,guenther
@@ -53,7 +53,7 @@ case "$1" in
 	#TextBoxEnd
 	#Item Usage
 	#Macro Textbox
-        #DescEnd
+	#DescEnd
 
         sysadm-user.pl --groups >$ELS_TEMP
 	if [ ! -s $ELS_TEMP ]; then
@@ -64,8 +64,8 @@ case "$1" in
         ;;
 
     add)
-        #Desc
-        # This creates a new, empty group.
+	#Desc
+	# This creates a new, empty group.
 	#
 	#Item Usage
 	# You see a question asking you for the name of the new group:
@@ -75,13 +75,13 @@ case "$1" in
 	# Use only letters. No digits, no special characters, no spaces!
 	#
 	#Macro Cancel
-        #DescEnd
+	#DescEnd
 
-        # ask questions and check for easy errors
+	# ask questions and check for easy errors
         InputString "Enter group name. Please use one word, lowercase only, e.g.\nfinance" || return
         test -z "$CHOICE" && return
 
-        # ask a perl program to actually create the group directory
+	# ask a perl program to actually create the group directory
         /usr/sbin/groupadd "$CHOICE" >$ELS_TEMP 2>&1 || {
             # bail out if there was an error
             $ELS_DIALOG --textbox $ELS_TEMP 10 60
@@ -100,8 +100,8 @@ case "$1" in
         ;;
 
     delete)
-        #Desc
-        # Use this option to delete a group.
+	#Desc
+	# Use this option to delete a group.
 	#
 	#Item Usage
 	# You see a list of all deleteable groups (not every group is
@@ -114,7 +114,7 @@ case "$1" in
 	#MenuEnd
 	#Macro Menu
 	#Macro Cancel
-        #DescEnd
+	#DescEnd
 
 	if [ "$EXPERTMODE" = "yes" ] ; then
 	    SelectGroup "to delete" --all

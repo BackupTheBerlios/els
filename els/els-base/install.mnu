@@ -46,10 +46,10 @@ function MountDevice ()
 	;;
     CD-ROM|RedHat-CD)
         mount /mnt/cdrom >/dev/null 2>&1
-        # mount may fail if already mounted, which will harm the test at
-        # the caller. So we grep for the all mounted devices to look if
-        # if a /mnt/cdrom is there. This gives us a zero errorlevel even
-        # when the above mount failed because of an already-mounted status.
+	# mount may fail if already mounted, which will harm the test at
+	# the caller. So we grep for the all mounted devices to look if
+	# if a /mnt/cdrom is there. This gives us a zero errorlevel even
+	# when the above mount failed because of an already-mounted status.
         mount | grep -q /mnt/cdrom
         ;;
 
@@ -173,27 +173,27 @@ case "$1" in
 
 
      list)
-        #Desc
-        # This will display a list of all your installed modules, probably
-        # something like this:
-        #Textbox
-        # Installed ELS packages:
-        #
-        # els-base-1.0-2
-        #
-        # Installed general packages:
-        #
-        # MAKEDEV-2.2-9
-        # NetKit-B-0.09-6
-        # SysVinit-2.64-8
-        # XFree86-libs-3.2-9
-        # adduser-1.7-1
-        # ash-0.2-8
-        # bash-1.14.7-1
-        #TextboxEnd
+	#Desc
+	# This will display a list of all your installed modules, probably
+	# something like this:
+	#Textbox
+	# Installed ELS packages:
+	#
+	# els-base-1.0-2
+	#
+	# Installed general packages:
+	#
+	# MAKEDEV-2.2-9
+	# NetKit-B-0.09-6
+	# SysVinit-2.64-8
+	# XFree86-libs-3.2-9
+	# adduser-1.7-1
+	# ash-0.2-8
+	# bash-1.14.7-1
+	#TextboxEnd
 	#Item Usage
 	#Macro Textbox
-        #DescEnd
+	#DescEnd
 
         $ELS_DIALOG --infobox "Just a moment ..." 3 26
         echo -e "Installed ELS packages:\n" >$ELS_TEMP
@@ -205,59 +205,59 @@ case "$1" in
 
 
      filelist)
-        #Desc
-        # This will show many internals of an already installed module,
-        # like module header, list of files, installation scripts and so
-        # on. Here is an example of one of the smallest modules (just one
-        # file):
-        #Textbox
-        # Contents of redhat-release-4.2-1:
-        #
-        # Name        : redhat-release              Distribution: Red Hat Linux Bi
-        # Version     : 4.2                               Vendor: Red Hat Software
-        # Release     : 1                             Build Date: Wed Apr 23 02:20
-        # Install date: Thu Jun 05 14:34:53 1997      Build Host: porky.redhat.com
-        # Group       : Base                          Source RPM: redhat-release-4
-        # Size        : 23
-        # Summary     : (none)
-        # Description :
-        # Red Hat Linux release file
-        #
-        #
-        # What files are in the module?
-        # -----------------------------
-        # /etc/redhat-release
-        #
-        #
-        # What scripts are in the module?
-        # -------------------------------
-        # preinstall script:
-        # (none)
-        # postinstall script:
-        # (none)
-        # preuninstall script:
-        # (none)
-        # postuninstall script:
-        # (none)
-        # verify script:
-        # (none)
-        #TextboxEnd
+	#Desc
+	# This will show many internals of an already installed module,
+	# like module header, list of files, installation scripts and so
+	# on. Here is an example of one of the smallest modules (just one
+	# file):
+	#Textbox
+	# Contents of redhat-release-4.2-1:
+	#
+	# Name        : redhat-release              Distribution: Red Hat Linux Bi
+	# Version     : 4.2                               Vendor: Red Hat Software
+	# Release     : 1                             Build Date: Wed Apr 23 02:20
+	# Install date: Thu Jun 05 14:34:53 1997      Build Host: porky.redhat.com
+	# Group       : Base                          Source RPM: redhat-release-4
+	# Size        : 23
+	# Summary     : (none)
+	# Description :
+	# Red Hat Linux release file
+	#
+	#
+	# What files are in the module?
+	# -----------------------------
+	# /etc/redhat-release
+	#
+	#
+	# What scripts are in the module?
+	# -------------------------------
+	# preinstall script:
+	# (none)
+	# postinstall script:
+	# (none)
+	# preuninstall script:
+	# (none)
+	# postuninstall script:
+	# (none)
+	# verify script:
+	# (none)
+	#TextboxEnd
 	#Item Usage
 	#Macro Textbox
-        #
-        #Item Hint
+	#
+	#Item Hint
 	# If you are interested in similar data about an uninstalled
 	# module, use the <A HREF="#test">Test</A> menu entry.
-        #DescEnd
+	#DescEnd
 
-        # ask for an installed module
+	# ask for an installed module
         echo -n "$ELS_DIALOG --menu \"For which package do you want info?\" 23 65 15 " >$ELS_TEMP.dialog
         rpm -qa | sort | awk '{ printf("%s %c%c ", $1, 34,34) }' >>$ELS_TEMP.dialog
         { . $ELS_TEMP.dialog; } 2>$ELS_TEMP
         test $? = 0 || return
         CHOICE=`cat $ELS_TEMP`
 
-        # creating the asked data
+	# creating the asked data
         echo -e "Contents of $CHOICE:\n" >$ELS_TEMP
         rpm -qi $CHOICE 2>&1 >>$ELS_TEMP
         echo -e "\n\nWhat files are in the module?" >>$ELS_TEMP
@@ -272,20 +272,20 @@ case "$1" in
 
 
      source)
-        #Desc
+	#Desc
 	# New RPMs can come from different sources: CDROMs, from a floppy,
 	# a ZIP drive or from the Internet. Depending on the source of the
 	# RPM, it is usually stored on different locations:
-        #Menu Source Default directory that is searched for RPMs
-        # Floppy    <TT>/mnt/floppy</TT>
-        # CD-ROM    <TT>/mnt/cdrom</TT>
-        # RedHat-CD <TT>/mnt/cdrom/RedHat/RPMS</TT>
-        # ZIP       <TT>/mnt/zip</TT>
-        # TempDir   <TT>/var/tmp</TT>
-        #MenuEnd
+	#Menu Source Default directory that is searched for RPMs
+	# Floppy    <TT>/mnt/floppy</TT>
+	# CD-ROM    <TT>/mnt/cdrom</TT>
+	# RedHat-CD <TT>/mnt/cdrom/RedHat/RPMS</TT>
+	# ZIP       <TT>/mnt/zip</TT>
+	# TempDir   <TT>/var/tmp</TT>
+	#MenuEnd
 	#Item Usage
 	#Macro Menu
-        #DescEnd
+	#DescEnd
 
         $ELS_DIALOG --menu "Select source for installation of RPMs" 13 50 5 \
                       "Floppy"    "/mnt/floppy" \
@@ -301,7 +301,7 @@ case "$1" in
 
 
      path)
-        #Desc
+	#Desc
 	# As you migth have noticed, the <a href="#source">Source</A> option
 	# already changed the path for you. But sometimes you want to install
 	# from another path, e.g. from
@@ -319,7 +319,7 @@ case "$1" in
 	#Item Visibility
 	# You can change the path only if the current
 	# <A HREF="#source">Source</A> is not set to "Floppy" or "RedHat-CD".
-        #DescEnd
+	#DescEnd
 
         InputString "Enter path to RPMs"
         test -z "$CHOICE" && return
@@ -328,12 +328,12 @@ case "$1" in
 
 
      test)
-        #Desc
-        # "Test" displays information for arbitrary modules. It also tests
+	#Desc
+	# "Test" displays information for arbitrary modules. It also tests
 	# if the selected module would be installable (e.g. if all
 	# dependencies are fulfilled). In case of a problem it gives you
 	# detailed information of what is wrong.
-        #DescEnd
+	#DescEnd
 
         if MountDevice; then
             SelectPackage "test"
@@ -361,12 +361,12 @@ case "$1" in
 
 
      install)
-        #Desc
-        # This will actually do the installation. The installation process
-        # itself works without any user-intervention. There is no way to
+	#Desc
+	# This will actually do the installation. The installation process
+	# itself works without any user-intervention. There is no way to
 	# modify the behavior of a module during installation time, we're not
 	# on windows where it's virtually impossible to auto-install applications.
-        #DescEnd
+	#DescEnd
 
         if MountDevice; then
             SelectPackage "install"
@@ -398,17 +398,17 @@ case "$1" in
 
 
     remove)
-        #Desc
-        # This will remove (uninstall) a module.
+	#Desc
+	# This will remove (uninstall) a module.
 	#
 	# Living in an imperfect world manifests in the fact that there is no
 	# undo-feature for this, so think twice what you do before you do it. :-)
-        #DescEnd
+	#DescEnd
 
-        # Confirmation one
+	# Confirmation one
         ExpertWarning || return
 
-        # ask for an installed module
+	# ask for an installed module
         echo -n "$ELS_DIALOG --menu \"Select installed package to remove $1\" 23 65 15 " >$ELS_TEMP.dialog
         rpm -qa | grep ^els- | sort | awk '{ printf("%s %c%c ", $1, 34,34) }' >>$ELS_TEMP.dialog
         rpm -qa | grep -v ^els- | sort | awk '{ printf("%s %c%c ", $1, 34,34) }' >>$ELS_TEMP.dialog
@@ -416,10 +416,10 @@ case "$1" in
         test $? = 0 || return
         CHOICE=`cat $ELS_TEMP`
 
-        # Confirmation two
+	# Confirmation two
         Question "\nAre you SURE you want to remove module $CHOICE  ???" || return
 
-        # ok, now get rid of the module
+	# ok, now get rid of the module
         $ELS_DIALOG --infobox "Removing $CHOICE ..." 3 60
         rpm -e $CHOICE >$ELS_TEMP 2>&1
         if [ $? = 0 ]; then

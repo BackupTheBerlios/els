@@ -53,7 +53,7 @@ case "$1" in
 	# The full name is used almost only for the purpose of receiving
 	# e-mails. Example: the user "donald" with full name "Donald Duck"
 	# can receive e-mail as donald@company.de and as
-        # donald.duck@company.de.
+	# donald.duck@company.de.
 	#DescEnd
 
         InputString "Enter full name, e.g. \"Donald Duck\""
@@ -112,8 +112,9 @@ case "$1" in
 	#ChecklistEnd
 	#Macro Checklist
 	#Macro Cancel
+	#
 	#Item Visibility
-        # This menu option is only visible if you selected a different user but 'root'.
+	# This menu option is only visible if you selected a different user but 'root'.
 	#DescEnd
 
 	sysadm-user.pl --all --userintogroups $LOGIN 2>$ELS_TEMP || {
@@ -123,17 +124,18 @@ case "$1" in
 	;;
 
      shell)
-        #Desc
-        # New users are generally only created for SAMBA (file server login) and EMail,
-        # depending on the installed modules.
-        #
-        # If you want that a user is allowed to login into the Linux server (via
-        # a SSH client like PuTTY), then use this option.
-        #
-        # Whenever you call it, the state of the user will be toggled.
-        #Item Visibility
-        # This menu option is only visible if you selected a different user but 'root'.
-        #DescEnd
+	#Desc
+	# New users are generally only created for SAMBA (file server login) and EMail,
+	# depending on the installed modules.
+	#
+	# If you want that a user is allowed to login into the Linux server (via
+	# a SSH client like PuTTY), then use this option.
+	#
+	# Whenever you call it, the state of the user will be toggled.
+	#
+	#Item Visibility
+	# This menu option is only visible if you selected a different user but 'root'.
+	#DescEnd
  
         clear
         if [ "$SHELLSTATE" = "enabled" ]; then

@@ -16,7 +16,7 @@ case "$1" in
         Option "Delete"    "Delete a user"
         Option "Modify"    "Modify a user"
 
-        #include Users sysadm -> Users
+	#include Users sysadm -> Users
         perl -nw - $ELS_MENULIB/*.mnu 2>/dev/null >>$ELS_TEMP.dialog <<-"EOF"
 	if ( /^\s+Title\s+"Users"\s+"(.*)"\s+"(.*)"/ ) {
 	    print "\"$1\" \"$2\" ";
@@ -25,60 +25,60 @@ case "$1" in
         ;;
 
 
-        #Desc
-        # This allows you to specify the users that have access to this
-        # system. Many other modules get their information from this
-        # module: els-samba e.g. uses this to determine which user has
-        # access, els-email uses this to find to which local users
-        # e-mail can be delivered and so on.
-        #DescEnd
+	#Desc
+	# This allows you to specify the users that have access to this
+	# system. Many other modules get their information from this
+	# module: els-samba e.g. uses this to determine which user has
+	# access, els-email uses this to find to which local users
+	# e-mail can be delivered and so on.
+	#DescEnd
 
 
     list)
-        #Desc
-        # This will display all currently defined users. Here is an excerpt
-        # of the display:
-        #Textbox
-        #  Id Login name   Real name              Member of groups ...
-        # ---------------------------------------------------------------------
-        # 103 andrea       Andrea Nicholas        users
-        # 121 charlotte    Charlotte Braeker      users
-        # 128 (daniel)     Daniel Rieker          (this account is disabled)
+	#Desc
+	# This will display all currently defined users. Here is an excerpt
+	# of the display:
+	#Textbox
+	# Login name   Real name              Member of groups ...
+	# -----------------------------------------------------------------
+	# andrea       Andrea Nicholas        users
+	# charlotte    Charlotte Braeker      users
+	# (daniel)     Daniel Rieker          (this account is disabled)
 	# ...
-        #TextboxEnd
-        #DescEnd
+	#TextboxEnd
+	#DescEnd
 
         sysadm-user.pl --users >$ELS_TEMP
         $ELS_DIALOG --textbox $ELS_TEMP 23 76
         ;;
 
     add)
-        #Desc
-        # This let you add a new user. First, you have to enter the login
-        # name. This name is usually written totally in lowercase. It must
-        # not contain any special characters ("/$%#) or spaces.
-        #Input donald
+	#Desc
+	# This let you add a new user. First, you have to enter the login
+	# name. This name is usually written totally in lowercase. It must
+	# not contain any special characters ("/$%#) or spaces.
+	#Input donald
 	# Enter the login name (one word!) using lower case, e.g.<BR>donald
-        #InputEnd
-        # After this prompt, you are asked to enter the full name. Please
-        # use proper capitalisation as well as spaces here:
-        #Input Donald Duck
+	#InputEnd
+	# After this prompt, you are asked to enter the full name. Please
+	# use proper capitalisation as well as spaces here:
+	#Input Donald Duck
 	# Enter the real name of the user. Use proper capitalisation, e.g.<BR>Donald Duck
-        #InputEnd
+	#InputEnd
 	# After a press at [Enter], the user account is created with
 	# default properties. You are automatically put into the
 	# "<A HREF="usermod.html">User modifification menu</A>" to allow
 	# you modifications (e.g. set a password).
-        #DescEnd
+	#DescEnd
 
-        # ask questions and check for easy errors
+	# ask questions and check for easy errors
         InputString "Enter the login name (one word!) using lower case, e.g.\ndonald" || return
         test -z "$CHOICE" && return
         export LOGIN="$CHOICE"
         InputString "Enter real name of user. Use proper capitalisation, e.g.\nDonald Duck" || return;
         test -z "$CHOICE" && return
 
-        # ask a program to actually enter the user
+	# ask a program to actually enter the user
         /usr/sbin/useradd -c "$CHOICE" -G users -m -s /bin/false $LOGIN >$ELS_TEMP 2>&1 || {
             # bail out if there was an error
             $ELS_DIALOG --textbox $ELS_TEMP 10 60
@@ -139,7 +139,7 @@ case "$1" in
 	# donald   Donald Duck
 	# root     root
 	#MenuEnd
-	# After you pressed [Enter], the see the
+	# After you pressed [Enter], you see the
 	# "<A HREF="usermod.html">User modifification menu</A>" and
 	# can modify the user.
 	#DescEnd

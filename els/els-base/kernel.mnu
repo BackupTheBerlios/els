@@ -1,7 +1,7 @@
 case "$1" in
 
     Query)
-        Title "" "Kernel" "For experts: kernel setup and compilation"
+        Title "internal" "Kernel" "For experts: kernel setup and compilation"
         Option "Parameters"  "For experts: set kernel parameters"
 
 	# ensure that user was at least once in "Parameters"
@@ -42,7 +42,7 @@ case "$1" in
         cd /usr/src/linux
         clear
 
-        # set the kernel parameters
+	# set the kernel parameters
         make menuconfig
 
         cd $ELS_MENULIB
@@ -62,7 +62,7 @@ case "$1" in
         cd /usr/src/linux
         clear
 
-        # remove old log if one existed
+	# remove old log if one existed
         rm .compile_log 2>/dev/null
 
 	{

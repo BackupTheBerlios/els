@@ -66,10 +66,10 @@ case "$1" in
 
 
     mount)
-        #Desc
+	#Desc
 	#Item Background
-        # Linux has a very efficient disk cache. The cache
-        # works with any file system, not just for the hard disk. This is
+	# Linux has a very efficient disk cache. The cache
+	# works with any file system, not just for the hard disk. This is
 	# one of the reasons why you have to mount disks before usage and
 	# to dismount them before removing (so that Linux can write out
 	# unwritten data blocks).
@@ -98,17 +98,17 @@ case "$1" in
 	# <LI>select <A HREF="#unmount">unmount</A>
 	# <LI>remove the inserted disk
 	# </OL>
-        #
+	#
 	#Item Visibility
-        # This option is only available when no floppy is mounted.
-        #DescEnd
+	# This option is only available when no floppy is mounted.
+	#DescEnd
 
         MountFloppy
         ;;
 
 
     unmount)
-        #Desc
+	#Desc
 	# Use this option to unmount a currently mounted floppy. Every
 	# outstanding data in the cache will be written to the disk.
 	#
@@ -118,8 +118,8 @@ case "$1" in
 	# inserted disk and trash the integrity of the disks.
 	#
 	#Item Visibility
-        # This option is only available when a floppy is currently mounted.
-        #DescEnd
+	# This option is only available when a floppy is currently mounted.
+	#DescEnd
 
 	$ELS_DIALOG --infobox "Just a moment ..." 3 26
 	sync
@@ -128,18 +128,18 @@ case "$1" in
 
 
     format)
-        #Desc
+	#Desc
 	# Any new disk must be formatted before it can be used. The formatting
-        # wipes out any data that might be on the disk.
+	# wipes out any data that might be on the disk.
 	#
 	# After you formatted a disk, you cannot use it immediately. First
 	# you must decide which file system the disk should get. Use the
 	# menu entries <A HREF="#linux">Linux</A> or <A HREF="#dos">DOS</A>
 	# to create a file system on the disk and render them usable.
-        #
+	#
 	#Item Visibility
-        # This option is only available when no floppy is mounted.
-        #DescEnd
+	# This option is only available when no floppy is mounted.
+	#DescEnd
 
         clear
         if fdformat /dev/fd0H1440; then
@@ -151,14 +151,14 @@ case "$1" in
 
 
     linux)
-        #Desc
-        # This creates the standard Linux file system "e2fs" on the disk.
-        # You can apply this to any formatted floppy. It is very fast and
-        # can be compared to the "quick format" option of MSDOS.
-        #
+	#Desc
+	# This creates the standard Linux file system "e2fs" on the disk.
+	# You can apply this to any formatted floppy. It is very fast and
+	# can be compared to the "quick format" option of MSDOS.
+	#
 	#Item Visibility
-        # This option is only available when no floppy is mounted.
-        #DescEnd
+	# This option is only available when no floppy is mounted.
+	#DescEnd
 
         $ELS_DIALOG --infobox "Please wait ...  creating LINUX disk" 3 40
         if mke2fs /dev/fd0H1440 >/dev/null 2>&1; then
@@ -170,16 +170,16 @@ case "$1" in
 
 
     dos)
-        #Desc
-        # This creates a DOS file system on the disk. It will actually
-        # create a "vfat" type file system. This is the file system used by
-        # Windows 95. It is also backwards compatible to normal DOS 2.1 -
-        # 6.12 file systems. This option is comparable to the "quick format"
+	#Desc
+	# This creates a DOS file system on the disk. It will actually
+	# create a "vfat" type file system. This is the file system used by
+	# Windows 95. It is also backwards compatible to normal DOS 2.1 -
+	# 6.12 file systems. This option is comparable to the "quick format"
 	# of the MSDOS format utility.
-        #
+	#
 	#Item Visibility
-        # This option is only available when no floppy is mounted.
-        #DescEnd
+	# This option is only available when no floppy is mounted.
+	#DescEnd
 
         if mformat a: 2>/dev/null; then
             $ELS_DIALOG --msgbox "The disk is now a DOS disk" 5 40

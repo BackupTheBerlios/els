@@ -2,7 +2,7 @@ case "$1" in
 
     Query)
         Title "Main" "Hardware" "Define and configure your hardware"
-        #Include Hardware sysadm -> Hardware
+	#Include Hardware sysadm -> Hardware
         perl -nw - $ELS_MENULIB/*.mnu 2>/dev/null >>$ELS_TEMP.dialog <<-"EOF"
         if ( /^\s+Title\s+"Hardware"\s+"(.*)"\s+"(.*)"/ ) {
             print "\"$1\" \"$2\" ";
