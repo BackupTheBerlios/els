@@ -6,14 +6,15 @@ Fine.
 
 Getting additional modules
 --------------------------
-ELS depends on some RPM's that are not part of Red Hat 7.2, e.g. on
+ELS depends on some RPMs that are not part of Red Hat 7.2, e.g. on
 postfix. When you do a "make all" or "make rpms" the system will try
-to automatically download this modules.
+to automatically download this modules. Therefore you should be online
+...
 
 Installation of the modules
 ---------------------------
-If everything goes well, you should have all ELS rpm's (as well as
-/some axiliary rpm's) in usr/src/redhat/RPMS/i386. Install the modules
+If everything goes well, you should have all ELS rpms (as well as
+/some auxiliary rpms) in /usr/src/redhat/RPMS/i386. Install the modules
 /that you like by doing something like
 
    $ cd /usr/src/redhat/RPMS/i386

@@ -10,13 +10,13 @@
 <P>
   If I remember things right, then this project started in 1996 or 1997, way before the
   Linux hype. One of the developers (Holger) was working at that time at a christian
-  missionary organisation named <a href="www.om.org">Operation Mobilisation</A> as the
+  missionary organization named <a href="www.om.org">Operation Mobilization</A> as the
   computer guy for a home country office. OM had little to medium offices in about 60
   countries, but only 10 computer technicians worldwide. And, living from donations,
   there was not much money to spend.
 </P><P>
   At that time I had in my office took the SCO running software, transferred it via
-  UUCP (our SCO version didn't had a TCP/IP licence!) to a linux box. I installed iBCS
+  UUCP (our SCO version didn't had a TCP/IP license!) to a Linux box. I installed iBCS
   and voila, it worked. Out of the box and way faster then before (maybe because of the
   better cache and buffer management of Linux). So I switched the old SCO box off. We
   used e-mail (it is and was much cheaper then fax or letters) and had a DOS based
@@ -24,8 +24,8 @@
   the e-mail server on my Linux box, too. Worked nicely, reliably and didn't cost
   me anything but time.
 </P><P>
-  Somewhat bigger offices used Novell fileservers for basic file
-  sharing. The software that were used for finance, address and compaign
+  Somewhat bigger offices used Novell file servers for basic file
+  sharing. The software that were used for finance, address and campaign
   management was running on SCO servers.  However, this software was aging
   and the new, upcoming software was running with a 4GL environment named
   Progress. However, Progress was no longer available for Novell and it was
@@ -43,14 +43,14 @@
   must be administrable from abroad
   <LI><B>reliable</B>: coming from Novell 3.x file servers, I expected working -- and not
   rebooting
-  <LI><B>easy to use</B>: many people in this organisation were there for one year,
+  <LI><B>easy to use</B>: many people in this organization were there for one year,
   not really technically trained or with their hearts focused on reaching people, not
   fixing computers
   <LI><B>platform</B>: it must be capable of running the new Progress based software
 </UL><P>
   NT was already available at that time and was considered as
   an option, but Holger made a proposal to use Linux. However, a bare bone
-  Linux was not something that you put in front of a "System Adminstrator" that
+  Linux was not something that you put in front of a "System Administrator" that
   has never seen a server before, but which just got the job of adding a new
   user because a new person joined the team ...
 </P><P>
