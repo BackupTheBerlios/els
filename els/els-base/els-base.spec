@@ -12,7 +12,7 @@ Copyright: GPL
 Group: System Environment/Base
 Packager: Holger Schurig <holgerschurig@gmx.de>
 Requires: redhat-release => 7.2, dialog, findutils, grep, gawk, textutils
-Requires: util-linux, mtools, e2fstools, shadow-utils, perl
+Requires: util-linux, mtools, e2fsprogs, shadow-utils, perl
 %if %{withjoe}
 Requires: joe
 %endif
@@ -54,50 +54,78 @@ echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment
 
 %files
 # DIRECTORIES
-%dir /etc/diralias.d
-%dir /usr/lib/els
+%attr(0755,root,root) %dir /etc/diralias.d
+%attr(0700,root,root) %dir /usr/lib/els
 
 # PRESET CONFIG FILES
+%attr(0600,root,root) %config(noreplace) /etc/els.conf
 %if %{withjoe}
 %attr(0644,root,root) %config(noreplace) /etc/joe/qrc
 %endif
-%attr(0700,root,root) %config(noreplace) /etc/els.conf
 
 # CONFIG FILE CHANGER
 %attr(0700,root,root) /usr/sbin/sysadm-setup.pl
-%attr(0700,root,root) /usr/lib/els/bashrc.setup
-%attr(0700,root,root) /usr/lib/els/bootmessages.setup
-%attr(0700,root,root) /usr/lib/els/ctrlaltdel.setup
-%attr(0700,root,root) /usr/lib/els/dircolors.setup
-%attr(0700,root,root) /usr/lib/els/inputrc.setup
-%attr(0700,root,root) /usr/lib/els/issue.setup
-%attr(0700,root,root) /usr/lib/els/mc-root.setup
-%attr(0700,root,root) /usr/lib/els/mountpoints.setup
-%attr(0700,root,root) /usr/lib/els/movehome.setup
-%attr(0700,root,root) /usr/lib/els/nscd.setup
-%attr(0700,root,root) /usr/lib/els/profile.setup
-%attr(0700,root,root) /usr/lib/els/rclocal.setup
-%attr(0700,root,root) /usr/lib/els/syslog.setup
-%attr(0700,root,root) /usr/lib/els/sysrq.setup
-%attr(0700,root,root) /usr/lib/els/tcptimestamps.setup
-%attr(0700,root,root) /usr/lib/els/tcpwrappers.setup
-%attr(0700,root,root) /usr/lib/els/unneededdaemons.setup
+%attr(0600,root,root) /usr/lib/els/bashrc.setup
+%attr(0600,root,root) /usr/lib/els/bootmessages.setup
+%attr(0600,root,root) /usr/lib/els/ctrlaltdel.setup
+%attr(0600,root,root) /usr/lib/els/dircolors.setup
+%attr(0600,root,root) /usr/lib/els/inputrc.setup
+%attr(0600,root,root) /usr/lib/els/issue.setup
+%attr(0600,root,root) /usr/lib/els/mc-root.setup
+%attr(0600,root,root) /usr/lib/els/mountpoints.setup
+%attr(0600,root,root) /usr/lib/els/movehome.setup
+%attr(0600,root,root) /usr/lib/els/nscd.setup
+%attr(0600,root,root) /usr/lib/els/profile.setup
+%attr(0600,root,root) /usr/lib/els/rclocal.setup
+%attr(0600,root,root) /usr/lib/els/syslog.setup
+%attr(0600,root,root) /usr/lib/els/sysrq.setup
+%attr(0600,root,root) /usr/lib/els/tcptimestamps.setup
+%attr(0600,root,root) /usr/lib/els/tcpwrappers.setup
+%attr(0600,root,root) /usr/lib/els/unneededdaemons.setup
+
+# SYSADM AND ITS HELPERS
+%attr(0700,root,root) /usr/sbin/sysadm
+%attr(0700,root,root) /usr/sbin/sysadm-user.pl
+%attr(0700,root,root) /usr/lib/els/adduser.els-base
+%attr(0700,root,root) /usr/lib/els/deluser.els-base
+%attr(0700,root,root) /usr/lib/els/pwchange.els-base
+%attr(0600,root,root) /usr/lib/els/cdrom.mnu
+%attr(0600,root,root) /usr/lib/els/expert.mnu
+%attr(0600,root,root) /usr/lib/els/floppy.mnu
+%attr(0600,root,root) /usr/lib/els/groups.mnu
+%attr(0600,root,root) /usr/lib/els/hardware.mnu
+%attr(0600,root,root) /usr/lib/els/install.mnu
+%attr(0600,root,root) /usr/lib/els/kernel.mnu
+%attr(0600,root,root) /usr/lib/els/login.mnu
+%attr(0600,root,root) /usr/lib/els/main.mnu
+%attr(0600,root,root) /usr/lib/els/messages.mnu
+%attr(0600,root,root) /usr/lib/els/network.mnu
+%attr(0600,root,root) /usr/lib/els/runlevel.mnu
+%attr(0600,root,root) /usr/lib/els/system.mnu
+#%attr(0600,root,root) /usr/lib/els/tcpip.mnu
+%attr(0600,root,root) /usr/lib/els/usermod.mnu
+%attr(0600,root,root) /usr/lib/els/users.mnu
 
 # DIRECTORY ALIASES
-%attr(0700,root,root) /etc/diralias.d/els-base.dirs
+%attr(0644,root,root) /etc/diralias.d/els-base.dirs
 
 # ENVIRONMENT PROFILES
 %if %{withjoe}
-/etc/profile.d/els-q.sh
+%attr(0644,root,root) /etc/profile.d/els-q.sh
 %endif
 
 # OTHER FILES
+# Helper routine to access configuration files
+%attr(0600,root,root) /usr/lib/perl5/site_perl/ConfigFiles.pm
+# Clear the screen and ring the bell
+%attr(0755,root,root) /usr/bin/cls
+%attr(0755,root,root) /usr/bin/bell
+# hex
+# .startup
 # Editor
 %if %{withjoe}
 /usr/bin/q
 %endif
-# Helper routine to access configuration files
-%attr(0700,root,root) /usr/lib/perl5/site_perl/ConfigFiles.pm
 
 # DOCUMENTATION
 %if %{withdoc}
