@@ -81,6 +81,7 @@ postmap /etc/postfix/transport >/dev/null
 # ENVIRONMENT PROFILES
 
 # OTHER FILES
+%attr(0755,root,root) /etc/ppp/20postfix.up
 
 # DOCUMENTATION
 %if %{withdoc}
