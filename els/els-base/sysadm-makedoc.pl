@@ -45,7 +45,7 @@ sub MakeShortFilename ($)
    my($fn) = @_;
 
    $fn =~ s/\.mnu$//;
-   $fn =~ s/\.html$//;
+   $fn =~ s/\.s?html$//;
    $fn =  $fn . ($shtml ? '.shtml' : '.html');
 
    return $fn;
@@ -291,10 +291,10 @@ sub MenuEntry ($$$)
     study $text;
 
     # cdrom setup
-    $text =~ s:\$CDROM:/dev/hdc: ;
+    $text =~ s:\$CDROM: hdc: ;
 
     # installation menu
-    $text =~ s:\$INSTALLFROM:CDROM: ;
+    $text =~ s:\$INSTALLFROM:RedHat-CD: ;
     $text =~ s:\$SOURCE:/mnt/cdrom/redhat/RPMS: ;
 
     # usermod menu
@@ -376,7 +376,7 @@ sub MenuEntry ($$$)
 
     # expert menu
     $text =~ s:\$EXPERTMODE:no: ;
-    $text =~ s:\$PROCESS_WATCHER:yes: ;
+    $text =~ s:\$TYPE:server: ;
 
 
     $text = " " . $text;
@@ -468,6 +468,7 @@ sub DoMenu ($)
     my($title) = @_;
 
     unless ($textmode) {
+	html "<P>";
         TableBegin($title, "");
     }
 
@@ -507,6 +508,7 @@ sub DoTextbox ($)
     my($title) = @_;
     my($line);
 
+    html "<P>";
     unless ($textmode) {
         #html "<!-- begin text box -->";
         OuterTableBegin("");
@@ -524,6 +526,7 @@ sub DoTextbox ($)
         if ($textmode) {
             html $line;
         } else {
+	    $line =~ s{ }{&nbsp;}g;
             html " $line<BR>";
         }
     }
@@ -645,7 +648,7 @@ sub DoInput ($)
         #html "<!-- input table for border -->";
         html "<TABLE WIDTH=\"100%\" BORDER=1 CELLPADDING=2 CELLSPACING=0>";
         html "<TR><TD>";
-        html "  <TT>$sample</TT>";
+        html "  <TT>${sample}_</TT>";
         html "</TD></TR>";
         html "</TABLE>";
 
@@ -878,7 +881,7 @@ sub Label ($)
 sub Include ($$)
 {
     # e.g.        $topic is "Network"
-    #                $refer is "sysadm -> Network"
+    #             $refer is "sysadm -> Network"
     my($topic, $refer) = @_;
 
     my($fn, $line);
