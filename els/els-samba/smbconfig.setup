@@ -24,7 +24,7 @@ close FILE;
 #
 # Set defaults
 #
-$ENV{SMB_NETBIOSNAME}    ||= 'LINUX';
+$ENV{SMB_NETBIOSNAME}    ||= 'SERVER';
 $ENV{SMB_WORKGROUP}      ||= 'ELS';
 $ENV{SMB_DOMAINLOGON}    ||= 'yes';
 $ENV{SMB_TRANSLATION}    ||= '';
@@ -68,10 +68,11 @@ print FILE ";;\n",
            "workgroup=$ENV{SMB_WORKGROUP}\n",
            "netbios name=$ENV{SMB_NETBIOSNAME}\n",
            "client code page=$ENV{SMB_CODEPAGE}\n",
-           "debug level=$ENV{SMB_DEBUGLEVEL}\n",
-           "\n",
-           "\n";
+           "debug level=$ENV{SMB_DEBUGLEVEL}\n";
 print FILE "character set=$ENV{SMB_TRANSLATION}\n" if $ENV{SMB_TRANSLATION} ne "";
+print FILE "\n",
+           "\n";
+
 if ($ENV{SMB_DOMAINLOGON} eq "yes") {
     print FILE ";;\n",
                ";;  Domain logon support:\n",
