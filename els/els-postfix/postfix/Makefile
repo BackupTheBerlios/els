@@ -3,7 +3,7 @@ include $(ROOT)/Makefile.inc
 
 
 # Postfix from the half-official RPM maintainer:
-POSTFIX=postfix-20010228_pl08release-2.i386.rpm
+POSTFIX=postfix-20010228_pl08release-3.i386.rpm
 URL=    http://www.ea4els.ampr.org/~sjmudd/postfix/ftp/rh72/RPMS/i386
 
 
@@ -29,7 +29,7 @@ rpms:: $(POSTFIXDEST)
 
 install:: $(POSTFIXDEST)
 	rm -f $(REDHAT_CD)/RedHat/RPMS/postfix*.rpm
-	cp -p /usr/src/redhat/RPMS/i386/postfix*.rpm $(REDHAT_CD)/RedHat/RPMS
+	cp -p /usr/src/redhat/RPMS/i386/postfix*.rpm $(RPM_DEST)
 
 
 
