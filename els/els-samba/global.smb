@@ -8,7 +8,6 @@ time server=yes
 #magic output=lxscript.txt
 printing=lprng
 #+++printer driver file=/var/samba/printer/printers.def
-
 log file = /var/log/samba/%m.log
 max log size = 0
 
