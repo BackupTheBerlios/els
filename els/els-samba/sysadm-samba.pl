@@ -7,11 +7,11 @@ use ConfigFiles;
 
 
 #
-# Loads /etc/sysconfig/rc.sysadm into $ENV{}
+# Loads /etc/els.conf into $ENV{}
 #
 sub LoadEnv ()
 {
-    open F, "/etc/sysconfig/rc.sysadm" || return;
+    open F, "/etc/els.conf" || return;
     while (defined($_ = <F>)) {
 	next if /^$/;
 	next if /^#/;
@@ -43,7 +43,7 @@ sub LoadFile ($)
 sub GetShareList ()
 {
     my(@shares);
-    opendir DIR, "/etc/samba.d";
+    opendir DIR, "/etc/samba";
     while (defined ($_ = readdir DIR)) {
 	next unless /\.smb$/;
 	next if /^global\.smb$/;
@@ -73,7 +73,7 @@ sub GetShareData ($)
    $volume     = undef;
    $printable  = undef;
 
-   open FILE, "/etc/samba.d/$share.smb" || return;
+   open FILE, "/etc/samba/$share.smb" || return;
    $share = uc $share;
    while (<FILE>) {
        chomp;
@@ -117,7 +117,7 @@ sub ShowUsers ()
             $MACHINE{$3} = $4;
         }
 
-        #18938  DENY_NONE  RDWR       EXCLUSIVE+BATCH  /usr/samba/app/Somas/m_1/lagaart.dbf   Wed Jul 19 10:19:30 2000
+        #18938  DENY_NONE  RDWR       EXCLUSIVE+BATCH  /var/samba/app/Somas/m_1/lagaart.dbf   Wed Jul 19 10:19:30 2000
         if ($_ =~ /^(\d+)\s+\S+\s+\S+\s+\S+\s+(\S+)/) {
              #print "pid $1  file $2\n";
              #printf "%-20s %s\n",  $USERS{$1}, $2;
@@ -173,7 +173,7 @@ sub ListShares ()
 
 	$comment   = undef;
 	$printable = undef;
-	open FILE, "/etc/samba.d/$share.smb";
+	open FILE, "/etc/samba/$share.smb";
 	while (<FILE>) {
 	    $comment = $1 if /^\s*comment\s*=\s*(.*)/;
 	    $printable = 1 if /^\s*printable/;
@@ -195,7 +195,7 @@ sub ListShares ()
 #
 # Get's the data of a share and writes out a list of commands that
 # can be sourced into a shell. This way, we can convert important
-# data from any file in /etc/samba.d into shell environment variables.
+# data from any file in /etc/samba into shell environment variables.
 #
 sub GetShare ()
 {
@@ -226,12 +226,12 @@ sub GetShare ()
 
 
 #
-# Creates a file in /etc/samba.d/ with all the value of the current
+# Creates a file in /etc/samba/ with all the value of the current
 # shell environment variables
 #
 sub SetShare ()
 {
-    loadfile "/etc/samba.d/$SetShare.smb", "";
+    loadfile "/etc/samba/$SetShare.smb", "";
 
     deleteline "^volume";
     deleteline "^browseable";
