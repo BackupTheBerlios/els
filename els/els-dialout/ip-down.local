@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for script in /etc/ppp/[0-9]*.down; do
+    test -x $script || continue
+    $script $* >>/var/log/connect-errors 2>&1
+done
