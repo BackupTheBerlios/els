@@ -12,7 +12,7 @@
 # low (less services = less things that can break) and makes sure that
 # nothing can suddenly change the setup.
 #DescEnd
-#Id $Id: unneededdaemons.setup,v 1.6 2001/12/05 14:47:31 holgerschurig Exp $
+#Id $Id: unneededdaemons.setup,v 1.7 2002/02/12 08:38:30 holgerschurig Exp $
 
 
 open CHKCONFIG, "chkconfig --list|";
@@ -21,11 +21,15 @@ close CHKCONFIG;
 foreach (@lines) {
   if ($server  && /^kudzu.*on/)    {
       system 'chkconfig --del kudzu >/dev/null 2>&1';
-      logit "/etc/rc.d/init.d/kudzu: autostart disabled\n";
+      logit "/etc/init.d/kudzu: autostart disabled\n";
+  }
+  if ($server  && /^harddrake.*on/)    {
+      system 'chkconfig --del harddrake >/dev/null 2>&1';
+      logit "/etc/init.d/harddrake: autostart disabled\n";
   }
   if ($server  && /^xfs.*on/)    {
       system 'chkconfig --xfs gpm >/dev/null 2>&1';
-      logit "/etc/rc.d/init.d/xfs: autostart disabled\n";
+      logit "/etc/init.d/xfs: autostart disabled\n";
   }
 }
 

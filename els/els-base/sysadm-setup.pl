@@ -7,7 +7,7 @@
 #
 #########################################################################
 #
-# $Id: sysadm-setup.pl,v 1.7 2001/12/05 14:47:13 holgerschurig Exp $
+# $Id: sysadm-setup.pl,v 1.8 2002/02/12 08:38:30 holgerschurig Exp $
 #
 
 use strict;
@@ -79,7 +79,7 @@ of documentation:
   # Longer description, may include paragraphs seperated by an
   # empty line.
   #DescEnd
-  #Id $Id: sysadm-setup.pl,v 1.7 2001/12/05 14:47:13 holgerschurig Exp $
+  #Id $Id: sysadm-setup.pl,v 1.8 2002/02/12 08:38:30 holgerschurig Exp $
 
   perl code
 
@@ -99,12 +99,21 @@ show up in the sysadm menu.
 #
 
 # First of all, we determine which version of RedHat we're running
-open FILE, '/etc/redhat-release';
+open FILE, '/etc/mandrake-release';
+my $version = 'unknown';
 $_ = <FILE>;
-/(\d.\d)/;
-my $version = $1 || 'unknown';
-unless ($version eq '7.2') {
+if (/(\d\.\d)/) {
+  $version = "mdk$1";
+} else {
+  open FILE, '/etc/redhat-release';
+  $_ = <FILE>;
+  if (/(\d\.\d)/) {
+    $version = "rh$1";
+  }
+}  
+unless ($version eq 'rh7.2' or $version eq 'mdk8.1') {
     print "This module has only been certified for Red Hat 7.2\n";
+    print "or                                      Mandrake 8.1\n";
 }
 my $insideanaconda = !defined $ENV{LOGNAME};
 my $quiet = 0;

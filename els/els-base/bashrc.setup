@@ -36,14 +36,20 @@
 # have a subdirectory 'log' then you will be put into '/var/log', wherever
 # you have been before.
 #DescEnd
-#Id $Id: bashrc.setup,v 1.6 2002/02/12 08:06:48 holgerschurig Exp $
+#Id $Id: bashrc.setup,v 1.7 2002/02/12 08:38:30 holgerschurig Exp $
 
 
 loadfile '/etc/bashrc';
 unless (search('function cd')) {
 writefile; # this makes a backup copy!
-open FILE, '>/etc/bashrc';
+if ($version =~ /^rh/) {
+  open FILE, '>/etc/bashrc';
+}
+elsif ($version =~ /^mdk/) {
+  open FILE, '>>/etc/bashrc';
+}
 print FILE <<EOF;
+
 # Better Prompt
 PROMPT_COMMAND='PS1=`test "\$UID" = 0 && echo "\\h:\\w# " || echo "\\h:\\w\$ "`'
 

@@ -11,12 +11,12 @@
 # legal reasons we add also a note that only authorited people are allowed
 # to use the system.
 #DescEnd
-#Id $Id: issue.setup,v 1.5 2001/12/04 22:35:29 holgerschurig Exp $
+#Id $Id: issue.setup,v 1.6 2002/02/12 08:38:30 holgerschurig Exp $
 
 
 chomp(my $hostname = `/bin/hostname`);
 loadfile '/etc/issue';
-unless ($insideanaconda || search($hostname)) {
+unless ($insideanaconda || (search($hostname) and $version =~ /^rh/)) {
     deleteall;
     append '';
     append 'Easy Linux Server at ' . $hostname;

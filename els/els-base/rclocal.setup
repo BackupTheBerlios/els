@@ -10,7 +10,7 @@
 # bit set will be sourced at system boot time. Therefore this scripts need
 # to be shell (and not perl or python) scripts.
 #DescEnd
-#Id $Id: rclocal.setup,v 1.5 2001/12/04 22:35:29 holgerschurig Exp $
+#Id $Id: rclocal.setup,v 1.6 2002/02/12 08:38:30 holgerschurig Exp $
 
 
 loadfile '/etc/rc.d/rc.local';
@@ -21,13 +21,17 @@ unless (search('rc.serial')) {
     append '# This script will be executed *after* all the other init scripts.';
     append '# You can put your own initialization stuff in here if you dont';
     append '# want to do the full Sys V style init stuff.';
-    append '#!/bin/sh';
+    append '#';
     append '# However, it might be wiser to just place shell scripts named';
     append '# rc.<whatever> into /etc/rc.d instead. They will be sourced';
     append '# automatically at the next boot. This allows any RPM to just';
     append '# drop their init stuff and get it executed --- however, there';
     append '# is no particular order.';
     append '';
+    if ($version =~ /^mdk/) {
+	append 'test -f /var/lock/TMP_1ST && test -f /etc/init.d/mandrake_firsttime && \\';
+	append '    /bin/sh /etc/init.d/mandrake_firsttime';
+    }
     append 'touch /var/lock/subsys/local';
     append '';
     append 'cd /etc/rc.d';
