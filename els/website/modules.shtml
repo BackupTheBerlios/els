@@ -21,7 +21,7 @@
 </TR><TR>
   <TD>els-base</TD>
   <TD>The basis for all other modules</TD>
-  <TD CLASS="small">Alpha<BR>not yet feature complete</TD>
+  <TD CLASS="small">Alpha<BR>the CVS-version works</TD>
   <TD COLSPAN=5>to be written</TD>
 </TR><TR>
   <TD>els-backup</TD>
@@ -71,12 +71,6 @@
 </TABLE>
 
 
-<H2>Where to go?</H2>
-<P>
-  Once you have installed the modules, you can use the
-  <A HREF="sysadm.shtml">sysadm</A> system administration tool.
-</P>
-
 <H2>Description</H2>
 <P>
   I am using the following terms:
@@ -104,5 +98,12 @@ blink and shine with all if it's bits. Go, install it immediately. Your reward
 will be eternally ...   And, by the way: it may still eat your hard disk. All of
 this software comes free of charge and without any guarantee :-)
 </UL>
+
+
+<H2>Where to go?</H2>
+<P>
+  Once you have installed the modules, you can use the
+  <A HREF="sysadm.shtml">sysadm</A> system administration tool.
+</P>
 
 <!--#include file="bottom.inc"-->
