@@ -67,11 +67,11 @@
 
 <H2>How it continued</H2>
 <P>
-  Throught the years the modules were installed in quite a number of
+  Through the years the modules were installed in quite a number of
   offices, with 5 to 60 computers. We had several meetings where we talked
   about the future, people learned how to program shell and perl and added
   modules on their own.
-</P><P>
+</P><P><!--
   Then in late 1999 an external developer came to the project. Technically
   he was (and is) brilliant, but he started to change things "the right way"
   without even trying to understand the underlying problem. And sometimes
@@ -80,23 +80,22 @@
 </P><P>
   He began to make nasty comments in public documentations, e.g. "How useful
   this really is to OM system admins worldwide is very unclear". He took
-  sourcecode written by others and placed his "Author XYZ" on top of it (it
-  would have been ok to write an "Modified by XYZ", credit where credit is
+  source code written by others and placed his "Author XYZ" on top of it (it
+  would have been OK to write an "Modified by XYZ", credit where credit is
   due!).  At some point communication was costing more than it was worth, so
   some developers retreated from the project, including the original main
-  develeper.
+  developer.
 </P><P>
-  However, you can't kill open source software that way. One of the original
-  developers left OM and started to work at a commercial company. And when a
-  file server was needed, he a took somewhat older version (unmodified by
-  person XYZ from above) and installed it. This version was later
-  re-christened from "OM Standard Linux Server" to "Easy Linux Server"
-  because it was not developed outside OM and was really of a wider audience
-  than just OM's offices. In the year 2000 it got occasional bug fixes and a
-  move from sendmail to postfix. It was deliberately not ported Red Hat 7.0
-  and 7.1 because of their strange C compiler.
+  However, you can't kill open source software that way. 
+-->
+  Later the original developer left OM and started to work at a
+  commercial company. And when a file server was needed, a
+  somewhat older version was taken and installed.
+  This version got occasional bug fixes and a move from sendmail
+  to postfix in the year 2000. Because it was now continued outside of
+  OM and had a broader view, it was re-christened to "Easy Linux Server".
 </P><P>
-  But when Red Hat 7.2 came (with a working C compiler, smile) the next
+  When Red Hat 7.2 came (with a working C compiler, smile) the next
   development cycle was started. A decision was made by this single developer
   to make a new web page, in the hope to attract other developers and
   to bring the modules to a wider audience.
