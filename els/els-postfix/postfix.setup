@@ -1,0 +1,13 @@
+#Title Create postfix configuration
+#Author Holger Schurig
+#Group els-postfix
+#Desc
+#DescEnd
+#Id $Id: postfix.setup,v 1.1 2001/11/30 15:22:49 holgerschurig Exp $
+
+
+system 'cd /etc/postfix
+        cat main.defaults main.local >main.cf';
+
+
+1;

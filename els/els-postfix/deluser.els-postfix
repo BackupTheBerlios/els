@@ -1,0 +1,8 @@
+#!/bin/bash
+LOGIN="$1"
+INTERACTIVE="$2"
+
+test "$INTERACTIVE" = "interactive" && echo -e "\nDeleting user from E-Mail ..."
+
+/usr/sbin/sysadm-setup.pl --rerun postfixcanonical
+/usr/sbin/sysadm-setup.pl postfixusers

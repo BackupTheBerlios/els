@@ -1,0 +1,10 @@
+#!/bin/bash
+LOGIN="$1"
+FULLNAME="$2"
+INTERACTIVE="$3"
+
+test "$INTERACTIVE" = "interactive" && echo -e "\nAdding user to E-Mail ..."
+
+/usr/sbin/sysadm-setup.pl --rerun postfixcanonical
+/usr/sbin/sysadm-setup.pl postfixusers
+

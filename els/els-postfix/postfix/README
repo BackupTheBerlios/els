@@ -1,0 +1,16 @@
+Postfix
+=======
+
+Postfix is an SMTP mailer similar to <B>sendmail</B>.
+
+It is not included with Red Hat 7.2, so the the directory
+<B>els-postfix/postfix</B> contains a Makefile that will automatically download
+the the binary RPM, ready for installation.
+
+
+Why?
+----
+
+Postfix was designed to be secure and fast, two areas where <B>sendmail</B>
+does not excel. What is best: it is way easier to configure than sendmail. Even the 
+documentation is quite nice (see http://www.postfix.org).

@@ -1,0 +1,16 @@
+#Title Save original smb.conf
+#Author Holger Schurig
+#Group els-samba
+#Desc
+#DescEnd
+#Id $Id: smbsave.setup,v 1.1 2001/11/30 15:27:49 holgerschurig Exp $
+
+
+loadfile '/etc/samba/smb.conf';
+if (search('fredsdir')) {
+    rename '/etc/samba/smb.conf', '/etc/samba/smb.conf.orig';
+    logit "/etc/samba/smb.conf: made backup copy\n";
+}
+
+
+1;

@@ -1,46 +1,17 @@
 case "$1" in
 
     Query)
-        Title "Network" "Postfix" "Setup Postfix mailer"
-        Option "Config"    "Edit main configuration file"
-        Option "Aliases"   "Edit aliases"
-        Option "Users"     "Edit user aliases"
-        Option "Canonical" "Edit e-mail address rewrite table"
-        #Option "Insiders"  "Edit list of inside domains"
-        #Option "Protected" "Edit recipients only accessbible for insiders"
-        Option "Relocated" "Edit list of people that moved away"
+        Title "Postfix" "Setup" "Advanced Postfix setup"
+        Option "Setup"      "Edit main configuration file"
+        Option "Relocated"  "Edit list of people that moved away"
+        Option "Transport"  "Edit smtp destination transport table"
+        Option "Bodychecks" "Edit e-mail body checks"
         ;;
 
-    config)
-        EditFile /etc/postfix/main.cf
+    setup)
+        EditFile /etc/postfix/main.local
+	/usr/sbin/sysadm-setup.pl postfix
         postfix reload
-        ;;
-
-    aliases)
-        EditFile /etc/postfix/aliases
-        newaliases
-        ;;
-
-    users)
-        EditFile /etc/postfix/aliases.users
-        newaliases
-        ;;
-
-    canonical)
-        EditFile /etc/postfix/canonical
-        postmap hash:/etc/postfix/canonical
-        ;;
-
-    insiders\
-	)
-        EditFile /etc/postfix/insiders_only
-        postmap hash:/etc/postfix/insiders_only
-        ;;
-
-    protected\
-	)
-        EditFile /etc/postfix/protected_destinations
-        postmap hash:/etc/postfix/protected_destinations
         ;;
 
     relocated)
@@ -48,21 +19,14 @@ case "$1" in
         postmap hash:/etc/postfix/relocated
         ;;
 
-    access\
-	)
-        EditFile /etc/postfix/access
-        postmap hash:/etc/postfix/access
-        ;;
-
-    transport\
-	)
+    transport)
         EditFile /etc/postfix/transport
         postmap hash:/etc/postfix/transport
         ;;
 
-
-# to remove job:
-# find /var/spool/postfix -name DB6831A80B -print | xargs rm
-
+    bodychecks)
+        EditFile /etc/postfix/bodychecks
+        postmap hash:/etc/postfix/bodychecks
+        ;;
 
 esac

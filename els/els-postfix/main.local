@@ -1,0 +1,33 @@
+#
+# SMTP RELAY
+# ----------
+# Postfix normally assumes that you have a dedicated (or dial-on-demand)
+# line to the internet. If you only go online from time to time, then
+# you need to change and uncomment the following two lines:
+#
+
+#defer_transports = smtp
+#relayhost = your.provider.goes.here
+
+
+
+#
+# YOUR E-MAIL DOMAIN NAME
+# ----------------------
+# Is your server named mycompany.de?  Then uncomment. Is your server named
+# <whatever>.mycompany.de ?  Then leave the next line commented out.
+#
+#myorigin =      $myhostname
+
+
+#
+# VALID RECEIVING DOMAIN NAMES
+# ----------------------------
+# Accept mail for this domain names:
+#
+mydestination =  $myhostname,
+                 $mydomain,
+                 localhost.$mydomain,
+                 mail.$mydomain,
+                 www.$mydomain,
+                 ftp.$mydomain

@@ -1,0 +1,48 @@
+#Title Create /etc/postfix/aliases.users
+#Author Holger Schurig
+#Group els-postfix
+#Desc
+#DescEnd
+
+
+*users = *ConfigFiles::users;
+
+ReadPasswd;
+loadfile '/etc/postfix/aliases.users';
+
+foreach my $user ( sort keys %users ) {
+    next if search "\\s$user\$";
+
+    my $id = $users{$user}[1];
+    next if $id < 500;
+    next if $id >= 64000;
+
+    # Convert national umlauts
+    #
+    # TODO: Is there a better way?  How can I found out translation for
+    # swedisch, dutch, spanish etc?
+
+    my $realname = lc $users{$user}[3];
+    $realname =~ s/ä/ae/g;
+    $realname =~ s/ö/oe/g;
+    $realname =~ s/ü/ue/g;
+    $realname =~ s/Ä/Ae/g;
+    $realname =~ s/Ö/Oe/g;
+    $realname =~ s/Ü/Ue/g;
+    $realname =~ s/ß/ss/g;
+
+    # The real user name must have at least on space
+    unless ($realname =~ /^(\S+)\s+(\S+)/) {
+        logit "Ignored realname \"$realname\" of user \"$user\" while making aliases\n";
+        next;
+    }
+
+    append sprintf("%-39s %s", "$1.$2:", $user);
+    append sprintf("%-39s %s", substr($1,0,1) . ".$2:", $user);
+}
+writefile;
+
+system '/usr/bin/newaliases 2>/dev/null';
+
+
+1;

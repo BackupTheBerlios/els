@@ -1,0 +1,27 @@
+#Title Create /etc/postfix/aliases.unixgroups
+#Author Holger Schurig
+#Group els-postfix
+#Desc
+#DescEnd
+
+
+*groups = *ConfigFiles::groups;
+
+ReadGroup;
+
+open FILE, ">/etc/postfix/aliases.groups";
+
+foreach my $name ( sort keys %groups ) {
+    next if $users{$name};
+    my $id = $groups{$name}[1];
+    next if $id < 500;
+    next if $id >= 64000;
+
+    printf FILE "%-20s %s\n", "$name:", $groups{$name}[2];
+}
+close FILE;
+
+system '/usr/bin/newaliases 2>/dev/null';
+
+
+1;

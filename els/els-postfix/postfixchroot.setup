@@ -1,0 +1,30 @@
+#Title Don't check for changes in /etc/services
+#Author Holger Schurig
+#Group els-postfix
+#Desc
+# Postfix by default checks if the the /etc/services in Postfix's chroot-environment
+# is different to the real /etc/services. It then creates annoying e-mails and
+# syslog entries. One has to manually do a
+#
+#    cp -p /etc/services /var/spool/postfix/etc
+
+# to stop the warnings.
+#
+# Unfortunately /etc/services changes quite regularly, e.g. when you install
+# database RPMs that need their own entries. Postfix does not normally need
+# those additional databases, so it does not make harm when Postfix's /etc/services
+# is different to the system wide /etc/services file.
+#
+# This patch stops Postfix checking for changes.
+#DescEnd
+
+
+loadfile '/etc/postfix/postfix-script';
+if (search('\/etc\/services')) {
+   replace '\/etc\/services ', '';
+   writefile;
+   logit "/etc/postfix/postfix-script: no more warnings about updated /etc/services\n";
+}
+
+
+1;

@@ -1,0 +1,22 @@
+case "$1" in
+
+    Query)
+        Title "Network" "EMail" "E-Mail settings"
+        Option "Postfix"   "Postfix SMTP mailer setup"
+        Option "Aliases"   "Edit aliases"
+        ;;
+
+    postfix)
+        $0 postfix.mnu
+        ;;
+
+    aliases)
+        EditFile /etc/postfix/aliases
+        newaliases
+        ;;
+
+# to remove job:
+# find /var/spool/postfix -name DB6831A80B -print | xargs rm
+
+
+esac

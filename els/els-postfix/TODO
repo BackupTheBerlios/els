@@ -1,0 +1,11 @@
+Implement "list waiting mails" menu entry
+Implement "delete waiting mail" menu entry
+Implement mail delivery types:
+   always online / dial-on-demand
+   dial-up SMTP
+      defer_transports = smtp
+      relayhost = <somehost>
+      delay_warntime = 24
+   uucp ?
+   uucp-over-tcpip ?
+Add similarreceiver (still have to re-code it in Free Pascal)

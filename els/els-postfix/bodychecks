@@ -1,0 +1,6 @@
+#/^[     ]*name=.*\.exe/         REJECT
+#/^[     ]*name=.*\.com/         REJECT
+#/^[     ]*name=.*\.pif/         REJECT
+#/^[     ]*name=.*\.wsh/         REJECT
+#/^[     ]*name=.*\.vbs/         REJECT
+#/^[     ]*name=.*\.url/         REJECT

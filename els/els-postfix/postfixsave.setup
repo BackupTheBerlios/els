@@ -1,0 +1,15 @@
+#Title Save original main.cd
+#Author Holger Schurig
+#Desc
+#DescEnd
+#Id $Id: postfixsave.setup,v 1.1 2001/11/30 15:22:49 holgerschurig Exp $
+
+
+loadfile '/etc/samba/smb.conf';
+unless (search('Easy Linux Server')) {
+    system '/bin/cp', '-p', '/etc/postfix/main.cf', '/etc/postfix/main.cf.orig';
+    logit "/etc/postfix/main.cf: made backup copy\n";
+}
+
+
+1;
