@@ -190,7 +190,7 @@ Hints to use the editor:\n\
 Alt Q      quit editor without saving\n\
 Alt X      to exit and save\
 \
-" 9 41
+" 8 42
 	;;
 
     vi)  $ELS_DIALOG --msgbox "\
@@ -202,7 +202,7 @@ ESC        back into command mode\n\n\
 : q !      leave editor without save\n\
 : x        to exit and save\
 \
-" 12 41
+" 11 42
 	;;
 
     esac
