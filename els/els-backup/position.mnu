@@ -15,7 +15,7 @@ Backup set:    $DESC
 Backup date:   $DATE
 Backup set no: $[BACKUPSET+1]
 Files in set:  $TAPEFILES
-Bytes in set:  $TAPESIZE" 11 60
+Bytes in set:  $TAPESIZE" 11 61
 }
 
 
@@ -142,7 +142,7 @@ case "$1" in
             return
         fi
 	rm -f $FILELIST
-        $ELS_DIALOG --msgbox "Now the tape is at the end of the data.\nYou can append another backup.\n" 6 45
+        $ELS_DIALOG --msgbox "Now the tape is at the end of the data.\nYou can append another backup.\n" 6 46
         ;;
 
 esac
