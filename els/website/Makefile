@@ -23,12 +23,14 @@ clean::
 upload:: all
 	scp *.html holgerschurig@els.berlios.de:/home/groups/els/htdocs/
 
+lint:: .docs
+	$(ROOT)/utilities/linklint -quiet -error /@
 
 
 .docs: $(SRC) $(DST)
 	touch .docs
 
-%.html:	%.shtml top.inc logos.inc bottom.inc admins.inc developers.inc
+%.html:	%.shtml top.inc logos.inc bottom.inc
 	$(ROOT)/utilities/makehtml.pl $< >$@
 
 index.shtml: ../README
@@ -45,3 +47,8 @@ install.shtml: ../INSTALL
 	echo '<!--#include file="logos.inc"-->' >>$@
 	$(ROOT)/utilities/text2shtml.pl $< >>$@
 	echo '<!--#include file="bottom.inc"-->' >>$@
+
+# Dependencies:
+developers.html patches.html structure.html:: developers.inc
+admins.html download.html faq.html install.html installation.html:: admins.inc
+modules.html sysadm.html:: admins.inc
