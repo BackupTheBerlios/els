@@ -5,14 +5,14 @@
 # Note that each user can have his own, private directory
 # aliases in ~/.diralias
 #
-# $Id: els-base.dirs,v 1.6 2002/05/27 08:31:44 holgerschurig Exp $
+# $Id: els-base.dirs,v 1.7 2002/08/09 13:02:52 holgerschurig Exp $
 #
 
 # often needed for module developers:
 if [ -f /etc/mandrake-release ]; then
     local specs=/usr/src/RPM/SPECS
     local build=/usr/src/RPM/BUILD
-    local rpms=/usr/src/RPM/RPMS/i686
+    local rpms=/usr/src/RPM/RPMS/i586
     local noarch=/usr/src/RPM/RPMS/noarch
     local srpms=/usr/src/RPM/SRPMS
     local sources=/usr/src/RPM/SOURCES
