@@ -3,16 +3,19 @@
 <!--#include file="admins.inc"-->
 <!--#include file="logos.inc"-->
 
-<H2>Base Modules</H2>
-<UL>
-  <LI>els-base
-  <LI>els-backup
-</UL>
+<H2>Module types</H2>
+<P>
+  And even this info is not yet there. Just so much for now: you always
+  have to install <B>els-base</B>. When you want to backup your server
+  to a SCSI DAT tape, then you can try <B>els-backup</B>. And if you
+  want to have a file server, then <B>els-samba</B> would really help to
+  set this up in a fast way.
+</P>
 
-<H2>Server Modules</H2>
-<UL>
-  <LI>els-samba
-  <LI>els-email
-</UL>
+<H2>Where to go?</H2>
+<P>
+  Once you have installed the modules, you can use the
+  <A HREF="sysadm.shtml">sysadm</A> system administration tool.
+</P>
 
 <!--#include file="bottom.inc"-->
