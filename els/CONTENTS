@@ -1,0 +1,14 @@
+The following are the still-in-development modules for Red Hat 7.2:
+
+els-base
+
+
+The following are modules that are designed for Red Hat 6.2, they
+are here for reference only.
+
+old/els-backup
+old/els-base
+old/els-dns
+old/els-lpr
+old/els-mundn
+old/els-postfix
