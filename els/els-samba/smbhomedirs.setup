@@ -1,0 +1,44 @@
+#Title Link linux home dir to samba home dir
+#Author Holger Schurig
+#Desc
+#DescEnd
+
+
+# Variables:
+my $name;
+*users = *ConfigFiles::users;
+
+
+#
+# Read /etc/passwd into the %users hash
+#
+open FILE, "</etc/passwd";
+while (defined($_ = <FILE>)) {
+    chomp;
+    @_ = split /:/, $_;
+    $name = shift @_;
+    $users{$name} = [ @_ ];
+    $users{$name}[5] = "" unless $users{$name}[5];
+}
+
+
+for $_ ( sort keys %users ) {
+    my $id = $users{$_}[1];
+    next if ($id < 500) and ($_ ne "root");
+    next if $id >= 64000;
+    next if $_ =~ /^[A-Z]/;
+    #print "symlink $users{$_}[4]  /var/samba/dat/users/$_\n" unless -l "/var/samba/dat/users/$_";
+    symlink($users{$_}[4], "/var/samba/dat/users/$_") unless -l "/var/samba/dat/users/$_";
+}
+
+
+# remove files that don't belong to valid user entries
+#my $basename;
+#for $_ ( glob ('/var/samba/dat/users/*')) {
+#    $basename = $_;
+#    $basename =~ s:.*/([^/]*):$1:g;
+#    system "rm -rf $_" unless ($users{$basename});
+#}
+
+
+1;

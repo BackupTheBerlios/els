@@ -1,0 +1,6 @@
+comment=CDROM drive in server
+path=/mnt/cdrom
+root preexec=mount /mnt/cdrom
+root postexec=umount /mnt/cdrom
+volume=CDROM
+read only=yes

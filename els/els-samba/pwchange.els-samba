@@ -1,0 +1,7 @@
+#!/bin/bash
+
+test "$3" = "interactive" && echo -e "\nChanging password for Samba ..."
+
+
+# Enable account in case it was previously disables 
+echo -e "$2\n$2" | /usr/bin/smbpasswd -s -a "$1"

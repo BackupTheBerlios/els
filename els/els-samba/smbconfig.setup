@@ -1,0 +1,115 @@
+#Title update samba configuraton
+#Author Holger Schurig
+#Desc
+# This creates from environment variables and the files in /etc/samba/*.smb
+# an /etc/samba/smb.conf that can be read and understood by samba.
+#DescEnd
+
+
+my %ENV;
+
+
+#
+# Load els.conf into the %ENVironment
+#
+open FILE, "/etc/els.conf";
+while (defined($_ = <FILE>)) {
+    next if /^$/;
+    next if /^#/;
+    /^(.*?)=\"?(.*?)\"?$/;
+    $ENV{$1} = $2;
+}
+close FILE;
+
+#
+# Set defaults
+#
+$ENV{SMB_NETBIOSNAME}    ||= 'LINUX';
+$ENV{SMB_WORKGROUP}      ||= 'ELS';
+$ENV{SMB_DOMAINLOGON}    ||= 'yes';
+$ENV{SMB_TRANSLATION}    ||= '';
+$ENV{SMB_CODEPAGE}       ||= '850';
+$ENV{SMB_DEBUGLEVEL}     ||= '0';
+
+
+
+open FILE, ">/etc/samba/smb.conf";
+
+#
+# Section 1: Intro
+#
+print FILE ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n",
+           ";;  This is an automatically created file, do not change.      ;;\n",
+           ";;  Please use sysadm -> Network -> Samba instead. Thank you.  ;;\n",
+           ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n",
+           "[global]\n",
+           "\n",
+           "\n";
+
+#
+# Section 2: global parameters
+#
+loadfile "/etc/samba/global.smb";
+# Delete comments
+@ConfigFiles::lines = map { if ($_ =~ /^#/) { } else { $_ } } @ConfigFiles::lines;
+print FILE ";;\n",
+           ";;  Global SAMBA parameters:\n",
+           ";;\n",
+           @ConfigFiles::lines,
+           "\n",
+           "\n";
+
+#
+# Section 3: settable parameters
+#
+print FILE ";;\n",
+           ";;  Parameters from sysadm -> Network -> Samba -> Setup:\n",
+           ";;\n",
+           "workgroup=$ENV{SMB_WORKGROUP}\n",
+           "netbios name=$ENV{SMB_NETBIOSNAME}\n",
+           "client code page=$ENV{SMB_CODEPAGE}\n",
+           "debug level=$ENV{SMB_DEBUGLEVEL}\n",
+           "\n",
+           "\n";
+print FILE "character set=$ENV{SMB_TRANSLATION}\n" if $ENV{SMB_TRANSLATION} ne "";
+if ($ENV{SMB_DOMAINLOGON} eq "yes") {
+    print FILE ";;\n",
+               ";;  Domain logon support:\n",
+               ";;\n",
+               "domain logons=yes\n",
+               "logon script=logon.bat\n",
+               "domain master=yes\n",
+               "preferred master=yes\n",
+               "os level=65\n",
+               "\n",
+               "\n";
+
+}    
+
+
+#
+# Section 4: the Shares
+#
+print FILE ";;;;;;;;;;;;;;;;;;;;;;;;;;;\n",
+           ";;  And now the shares:  ;;\n",
+           ";;;;;;;;;;;;;;;;;;;;;;;;;;;\n",
+           "\n";
+
+foreach my $share (sort glob '/etc/samba/*.smb') {
+    loadfile $share;
+    # Delete comments
+    @ConfigFiles::lines = map { if ($_ =~ /^#/) { } else { $_ } } @ConfigFiles::lines;
+    $share =~ s{.+/(.+)}{$1};
+    $share =~ s{.smb$}{};
+    next if $share eq 'global';
+    print FILE "[$share]\n",
+          @ConfigFiles::lines,
+          "\n";
+}
+close FILE;
+
+
+# Don't tell samba about our shining new config file!
+
+
+1;

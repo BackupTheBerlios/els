@@ -1,0 +1,3 @@
+comment=Server based applications
+path=/var/samba/app
+force group=users

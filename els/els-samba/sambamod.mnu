@@ -1,0 +1,174 @@
+case "$1" in
+
+    Query)
+	COMMENT=${SMB_COMMENT:--none-}
+	MYPATH=${SMB_PATH:--none-}
+	VOLUME=${SMB_VOLUME:--none-}
+	WRITELIST=${SMB_WRITELIST:--none-}
+	Title "Internal to SAMBA" "Share modification" "Parameters for share '$SMB_SHARE'"
+	Option "Path"        "Server path          ($MYPATH)"
+	Option "Description" "Share description    ($COMMENT)"
+	Option "Volume"      "Volume label         ($VOLUME)"
+	Option "Available"   "Is share available?  ($SMB_AVAILABLE)"
+	Option "Browseable"  "Browseable           ($SMB_BROWSEABLE)"
+	Option "Public"      "Access without login ($SMB_GUESTOK)"
+	Option "Readonly"    "Read only status     ($SMB_READONLY)"
+	test $SMB_READONLY = "yes" &&
+	Option "Writelist"   "still w/ writeaccess ($WRITELIST)"
+	Option "Special"     "For exports: edit special options"
+	Option "Update"      "Update share configuration"
+	;;
+
+	#Desc
+	# Use this menu to create or modify a Samba share.
+	#DescEnd
+
+
+    description)
+	#Desc
+	# Enter a short descriptions. If your users have enabled the detailed
+	# view in their Windows Explorer, they will see this description text.
+	#DescEnd
+
+	dialog --inputbox "Please enter a short description:" 8 39 2>$ELS_TEMP || return
+	SMB_COMMENT=`cat $ELS_TEMP`
+	;;
+
+    available)
+	#Desc
+	# Specifies if a share is available for use. Set this to no if you
+	# want to disable a share temporarily.
+	#DescEnd
+
+	if Question "Is the share available for use?\n\nHint: set to 'no' to temporarily disable this share." ; then
+	    SMB_AVAILABLE="yes"
+	else
+	    SMB_AVAILABLE="no"
+	fi
+	;;
+
+    path)
+	#Desc
+	# Specifies the unix path where the files for the share are located,
+	# e.g. /mnt/cdrom or /usr/samba/app.
+	#DescEnd
+
+	dialog --inputbox "Please enter the unix path for the share:" 8 70 2>$ELS_TEMP || return
+	SMB_PATH=`cat $ELS_TEMP`
+	;;
+
+    volume)
+	#Desc
+	# This is the DOS volume label. Because this is a DOS name, you should
+	# only enter a name with up to 11 characters. DOS doesn't know about
+	# long file names ...
+	#DescEnd
+
+	dialog --inputbox "Please enter DOS volume name for the share.\n\nHint: you don't need this normally." 10 70 2>$ELS_TEMP || return
+	SMB_VOLUME=`cat $ELS_TEMP`
+	;;
+
+    browseable)
+	#Desc
+	# Setting this to "no" makes the share hidden in the "Network
+	# Neightborhood" of Windows 95. A user can access the share anyway,
+	# but only if he knows the shares' name.
+	#
+	# Call this security throught obscurity. :-)
+	#DescEnd
+
+	if Question "Should the share be visible in the 'Network Neightborhood' ?\n\nHint: this should almost always be 'yes'" ; then
+	    SMB_BROWSEABLE="yes"
+	else
+	    SMB_BROWSEABLE="no"
+	fi
+	;;
+
+    public)
+	#Desc
+	# A public share can be access by anybody, even without a valid logon.
+	# I guess you need this only in special circumstances ...
+	#DescEnd
+
+	if Question "Should everyone be able to access this share, even without a\nvalid login?\nHint: this should almost always be 'no'" ; then
+	    SMB_GUESTOK="yes"
+	else
+	    SMB_GUESTOK="no"
+	fi
+	;;
+
+    readonly)
+	#Desc
+	# This makes a share readonly. No user can write to the share -- except
+	# the username is listed in the <A HREF="#writelist">Writelist</A>.
+	#DescEnd
+
+	if Question "Should the share be read only?\n\nHint: this should almost always be 'no'" ; then
+	    SMB_READONLY="yes"
+	else
+	    SMB_READONLY="no"
+	    SMB_WRITELIST=""
+	fi
+	;;
+
+    writelist)
+	#Desc
+	# The write list allows you to to enter the names (e.g. "root,
+	# holger") of those users that are allowed to write to a normally
+	# readonly-share.
+	#
+	# Note that you can not only specify users, but also groups. If you
+	# set the write list to "root, @itdepartment" then root and all the
+	# people that are member of the unix group "itdepartment" can also
+	# write into the share.
+	#
+	#Item Visibility
+	# You see this menu entry only when a share is readonly.
+	#DescEnd
+
+	dialog --inputbox "People that may write even when the share is read-only. Use a\ncomma separated list, e.g.\n\nroot, holger, @petrausers" 12 70 2>$ELS_TEMP || return
+	SMB_WRITELIST=`cat $ELS_TEMP`
+	;;
+
+    special)
+	#Desc
+	# Sometimes you need special options for a share. This menu entry
+	# launches you into the editor where you can modify all possible
+	# parameters. You should have read and understood the manual page
+	# "man smb.conf" before you do this.
+	#
+	#Item Usage
+	#Macro Editor
+	#DescEnd
+
+	SHARE=`echo $SMB_SHARE | tr A-Z a-z`
+	EditFile /etc/samba.d/$SHARE.smb
+	/usr/sbin/sysadm-samba.pl --getshare $SHARE >$ELS_TEMP
+	. $ELS_TEMP
+	;;
+
+    update)
+	#Desc
+	# All your modifications (except the <A HREF="#special">Special</A>
+	# modifications) take place only after you selected this option.
+	#DescEnd
+
+	test "$MYPATH" = "-none-" && {
+	    dialog --title "Can't update" --msgbox "\nA share without a path doesn't make sense!" 7 46
+	    return
+	}
+	#test -d $SMB_PATH || {
+	#    dialog --title "Can't update" --msgbox "\nSpecified path must lead to an existing directory!" 7 54 
+	#    return
+	#}
+	test "$COMMENT" = "-none-" && {
+	    dialog --title "Can't update" --msgbox "\nSorry, I need a description first!" 7 38
+	    return
+	}
+	SHARE=`echo $SMB_SHARE | tr A-Z a-z`
+	/usr/sbin/sysadm-samba.pl --setshare $SHARE
+	dialog --msgbox "Share will be available with your options\nafter the next restart of SAMBA." 6 45
+	ExitMenu
+	;;
+
+esac

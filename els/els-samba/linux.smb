@@ -1,0 +1,4 @@
+comment=Whole linux partition
+path=/
+browseable=no
+valid users=root

@@ -1,0 +1,3 @@
+comment=Your home directory
+path=/var/samba/dat/users/%u
+browseable=no

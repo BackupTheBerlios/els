@@ -1,0 +1,53 @@
+#
+# Please don't just modify this file. Tell holger.schurig@d.om.org of what
+# you are doing, maybe it's a general issue for every site!
+#
+wins support=yes
+dns proxy=no
+message command=bash -c 'cat %s | logger -t %f' &
+name resolve order=wins host
+security=user
+deadtime=10
+time server=yes
+keepalive=600
+magic script=lxscript.sh
+magic output=lxscript.txt
+load printers=yes
+printing=lprng
+printcap name=/etc/printcap
+printer driver file=/var/samba/printer/printers.def
+
+log file = /var/log/samba/log.%m
+max log size = 100
+debug timestamp = no
+
+
+;;
+;; Speed optimisations
+;;
+socket options=TCP_NODELAY SO_RCVBUF=8192 SO_SNDBUF=8192
+
+
+;;
+;;  Global SHARE parameters:
+;;
+force create mode=660
+directory mask=2770
+force directory mode=2000
+dos filetimes=yes
+hosts allow=192.168. 127.0.0.
+min print space=2048
+veto files=lost+found/proc/dev
+read only=no
+dos filetime resolution=yes
+preserve case=yes
+
+
+;;
+;; Support for encrypted password (and for client changeable passwords)
+;;
+encrypt passwords=yes
+unix password sync=yes
+passwd program=/var/sbin/sysadm-samba.pl --changepw
+passwd chat=*username* %u\n *new*password* %n\n *changed*
+password level=2

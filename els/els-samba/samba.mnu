@@ -1,0 +1,282 @@
+function SelectShare ()
+{
+    echo -n "dialog --menu \"Select a share $1\" 23 65 15 " >$ELS_TEMP.dialog
+    sysadm-samba.pl --listshares >>$ELS_TEMP.dialog
+    { . $ELS_TEMP.dialog; } 2>$ELS_TEMP
+    CHOICE=`cat $ELS_TEMP`
+}
+
+
+case "$1" in
+
+    Query)
+	Title "Network" "Samba" "Setup SAMBA file server"
+	Option "Who"      "Display users connected to SAMBA"
+	Option "Batch"    "For experts: edit domain logon batch file"
+	Option "List"     "Display list of shares"
+	Option "Add"      "Add a new share"
+	Option "Delete"   "Delete a share"
+	Option "Modify"   "Modify a share"
+	Option "Setup"    "For experts: setup internal SAMBA parameters"
+	[ -s /var/log/samba/log.smbd ] &&
+	Option "Log"      "Displays the samba SMB log file"
+	[ -s /var/log/samba/log.nmbd ] &&
+	Option "Netbios"  "Displays the samba NMB (Netbios) log file"
+	;;
+
+	#Desc
+	# SAMBA is the file server module for the Easy Linux Server.
+	# It comes totally preconfigured, so only people with special needs
+	# will ever need to fiddle with this menu.
+	#DescEnd
+
+
+    who)
+	#Desc
+	# This entry shows you which users are using SAMBA from their
+	# workstations and which files they have open.
+	#TextBoxEnd.
+	#Macro TextBox
+	#DescEnd
+
+	sysadm-samba.pl --users >$ELS_TEMP
+	dialog --title "Who is using SAMBA?" --textbox $ELS_TEMP 23 76
+	;;
+
+    batch)
+	#Desc
+	# When you enabled the "Domain logon" feature at your clients,
+	# they will execute a batch directly after logon. While there
+	# comes one already preconfigured with SAMBA, you might want
+	# to add your own stuff there.
+	#
+	#Item Usage
+	#Edit
+	# @echo off
+	# echo Welcome to the Easy Linux Server !
+	# echo.
+	# net use F: \\LINUX\APP
+	# net use I: \\LINUX\DAT
+	# net use H: \\LINUX\HOME
+	#EditEnd
+	#Macro Editor
+	#DescEnd
+
+	# change special characters and change CRLF -> LF, remove Ctrl-Z
+	{
+	    recode IBM-PC:latin1 </usr/samba/netlogon/logon.bat |
+		tr -d "\032"
+	}>$ELS_TEMP 2>/dev/null
+
+	EditFile "$ELS_TEMP" /usr/samba/netlogon/logon.bat
+
+	# change special characters back and change LF -> CRLF, add Ctrl-Z
+	{
+	    recode latin1:IBM-PC <$ELS_TEMP
+	    echo -en "\032"
+	} >/usr/samba/netlogon/logon.bat 
+	;;
+
+    list)
+	#Desc
+	# This entry shows you all shares and special attributes of them. 
+	# This entry displays all shares as opposed to theg "Network
+	# Neightborhood" in Windows 95 -- which doesn't display the hidden
+	# shares. Why do we have hidden shares? Because we need them for
+	# internal or special use, but they are not meant for day-to-day work.
+	# Anyway, once you know their name using this menu, you can connect
+	# to the shares if need arises.
+	#
+	#TextBox
+	# APP              Server based applications
+	#   Server path    /usr/samba/app
+	#   Read only      yes
+	#   Write list     root
+	# 
+	# ARC              Software archive
+	#   Server path    /usr/samba/arc
+	#   Read only      yes
+	#   Write list     root
+	# 
+	# CDROM            CDROM drive in server
+	#   Volume label   CDROM
+	#   Server path    /mnt/cdrom
+	#   Read only      yes
+	# 
+	# DAT              Users and workgroups
+	#   Server path    /usr/samba/dat
+	#TextBoxEnd.
+	#Macro TextBox
+	#DescEnd
+
+	/usr/sbin/sysadm-samba.pl --shares >$ELS_TEMP
+	dialog --title "Available shares" --textbox $ELS_TEMP 23 76
+	;;
+
+    add)
+	#Desc
+	# This entry allows you to create a new share. A "share" tells
+	# SAMBA to export one of the Linux directory, e.g. "/mnt/zip"
+	# via a name, e.g. "\\LINUX\ZIP" so that a workstation can access
+	# the files. At the workstation, you usually connect a share to
+	# a drive letter, ending up with the "Z:" drive pointing to your
+	# "/mnt/zip" drive. Cute, ey?
+	#
+	#Item Usage
+	# First you have to specify a name:
+	#Input ZIP
+	# Enter name of share, e.g. "CDROM" or "TEST"
+	#InputEnd
+	# And then you will be put into the <A HREF="sambamod.htm">Share
+	# modification</A> menu to modify the initial settings to your
+	# needs.
+	#
+	# <B>Note</B>: the new share will only be available to your users
+	# after the next <A HREF="#restart">restart</A> of Samba.
+	#DescEnd
+
+	InputString "Enter name of share, e.g. \"CDROM\" or \"TEST\""
+	test -z "$CHOICE" && return
+	export SMB_SHARE=`echo $CHOICE | tr a-z A-Z`
+	SHARE=`echo $CHOICE | tr A-Z a-z`
+	test -f /etc/samba.d/$SHARE.smb && {
+	    dialog --title "Can't create" --msgbox "\nSorry, the $SMB_SHARE share does already exists." 7 50
+	    return
+	}
+	export SMB_COMMENT=""
+	export SMB_PATH="/enter/your/path/here"
+	export SMB_WRITELIST=""
+	export SMB_BROWSEABLE="yes"
+	export SMB_READONLY="no"
+	export SMB_AVAILABLE="yes"
+	export SMB_GUESTOK="no"
+	export SMB_VOLUME=""
+	$0 sambamod
+	;;
+
+    delete)
+	#Desc
+	# Use this option to delete share.
+	#
+	#Item Usage
+	# Select the share you want to delete:
+	#Menu Select a share to delete:
+	# app       Server based applications
+	# arc       Software archive
+	# cdrom     CDROM drive in server
+	# dat       Users and workgroups
+	# home      Your home directory
+	# kyocera   KYOCERA printer
+	# linux     Whole linux partition
+	# netlogon  Domain logon script
+	# tmp       temporary data
+	# zip       ZIP drive in the server
+	#MenuEnd
+	#Macro Menu
+	# The selected share will the be deleted.
+	#
+	# <B>Note</B>: the share will only inaccessible to your users
+	# after the next <A HREF="#restart">restart</A> of Samba.
+	#DescEnd
+
+	SelectShare "to delete:"
+	test -z "$CHOICE" && return
+
+	# check if this is a printer
+	/usr/sbin/sysadm-samba.pl --getshare $CHOICE >$ELS_TEMP
+	. $ELS_TEMP
+	test "$SMB_PRINTABLE" = "yes" && {
+	    dialog --title "Can't remove" --msgbox "\nThe $SMB_SHARE share is a printer.\n\nUse  sysadm -> Hardware -> Printer  to remove this printer." 9 70
+	    return
+	}
+
+	# Make sure the user knows what he is doing ...
+	Question "Do you really want to delete the $SMB_SHARE share?" || return
+
+	# remove the share
+	rm -f /etc/samba.d/$CHOICE.smb
+	/usr/sbin/sysadm-setup.pl smbconfig.setup
+	dialog --msgbox "Share is gone after the next restart of SAMBA." 5 50 
+	;;
+
+    modify)
+	#Desc
+	# This entry allows you to modify the parameters of an already
+	# existing share.
+	#
+	#Item Usage
+	# First you have to select a share:
+	#Menu Select a share to modify:
+	# app       Server based applications
+	# arc       Software archive
+	# cdrom     CDROM drive in server
+	# dat       Users and workgroups
+	# home      Your home directory
+	# kyocera   KYOCERA printer
+	# linux     Whole linux partition
+	# netlogon  Domain logon script
+	# tmp       temporary data
+	# zip       ZIP drive in the server
+	#MenuEnd
+	#Macro Menu
+	# You will be sent into the 
+	# <A HREF="sambamod.htm">Share
+	# modification</A> menu. There you can modify the settings.
+	#
+	# <B>Note</B>: the modifications will only be available to your users
+	# after the next <A HREF="#restart">restart</A> of Samba.
+	#DescEnd
+
+	SelectShare "to modify:"
+	test -z "$CHOICE" && return
+	/usr/sbin/sysadm-samba.pl --getshare $CHOICE >$ELS_TEMP
+	. $ELS_TEMP
+	$0 sambamod
+	;;
+
+    log)
+	#Desc
+	# Displays the log file of the SAMBA file server process.
+	#
+	#TextBox
+	# 1998/08/14 14:17:26 test (192.168.1.99) connect to service netlogon as user holger (uid=100,gid=101) (pid 1190)
+	# 1998/08/14 14:21:11 test (192.168.1.99) closed connection to service netlogon
+	# 1998/08/14 14:27:31 test (192.168.1.99) closed connection to service app
+	# 1998/08/14 14:27:31 test (192.168.1.99) closed connection to service holger
+	# 1998/08/14 14:27:31 test (192.168.1.99) closed connection to service dat
+	# 1998/08/14 15:55:40 test (192.168.1.99) connect to service cdrom as user holger (uid=100,gid=101) (pid 2142)
+	#TextBoxEnd
+	#Item Usage
+	#Macro Textbox
+	#DescEnd
+
+	dialog --textbox /var/log/samba/log.smbd 23 76
+	;;
+
+    netbios\
+	)
+	#Desc
+	# Displays the name bios resolving actions of your SAMBA file
+	# server.
+	#
+	#Item Usage
+	#Macro Textbox
+	#DescEnd
+
+	dialog --textbox /var/log/samba/log.nmbd 23 76
+	;;
+
+    setup)
+	#Desc
+	# You might want to change some global SAMBA parameter. This is
+	# usually only necessary if you have more than one SAMBA server
+	# in your network or a SAMBA and an NT server.
+	#
+	# After selecting this entry, you will find yourself in the
+	# <A HREF="sambaset.htm">sysadm -&gt; Network -&gt; Samba -&gt;
+	# Setup</A> menu.
+	#DescEnd
+	$0 sambasetup
+	;;
+
+esac

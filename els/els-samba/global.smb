@@ -1,0 +1,44 @@
+wins support=yes
+dns proxy=no
+message command=bash -c 'cat %s | logger -t %f' &
+name resolve order=lmhosts host wins
+deadtime=10
+time server=yes
+#magic script=lxscript.sh
+#magic output=lxscript.txt
+printing=lprng
+#+++printer driver file=/var/samba/printer/printers.def
+
+log file = /var/log/samba/%m.log
+max log size = 0
+
+
+;;
+;; Speed optimisations
+;;
+socket options=TCP_NODELAY SO_RCVBUF=8192 SO_SNDBUF=8192
+
+
+;;
+;;  Global SHARE parameters:
+;;
+force create mode=660
+directory mask=2770
+force directory mode=2000
+dos filetimes=yes
+dos filetime resolution=yes
+#+++hosts allow=192.168. 127.0.0.1
+min print space=2048
+veto files=lost+found/proc/dev
+read only=no
+
+
+;;
+;; Support for encrypted password (and for client changeable passwords)
+;;
+encrypt passwords=yes
+unix password sync=yes
+passwd program=/usr/sbin/sysadm-samba.pl --changepw
+passwd chat=*username* %u\n *new*password* %n\n *changed*
+username level=8
+password level=8

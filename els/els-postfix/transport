@@ -1,0 +1,30 @@
+####################################################################
+#
+# The transport table allows manual mail routing, e.g. when you have
+# to override the MX entries in the DNS.
+#
+####################################################################
+#
+#        domain transport:nexthop
+#               Mail  for  domain is delivered through transport to
+#               nexthop.
+# 
+#        .domain transport:nexthop
+#               Mail for  any  subdomain  of  domain  is  delivered
+#               through transport to nexthop.
+#
+# Examples:
+#             foo.org      uucp:foo
+#             .foo.org     uucp:foo
+#             foo.org      slow:
+#             foo.org      :[gateway.foo.org]
+#             .foo.org     :[gateway.foo.org]
+#             foo.org      smtp:bar.org:2025
+#             .foo.org      error:mail for *.foo.org is not deliverable
+#
+####################################################################
+#
+# Edit this file via sysadm -> Network -> Postfix or do
+# "postmap hash:/etc/postfix/transport" after editing.
+#
+####################################################################

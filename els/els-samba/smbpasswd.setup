@@ -1,0 +1,79 @@
+#Title Update /etc/samba/smbpasswd file
+#Author Holger Schurig
+#Desc
+#DescEnd
+
+
+# Variables:
+my $name;
+*users = *ConfigFiles::users;
+
+# Contents of %users:
+# $users{$name}[0] password             from /etc/passwd (ReadPassWd)
+# $users{$name}[1] user id              from /etc/passwd
+# $users{$name}[2] primary group id     from /etc/passwd
+# $users{$name}[3] full name            from /etc/passwd
+# $users{$name}[4] home path            from /etc/passwd
+# $users{$name}[5] shell                from /etc/passwd
+# $users{$name}[6] hash 1               from /etc/smbpasswd (ReadSamba)
+# $users{$name}[7] hash 2               from /etc/smbpasswd
+
+
+#
+# Read /etc/passwd into the %users hash
+#
+open FILE, "</etc/passwd";
+while (defined($_ = <FILE>)) {
+    chomp;
+    @_ = split /:/, $_;
+    $name = shift @_;
+    $users{$name} = [ @_ ];
+    $users{$name}[5] = "" unless $users{$name}[5];
+}
+
+
+#
+# Read /etc/samba/smbpasswd into the %users hash
+#
+
+open FILE, "</etc/samba/smbpasswd";
+while (defined ($_ = <FILE>)) {
+    chomp;
+    @_ = split /:/, $_;
+    $name = shift @_;
+    next unless $users{$name};
+    $users{$name}[6] = $_[1];
+    $users{$name}[7] = $_[2];
+}
+close FILE;
+
+
+
+#
+# Write data from the %users into /etc/smbpasswd
+#
+
+# make a backup copy ...
+system "cp --preserve /etc/samba/smbpasswd /etc/samba/smbpasswd-" if -f "/etc/smbpasswd";
+
+# ... and write the data
+open FILE, ">/etc/samba/smbpasswd";
+
+foreach $_ ( sort keys %users ) {
+    next unless defined($users{$_}[1]);
+    unless ($users{$_}[1] == 0) {		# root should make it
+        next if $users{$_}[1] < 500;		# but no lower special users
+        next if $users{$_}[1] >= 64000;		# and no upper special users
+    }
+    $users{$_}[6] = 'NO PASSWORDXXXXXXXXXXXXXXXXXXXXX' unless defined $users{$_}[6];
+    $users{$_}[7] = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX' unless defined $users{$_}[7];
+    print FILE "$_:$users{$_}[1]:$users{$_}[6]:$users{$_}[7]:$users{$_}[3]:$users{$_}[4]:$users{$_}[5]\n";
+#        if $users{$_}[1] && ($users{$_}[1] >= 500 || $users{$_}[1] == 0); 
+}
+close FILE;
+
+
+chmod 0600, "/etc/samba/smbpasswd";
+
+
+1;

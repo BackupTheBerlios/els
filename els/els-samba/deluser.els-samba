@@ -1,0 +1,15 @@
+#!/bin/bash
+LOGIN="$1"
+INTERACTIVE="$2"
+
+test "$INTERACTIVE" = "interactive" && echo -en "\nDeleting user from Samba ... "
+
+
+# delete link to home directory
+rm -rf "/var/samba/dat/users/$LOGIN"
+
+# delete the user entry ...
+/usr/bin/smbpasswd -x "$LOGIN" >/dev/null 2>&1 
+
+
+test "$INTERACTIVE" = "interactive" && echo "done."

@@ -1,0 +1,15 @@
+#Title Save original smb.conf
+#Author Holger Schurig
+#Desc
+#DescEnd
+#Id $Id: savesmbconf.setup,v 1.1 2001/11/29 13:01:36 holgerschurig Exp $
+
+
+loadfile '/etc/samba/smb.conf';
+if (search('fredsdir')) {
+    rename '/etc/samba/smb.conf', '/etc/samba/smb.conf.redhat';
+    logit "Saved Red Hat's smb.conf\n";
+}
+
+
+1;
