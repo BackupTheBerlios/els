@@ -122,6 +122,11 @@ case "$1" in
             return
         }
 
+        /usr/sbin/groupdel $CHOICE 2>$ELS_TEMP || {
+            $ELS_DIALOG --textbox $ELS_TEMP 10 60
+            return
+        }
+
 	# call programs supplied by other modules
 	clear
 	for i in $ELS_MENULIB/deluser.*; do $i $CHOICE interactive; done
