@@ -2,7 +2,7 @@ export ROOT = ../..
 include $(ROOT)/Makefile.inc
 
 INC = top.inc admins.inc developers.inc logos.inc bottom.inc
-DOCS = index.html
+DOCS = index.html install.html
 
 
 all:: docs
@@ -25,6 +25,14 @@ index.shtml: $(ROOT)/els-base/README
 	$(ROOT)/utilities/text2shtml.pl $< >>$@
 	echo '<!--#include file="bottom.inc"-->' >>$@
 
+install.shtml: $(ROOT)/els-base/INSTALL
+	echo '<!--#set var="title" value="Easy Linux Server - Install els-base"-->' >$@
+	echo '<!--#include file="top.inc"-->' >>$@
+	echo '<!--#include file="admins.inc"-->' >>$@
+	echo '<!--#include file="logos.inc"-->' >>$@
+	$(ROOT)/utilities/text2shtml.pl $< >>$@
+	echo '<!--#include file="bottom.inc"-->' >>$@
+
 .links:
 	ln -fs ../sysadm/top.inc top.inc
 	ln -fs ../sysadm/bottom.inc bottom.inc
@@ -34,3 +42,4 @@ index.shtml: $(ROOT)/els-base/README
 	touch .links
 
 index.html:: index.shtml
+install.html:: install.shtml
