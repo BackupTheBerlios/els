@@ -1,7 +1,7 @@
 case "$1" in
 
     Query)
-        Title "System" "Kernel" "For experts: kernel setup and compilation"
+        Title "" "Kernel" "For experts: kernel setup and compilation"
         Option "Parameters"  "For experts: set kernel parameters"
 
 	# ensure that user was at least once in "Parameters"
@@ -45,8 +45,8 @@ case "$1" in
         # set the kernel parameters
         make menuconfig
 
-        cd $MENULIB
-        $DIALOG --msgbox "Your kernel is re-configured,\nnow you can compile your kernel." 6 40
+        cd $ELS_MENULIB
+        $ELS_DIALOG --msgbox "Your kernel is re-configured,\nnow you can compile your kernel." 6 40
         ;;
 
     compile)
@@ -57,7 +57,7 @@ case "$1" in
 	#DescEnd
 
         ExpertWarning || return
-        $DIALOG --infobox "Compiling a new kernel will take some minutes ..." 3 60
+        $ELS_DIALOG --infobox "Compiling a new kernel will take some minutes ..." 3 60
         sleep 3
         cd /usr/src/linux
         cls
@@ -79,7 +79,7 @@ case "$1" in
 	# compilation finished (or aborted), ring the bell
 	echo -e "\7"
 
-        cd $MENULIB
+        cd $ELS_MENULIB
 	if [ -f /usr/src/linux/arch/i386/boot/bzImage   -a \
 	     -f /usr/src/linux/modules/BLOCK_MODULES    -a \
 	     -f /usr/src/linux/modules/FS_MODULES       -a \
@@ -88,9 +88,9 @@ case "$1" in
 	     -f /usr/src/linux/modules/NET_MISC_MODULES -a \
 	     -f /usr/src/linux/modules/SCSI_MODULES     ]
 	then
-            $DIALOG --msgbox "Your kernel is re-compiled,\nyou can now install your kernel." 6 40
+            $ELS_DIALOG --msgbox "Your kernel is re-compiled,\nyou can now install your kernel." 6 40
 	else
-            $DIALOG --msgbox "An error occured during compilation,\nmake sure you check the log file." 6 50
+            $ELS_DIALOG --msgbox "An error occured during compilation,\nmake sure you check the log file." 6 50
 	fi
         ;;
 
@@ -139,8 +139,8 @@ case "$1" in
 	echo -e "\n\nInstall new kernel ...\n"
         nice -2 make install
 
-        cd $MENULIB
-        $DIALOG --msgbox "New kernel installed, please reboot now ..." 5 60
+        cd $ELS_MENULIB
+        $ELS_DIALOG --msgbox "New kernel installed, please reboot now ..." 5 60
         ;;
 
     log)
@@ -152,7 +152,7 @@ case "$1" in
 	# This option is only visible after you compiled a kernel.
 	#DescEnd
 
-        $DIALOG --textbox /usr/src/linux/.compile_log 23 76
+        $ELS_DIALOG --textbox /usr/src/linux/.compile_log 23 76
         ;;
 
     remove)
