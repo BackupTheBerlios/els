@@ -35,7 +35,6 @@ case "$1" in
 	#Desc
 	# This entry shows you which users are using SAMBA from their
 	# workstations and which files they have open.
-	#TextBoxEnd.
 	#Macro TextBox
 	#DescEnd
 
@@ -45,13 +44,14 @@ case "$1" in
 
     list)
 	#Desc
-	# This entry shows you all shares and special attributes of them. 
-	# This entry displays all shares as opposed to theg "Network
-	# Neightborhood" in Windows 95 -- which doesn't display the hidden
-	# shares. Why do we have hidden shares? Because we need them for
-	# internal or special use, but they are not meant for day-to-day work.
-	# Anyway, once you know their name using this menu, you can connect
-	# to the shares if need arises.
+	# This entry displays all shares as like to the "Network
+	# Neightborhood" in Windows.
+	#
+	# However, it displays also hidden shares. Why do we have hidden
+	# shares? Because we need them for internal or special use, but they
+	# are not meant for day-to-day work.  Anyway, once you know their
+	# name using this menu, you can connect to the shares if need
+	# arises.
 	#
 	#TextBox
 	# APP              Server based applications
@@ -83,14 +83,6 @@ case "$1" in
 	#Desc
 	# Displays the log file of the SAMBA file server process.
 	#
-	#TextBox
-	# 1998/08/14 14:17:26 test (192.168.1.99) connect to service netlogon as user holger (uid=100,gid=101) (pid 1190)
-	# 1998/08/14 14:21:11 test (192.168.1.99) closed connection to service netlogon
-	# 1998/08/14 14:27:31 test (192.168.1.99) closed connection to service app
-	# 1998/08/14 14:27:31 test (192.168.1.99) closed connection to service holger
-	# 1998/08/14 14:27:31 test (192.168.1.99) closed connection to service dat
-	# 1998/08/14 15:55:40 test (192.168.1.99) connect to service cdrom as user holger (uid=100,gid=101) (pid 2142)
-	#TextBoxEnd
 	#Item Usage
 	#Macro Textbox
 	#DescEnd
@@ -98,12 +90,21 @@ case "$1" in
 	$ELS_DIALOG --textbox /var/log/samba/log.smbd 23 76
 	;;
 
-    netbios\
-	)
+    netbios)
 	#Desc
 	# Displays the name bios resolving actions of your SAMBA file
 	# server.
 	#
+	#TextBox
+	# [2001/12/03 12:47:10, 0] nmbd_logonnames.c:become_logon_server_success(116)
+	# Samba is now a logon server for workgroup ELS on subnet 192.168.233.8
+	# [2001/12/03 12:47:14, 0] nmbd_become_dmb.c:become_domain_master_stage2(117)
+	# *****
+	#
+	# LINUX is now a domain master browser for workgroup ELS on subnet 192.168.233.8
+	#
+	# *****
+	#TextBoxEnd
 	#Item Usage
 	#Macro Textbox
 	#DescEnd
@@ -125,12 +126,9 @@ case "$1" in
 	#Input ZIP
 	# Enter name of share, e.g. "CDROM" or "TEST"
 	#InputEnd
-	# And then you will be put into the <A HREF="sambamod.htm">Share
+	# And then you will be put into the <A HREF="sambamod.html">Share
 	# modification</A> menu to modify the initial settings to your
 	# needs.
-	#
-	# <B>Note</B>: the new share will only be available to your users
-	# after the next <A HREF="#restart">restart</A> of Samba.
 	#DescEnd
 
 	InputString "Enter name of share, e.g. \"CDROM\" or \"TEST\""
@@ -172,9 +170,6 @@ case "$1" in
 	#MenuEnd
 	#Macro Menu
 	# The selected share will the be deleted.
-	#
-	# <B>Note</B>: the share will only inaccessible to your users
-	# after the next <A HREF="#restart">restart</A> of Samba.
 	#DescEnd
 
 	SelectShare "to delete:"
@@ -218,11 +213,8 @@ case "$1" in
 	#MenuEnd
 	#Macro Menu
 	# You will be sent into the 
-	# <A HREF="sambamod.htm">Share
+	# <A HREF="sambamod.html">Share
 	# modification</A> menu. There you can modify the settings.
-	#
-	# <B>Note</B>: the modifications will only be available to your users
-	# after the next <A HREF="#restart">restart</A> of Samba.
 	#DescEnd
 
 	SelectShare "to modify:"
@@ -239,7 +231,7 @@ case "$1" in
 	# in your network or a SAMBA and an NT server.
 	#
 	# After selecting this entry, you will find yourself in the
-	# <A HREF="sambaset.htm">sysadm -&gt; Network -&gt; Samba -&gt;
+	# <A HREF="sambasetup.html">sysadm -&gt; Network -&gt; Samba -&gt;
 	# Setup</A> menu.
 	#DescEnd
 
@@ -247,6 +239,11 @@ case "$1" in
 	;;
 
     reload)
+	#Desc
+	# This sends a signal to the Samba processes so that they re-load
+	# the configuration file.
+	#DescEnd
+
 	/usr/sbin/sysadm-setup.pl smbconfig
         killall -HUP nmbd smbd
         ;;
