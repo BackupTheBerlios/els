@@ -1,0 +1,7 @@
+<!--#set var="title" value="Easy Linux Server - Title"-->
+<!--#include file="top.inc"-->
+<!--#include file="logos.inc"-->
+
+<H2>Title</H2>
+
+<!--#include file="bottom.inc"-->

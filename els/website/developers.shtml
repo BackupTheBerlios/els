@@ -1,0 +1,16 @@
+<!--#set var="title" value="Easy Linux Server - for Developers"-->
+<!--#include file="top.inc"-->
+<!--#include file="developers.inc"-->
+<!--#include file="logos.inc"-->
+
+<H2>How to participate</H2>
+<P>
+  You can participate in development by getting
+  the development version 
+  <A HREF="http://developer.berlios.de/cvs/?group_id=204">from CVS</A>, sending
+  <A HREF="http://developer.berlios.de/patch/?group_id=204">patches</A> or
+  participating in the
+  <A HREF="http://developer.berlios.de/mail/?group_id=204">mailing list</A>.
+</P>
+
+<!--#include file="bottom.inc"-->

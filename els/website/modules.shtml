@@ -1,0 +1,18 @@
+<!--#set var="title" value="Easy Linux Server - Available Modules" -->
+<!--#include file="top.inc"-->
+<!--#include file="admins.inc"-->
+<!--#include file="logos.inc"-->
+
+<H2>Base Modules</H2>
+<UL>
+  <LI>els-base
+  <LI>els-backup
+</UL>
+
+<H2>Server Modules</H2>
+<UL>
+  <LI>els-samba
+  <LI>els-email
+</UL>
+
+<!--#include file="bottom.inc"-->
