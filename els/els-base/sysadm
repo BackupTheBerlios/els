@@ -1,19 +1,18 @@
 #!/bin/bash
 
 # set defaults
-export ELS_MENU=main
+export ELS_MENU=${ELS_MENU:-main}
 export ELS_MENULIB=${ELS_MENULIB:-/usr/lib/els}
-export ELS_CONF=/etc/els.conf
+export ELS_CONF=${ELS_CONF:-/etc/els.conf}
 export ELS_TEMP=${TMP:-/var/tmp}/sysadm.$$
 export EXPERTMODE=${EXPERTMODE:-no}
 export EDITOR=${EDITOR:-vi}
-export ELS_DIALOG="/usr/bin/dialog --cr-wrap"
+export ELS_DIALOG=${ELS_DIALOG:-"/usr/bin/dialog --cr-wrap"}
 
 # Pity, whiptail is soooooo ugly!
 # If it were prettier, it would be nice, because the redhat console based
 # tools use the newt toolkit, too.
 #test -x /usr/bin/whiptail && ELS_DIALOG=/usr/bin/whiptail
-
 
 # remember if we are the first instance of sysadm
 if [ -z "$ELS_INSTANCE" ]; then
