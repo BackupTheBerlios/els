@@ -16,14 +16,14 @@ clean::
 	rm -f *.html
 
 install:: .rpms
-	cp -v /usr/src/redhat/RPMS/i386/els-postfix*.rpm $(RPM_DEST)
+	cp /usr/src/redhat/RPMS/noarch/els-postfix*.rpm $(RPM_DEST)
 
 
 
 
 
 .rpms: $(ALL)
-	rm -f /usr/src/redhat/RPMS/i386/els-postfix*.rpm
+	rm -f /usr/src/redhat/RPMS/noarch/els-postfix*.rpm
 	rpm -bb els-postfix.spec
 	touch .rpms
 

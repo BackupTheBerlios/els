@@ -11,6 +11,7 @@ Release: %{rel}
 Copyright: GPL
 Group: System Environment/Base
 Vendor: Easy Linux Server
+BuildArch: noarch
 Requires: redhat-release => 7.2, dialog, findutils, grep, gawk, textutils
 Requires: util-linux, mtools, e2fsprogs, shadow-utils, perl
 %if %{withjoe}

@@ -16,14 +16,14 @@ clean::
 	rm -rf html q
 
 install:: .rpms
-	cp -v /usr/src/redhat/RPMS/i386/els-base*.rpm $(RPM_DEST)
+	cp /usr/src/redhat/RPMS/noarch/els-base*.rpm $(RPM_DEST)
 
 
 
 
 
 .rpms: $(ALL)
-	rm -f /usr/src/redhat/RPMS/i386/els-base*.rpm
+	rm -f /usr/src/redhat/RPMS/noarch/els-base*.rpm
 	rpm -bb els-base.spec
 	touch .rpms
 
@@ -31,4 +31,4 @@ install:: .rpms
 	../els-base/sysadm-makedoc.pl --verbose *.mnu && touch .docs
 
 q:
-	ln -s ./joe q
+	test -L q || ln -s ./joe q 

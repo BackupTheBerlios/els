@@ -10,6 +10,7 @@ Release: %{rel}
 Copyright: GPL
 Group: Applications/System
 Vendor: Easy Linux Server
+BuildArch: noarch
 Requires: els-base, postfix, procmail
 BuildRoot: /var/tmp/%{name}-%{vers}-%{rel}
 

@@ -17,12 +17,12 @@ clean::
 	rm -rf html
 
 install:: .rpms
-	cp -v /usr/src/redhat/RPMS/i386/els-backup*.rpm $(RPM_DEST)
+	cp /usr/src/redhat/RPMS/noarch/els-backup*.rpm $(RPM_DEST)
 
 
 
 .rpms: $(ALL)
-	rm -f /usr/src/redhat/RPMS/i386/els-backup*.rpm
+	rm -f /usr/src/redhat/RPMS/noarch/els-backup*.rpm
 	rpm -bb els-backup.spec
 	touch .rpms
 

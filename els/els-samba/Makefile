@@ -15,15 +15,16 @@ clean::
 	rm -f *.html q
 
 install:: .rpms
-	cp -v /usr/src/redhat/RPMS/i386/els-samba*.rpm $(RPM_DEST)
+	cp /usr/src/redhat/RPMS/noarch/els-samba*.rpm $(RPM_DEST)
 
 
 
 
 
 .rpms: $(ALL)
-	rm -f /usr/src/redhat/RPMS/i386/els-samba*.rpm
-	rpm -bb els-samba.spec && touch .rpms
+	rm -f /usr/src/redhat/RPMS/noarch/els-samba*.rpm
+	rpm -bb els-samba.spec
+	touch .rpms
 
 .docs: $(wildcard *.mnu)
 	../els-samba/sysadm-makedoc.pl --verbose *.mnu && touch .docs
