@@ -3,7 +3,7 @@ include $(ROOT)/Makefile.inc
 
 
 ALL = Makefile *.sh *.spec *.setup *.mnu *.pl *.dirs *.els-base \
-      q bell cls sysadm els.conf qrc
+      bell cls sysadm els.conf qrc
 
 
 all:: rpms
@@ -21,15 +21,14 @@ install:: .rpms
 
 .rpms: $(ALL)
 	rm -f /usr/src/redhat/RPMS/noarch/els-base*.rpm
+	ln -s joe q 
 	rpm -bb els-base.spec
+	rm -f q
 	touch .rpms
 
 .docs: $(wildcard *.mnu)
 	../els-base/sysadm-makedoc.pl --verbose *.mnu
 	touch .docs
-
-q:
-	test -L q || ln -s ./joe q 
 
 clean::
 	rm -rf q
