@@ -31,4 +31,4 @@ install:: .rpms
 	../els-base/sysadm-makedoc.pl --verbose *.mnu && touch .docs
 
 q:
-	ln -s /usr/bin/joe q
+	ln -s ./joe q
