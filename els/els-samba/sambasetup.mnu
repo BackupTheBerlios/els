@@ -10,21 +10,28 @@ case "$1" in
         PAGE=${SMB_CODEPAGE:-850}
 	DEBUG=${SMB_DEBUGLEVEL:-0}
 
-	Option "Server"      "Set SAMBA server name                (now $NAME)"
-	Option "Workgroup"   "Set work group  nam                  (now $WG)"
-	Option "Domain"      "Allow domain logons                  (now $LOGON)"
-	Option "Translation" "Character set translation            (now $CHAR)"
+	Option "Server"       "Set SAMBA server name                (now $NAME)"
+	Option "Workgroup"    "Set work group  nam                  (now $WG)"
+	Option "Domainmaster" "Allow domain logons                  (now $LOGON)"
+	Option "Translation"  "Character set translation            (now $CHAR)"
 	test "$CHAR" != "-none-" &&
-	Option "Page"        "Client code page                     (now $PAGE)"
-	Option "LogLevel"    "Debug level                          (now $DEBUG)"
-	Option "Batch"       "For experts: edit domain logon batch file"
-	Option "Errors"      "Test setup and display possible errors"
-	Option "Reload"      "Reload SAMBA"
+	Option "Page"         "Client code page                     (now $PAGE)"
+	Option "LogLevel"     "Debug level                          (now $DEBUG)"
+	Option "Batch"        "For experts: edit domain logon batch file"
+	Option "Errors"       "Test setup and display possible errors"
+	Option "Restart"      "Restart SAMBA"
 	;;
 
     server)
 	#Desc
-	# The name of your server for Windows users.
+	# The netbios name of your server.
+	#
+	# A Samba server can have a different hostname (used for TCP/IP based
+	# services) and netbios name (used towards windows boxes, a.k.a. as
+	# WINS name).
+	#
+	# Normally, you can keep the default, but occassionally this option is
+	# handy.
 	#DescEnd
 
 	InputString "Enter name of your SAMBA server. This has nothing to do with your\ne-mail system name. Example: LINUX"
@@ -41,6 +48,10 @@ case "$1" in
 	;;
 
     workgroup)
+	#Desc
+	# Workstations must be in the same workgroup as the server, otherwise they
+	# can not login. Use this setting to specify the workgroup for your server.
+	#DescEnd
 
 	InputString "Enter name of your Workgroup.\nExample: WORKGROUP"
 	test -z "$CHOICE" && return
@@ -53,7 +64,16 @@ case "$1" in
 	fi
 	;;
 
-    domain)
+    domainmaster)
+	#Desc
+	# You can have several servers running in your ethernet, but they must have
+	# <UL>
+	# <LI>have different workgroup names
+	# <LI>or only one of the servers can be a domain master
+	# </UL>
+	# Use this option to disable the domain master feature.
+	#DescEnd
+
 	if Question "Only one SAMBA server in a network can be a primary domain\ncontroller. Set this option to 'NO' on your secondary servers\nHint: normally set to 'yes'." ; then
 	    SetOpt SMB_DOMAINLOGON "yes"
 	else
@@ -63,6 +83,14 @@ case "$1" in
 	;;
 
     translation)
+	#Desc
+	# When you set the translation on the server to the character set
+	# of your clients than file names with umlauts will show up correctly.
+	#
+	# Note that this has nothing to do with the contents of the files. Umlaut
+	# characters inside files will always be stored correctly.
+	#DescEnd
+
 	$ELS_DIALOG --menu "Select filename translation" 12 58 5 \
 		"none"   "no filename translation" \
 		"iso8859-1" "Western european filename translation" \
@@ -80,6 +108,14 @@ case "$1" in
 	;;
 
     page)
+	#Desc
+	# When you set the code page on the server to the code page of your
+	# clients than file names with umlauts will show up correctly.
+	#
+	# Note that this has nothing to do with the contents of the files. Umlaut
+	# characters inside files will always be stored correctly.
+	#DescEnd
+
 	$ELS_DIALOG --menu "Select code page of your Win95 client" 15 43 8 \
 		"437" "MS-DOS Latin US" \
 		"737" "MS-DOS Greek" \
@@ -97,6 +133,17 @@ case "$1" in
 	;;
 
     loglevel)
+	#Desc
+	# The log level defines how much text will be stored in your log files.
+	# You need this normally only for hard-core debugging :-)
+	#
+	# The higher the log level is, the slower will be your server.
+	#
+	# No matter how high you set it, there is no risk that the log file will
+	# eventually fill your hard disk. If it grows to big, it will be automatically
+	# shrinked.
+	#DescEnd
+
 	$ELS_DIALOG --menu "Log level for /var/log/samba/log.smbd" 13 43 6 \
 		"0" "none" \
 		"1" "normal" \
@@ -152,22 +199,21 @@ your hard disk will overflow." 7 61 ;;
 	;;
 
     errors)
+	#Desc
+	# This checks your configuration file for errors.
+	#DescEnd
+
 	/usr/sbin/sysadm-setup.pl smbconfig
 	testparm -s 2>&1 | sed -e " s/	/    /
 					s/Press enter to see a dump of your service definitions//" >$ELS_TEMP
 	$ELS_DIALOG --title "Please check the setup" --textbox $ELS_TEMP 23 76
 	;;
 
-    reload)
-	/usr/sbin/sysadm-setup.pl smbconfig
-        killall -HUP nmbd smbd
-        ;;
-
     restart)
 	#Desc
-	# This option will restart SAMBA. This is necessary if you changed
-	# either the global or the per-share settings of SAMBA. However,
-	# any user that had open files while you restarted SAMBA will have
+	# This option will restart SAMBA.
+	#
+	# Any user that had open files while you restart SAMBA will have
 	# some problems, so check with <A HREF="samba.html#who">sysadm -&gt; network
         # -&gt; samba -&gt; Who</A> that no one is using SAMBA before you restart it.
 	#DescEnd
