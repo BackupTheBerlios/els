@@ -34,7 +34,6 @@ case "$1" in
         Option "Name"     "Set full name            (now $USER_FULLNAME)"
         Option "Password" "Set password             $USER_PASSWORD"
 	test "$LOGIN" != "root" &&
-	Option "Delete"   "Delete this user"
 	Option "Member"   "Set groups this user is a member of"
         ;;
 
@@ -85,34 +84,9 @@ case "$1" in
             return
 	}
 
+	sleep 1
         $ELS_DIALOG --msgbox "Password changed." 5 30
         ;;
-
-    delete)
-	#Desc
-	# Use this option with care, it will delete the current user!
-	#
-	#Item Usage
-	# Before the user will be deleted, you will be asked:
-	#
-	#Question
-	# Do you really want to delete user 'donald' ?
-	#QuestionEnd
-	#Macro Question
-	#DescEnd
-
-	Question "Do you really want to delete user '$LOGIN'?" || return
-	$ELS_DIALOG --infobox "One moment ... deleting ..." 3 32
-        /usr/sbin/userdel -r $LOGIN 2>$ELS_TEMP || {
-            $ELS_DIALOG --textbox $ELS_TEMP 10 60
-            return
-        }
-	# call programs supplied by other modules
-	cls
-	for i in $ELS_MENULIB/deluser.*; do $i $LOGIN interactive; done
-	sleep 1
-	ExitMenu
-	;;
 
     member)
 	#Desc
