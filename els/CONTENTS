@@ -7,11 +7,16 @@ els-samba               easy samba setup module
 els-backup		automatic backup
 els-backup/afio		to get the RPM for the cpio-like backup tool afio
 
-els-dialin		(UNFINISHED) support for dial in by modem
-els-dialout		(UNFINISHED) support for outgoint PPP connections
-
 els-postfix		support for e-mail
 els-postfix/postfix	to get the RPM for the postfix SMTP mailer
+
+contrib			misc stuff that might be helpful, but has not been
+			put into one of the official modules
+
+els-dialin		(UNFINISHED) support for dial in by modem
+
+els-dialout		(UNFINISHED) support for outgoint PPP connections
+
 
 old			old modules for Red Hat 6.2, kept here as
 			a development aid
