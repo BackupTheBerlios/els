@@ -47,6 +47,6 @@ initial_destination_concurrency_limit = 2
 default_destination_concurrency_limit = 2
 
 # Paths
-mailbox_command = /usr/bin/procmail -a "$EXTENSION"
+#mailbox_command = /usr/bin/procmail -a "$EXTENSION"
 command_directory = /usr/sbin
 
