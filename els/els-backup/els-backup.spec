@@ -9,8 +9,8 @@ Version: %{vers}
 Release: %{rel}
 Copyright: GPL
 Group: Applications/System
-Vendor:       Easy Linux Server
-Requires: afio, mt-st
+Vendor: Easy Linux Server
+Requires: els-base, afio, mt-st
 BuildRoot: /var/tmp/%{name}-%{vers}-%{rel}
 
 
@@ -43,7 +43,7 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %post
-/usr/sbin/sysadm-setup.pl detecttape.setup backupsets.setup
+/usr/sbin/sysadm-setup.pl detecttape backupsets
 
 
 %files
