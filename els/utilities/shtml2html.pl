@@ -1,5 +1,16 @@
 #!/usr/bin/perl -w
 
+#
+# I wrote the web site manually, by hand. I only use the *.inc and *.shtml files
+# for contents. A local running Apache handles the server-site-include scripts,
+# so I can directly view the files from the browser.
+#
+# However, most web-servers don't have server-site include scripts enabled. So
+# a little tool 'makehtml.pl' takes the *.shtml files, executes a limited set
+# of SSI commands (#include, #set and #echo) and omits the result. These *.html
+# files are then sent to the webserver.
+#
+
 use vars qw(%vars %files);
 
 sub Process ($)
@@ -10,9 +21,7 @@ sub Process ($)
    my $txt = <FILE>;
    close FILE;
 
-   # Process #include
-
-
+   # process #include
    $txt =~ s/<!--#include\s+file="(.*)"\s*-->\n/
       unless (defined($files{$1})) {
          open FILE, "<$1";
