@@ -11,10 +11,10 @@
 # legal reasons we add also a note that only authorited people are allowed
 # to use the system.
 #DescEnd
-#Id $Id: issue.setup,v 1.7 2002/02/19 16:52:51 holgerschurig Exp $
+#Id $Id: issue.setup,v 1.8 2002/02/22 09:02:21 holgerschurig Exp $
 
 
-unless ($insideanaconda) {
+unless ($insideinstaller) {
 
 
     chomp(my $hostname = `/bin/hostname`);
