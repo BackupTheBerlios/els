@@ -2,7 +2,7 @@
 
 # set defaults
 export MENU=main
-export MENULIB=/usr/lib/els
+export MENULIB=${MENULIB:-/usr/lib/els}
 export RCFILE=/etc/els.conf
 export TMPFILE=${TMP:-/var/tmp}/sysadm.$$
 export EDITOR=${EDITOR:-vi}
@@ -131,7 +131,7 @@ function MountFloppy ()
 }
 
 
-# set an option in /etc/sysconfig/rc.sysadm
+# set an option in /etc/els.conf
 #
 # Option 1:  variable
 # Option 2:  new contents
