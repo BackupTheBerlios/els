@@ -30,7 +30,7 @@ case "$1" in
 	# view in their Windows Explorer, they will see this description text.
 	#DescEnd
 
-	dialog --inputbox "Please enter a short description:" 8 39 2>$ELS_TEMP || return
+	$ELS_DIALOG --inputbox "Please enter a short description:" 8 39 2>$ELS_TEMP || return
 	SMB_COMMENT=`cat $ELS_TEMP`
 	;;
 
@@ -50,10 +50,10 @@ case "$1" in
     path)
 	#Desc
 	# Specifies the unix path where the files for the share are located,
-	# e.g. /mnt/cdrom or /usr/samba/app.
+	# e.g. /mnt/cdrom or /var/samba/app.
 	#DescEnd
 
-	dialog --inputbox "Please enter the unix path for the share:" 8 70 2>$ELS_TEMP || return
+	$ELS_DIALOG --inputbox "Please enter the unix path for the share:" 8 70 2>$ELS_TEMP || return
 	SMB_PATH=`cat $ELS_TEMP`
 	;;
 
@@ -64,7 +64,7 @@ case "$1" in
 	# long file names ...
 	#DescEnd
 
-	dialog --inputbox "Please enter DOS volume name for the share.\n\nHint: you don't need this normally." 10 70 2>$ELS_TEMP || return
+	$ELS_DIALOG --inputbox "Please enter DOS volume name for the share.\n\nHint: you don't need this normally." 10 70 2>$ELS_TEMP || return
 	SMB_VOLUME=`cat $ELS_TEMP`
 	;;
 
@@ -126,7 +126,7 @@ case "$1" in
 	# You see this menu entry only when a share is readonly.
 	#DescEnd
 
-	dialog --inputbox "People that may write even when the share is read-only. Use a\ncomma separated list, e.g.\n\nroot, holger, @petrausers" 12 70 2>$ELS_TEMP || return
+	$ELS_DIALOG --inputbox "People that may write even when the share is read-only. Use a\ncomma separated list, e.g.\n\nroot, holger, @petrausers" 12 70 2>$ELS_TEMP || return
 	SMB_WRITELIST=`cat $ELS_TEMP`
 	;;
 
@@ -154,20 +154,20 @@ case "$1" in
 	#DescEnd
 
 	test "$MYPATH" = "-none-" && {
-	    dialog --title "Can't update" --msgbox "\nA share without a path doesn't make sense!" 7 46
+	    $ELS_DIALOG --title "Can't update" --msgbox "\nA share without a path doesn't make sense!" 7 47
 	    return
 	}
 	#test -d $SMB_PATH || {
-	#    dialog --title "Can't update" --msgbox "\nSpecified path must lead to an existing directory!" 7 54 
+	#    $ELS_DIALOG --title "Can't update" --msgbox "\nSpecified path must lead to an existing directory!" 7 55
 	#    return
 	#}
 	test "$COMMENT" = "-none-" && {
-	    dialog --title "Can't update" --msgbox "\nSorry, I need a description first!" 7 38
+	    $ELS_DIALOG --title "Can't update" --msgbox "\nSorry, I need a description first!" 7 39
 	    return
 	}
 	SHARE=`echo $SMB_SHARE | tr A-Z a-z`
 	/usr/sbin/sysadm-samba.pl --setshare $SHARE
-	dialog --msgbox "Share will be available with your options\nafter the next restart of SAMBA." 6 45
+	$ELS_DIALOG --msgbox "Share will be available with your options\nafter the next reload of SAMBA." 6 45
 	ExitMenu
 	;;
 

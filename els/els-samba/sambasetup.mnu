@@ -3,30 +3,49 @@ case "$1" in
     Query)
 	Title "Samba" "SambaSetup" "Setup internal SAMBA parameters"
 
-	NAME=${SMB_NETBIOSNAME:-LINUX}
+	NAME=${SMB_NETBIOSNAME:-SERVER}
+	WG=${SMB_WORKGROUP:-ELS}
 	LOGON=${SMB_DOMAINLOGON:-yes}
         CHAR=${SMB_TRANSLATION:--none-}
         PAGE=${SMB_CODEPAGE:-850}
 	DEBUG=${SMB_DEBUGLEVEL:-0}
 
 	Option "Server"      "Set SAMBA server name                (now $NAME)"
+	Option "Workgroup"   "Set work group  nam                  (now $WG)"
 	Option "Domain"      "Allow domain logons                  (now $LOGON)"
 	Option "Translation" "Character set translation            (now $CHAR)"
 	test "$CHAR" != "-none-" &&
 	Option "Page"        "Client code page                     (now $PAGE)"
 	Option "LogLevel"    "Debug level                          (now $DEBUG)"
+	Option "Batch"       "For experts: edit domain logon batch file"
 	Option "Errors"      "Test setup and display possible errors"
-	Option "Reload"   "Reload SAMBA"
-	Option "Restart"  "Restart SAMBA"
+	Option "Reload"      "Reload SAMBA"
 	;;
 
     server)
 	InputString "Enter name of your SAMBA server. This has nothing to do with your\ne-mail system name. Example: LINUX"
 	test -z "$CHOICE" && return
-	NAME=`echo $CHOICE | tr a-z A-Z`
-	SetOpt SMB_NETBIOSNAME "$NAME"
-	test "$SMB_NETBIOSNAME" != "LINUX" -a "$SMB_DOMAINLOGON" = "yes" && dialog --msgbox "Use this name also in your domain logon batch file:\n\nsysadm -> Network -> Samba -> Batch" 7 60
-	/usr/sbin/sysadm-setup.pl smbconfig.setup
+	NEWNAME=`echo $CHOICE | tr a-z A-Z`
+	if [ "$WG" = "$NEWNAME" ]; then
+	    $ELS_DIALOG --msgbox "The server name and the workgroup name must be different." 6 38
+	else
+	    OLDNAME="$SMB_NETBIOSNAME"
+	    SetOpt SMB_NETBIOSNAME "$NEWNAME"
+	    perl -pi -e "s:\\\\$OLDNAME:\\\\$NEWNAME:g" /var/samba/netlogon/logon.bat
+	    /usr/sbin/sysadm-setup.pl smbconfig
+	fi
+	;;
+
+    workgroup)
+	InputString "Enter name of your Workgroup.\nExample: WORKGROUP"
+	test -z "$CHOICE" && return
+	WG=`echo $CHOICE | tr a-z A-Z`
+	if [ "$WG" = "$NAME" ]; then
+	    $ELS_DIALOG --msgbox "The server name and the workgroup name must be different." 6 38
+	else
+	    SetOpt SMB_WORKGROUP "$WG"
+	    /usr/sbin/sysadm-setup.pl smbconfig
+	fi
 	;;
 
     domain)
@@ -35,11 +54,11 @@ case "$1" in
 	else
 	    SetOpt SMB_DOMAINLOGON "no"
  	fi
-	/usr/sbin/sysadm-setup.pl smbconfig.setup
+	/usr/sbin/sysadm-setup.pl smbconfig
 	;;
 
     translation)
-	dialog --menu "Select filename translation" 12 58 5 \
+	$ELS_DIALOG --menu "Select filename translation" 12 58 5 \
 		"none"   "no filename translation" \
 		"iso8859-1" "Western european filename translation" \
 		"iso8859-2" "Easter european filename translation" \
@@ -52,11 +71,11 @@ case "$1" in
 	    iso8859-5) SetOpt SMB_TRANSLATION "iso8859-5"; SetOpt SMB_CODEPAGE "866" ;;
 	    koi8-r)    SetOpt SMB_TRANSLATION "koi8-r";    SetOpt SMB_CODEPAGE "866" ;;
 	esac
-	/usr/sbin/sysadm-setup.pl smbconfig.setup
+	/usr/sbin/sysadm-setup.pl smbconfig
 	;;
 
     page)
-	dialog --menu "Select code page of your Win95 client" 15 43 8 \
+	$ELS_DIALOG --menu "Select code page of your Win95 client" 15 43 8 \
 		"437" "MS-DOS Latin US" \
 		"737" "MS-DOS Greek" \
 		"850" "MS-DOS Latin 1 (common setting)" \
@@ -69,11 +88,11 @@ case "$1" in
 		"950" "MS-DOS Traditional Chinese" \
 		2>$ELS_TEMP || return
         SetOpt SMB_CODEPAGE "`cat $ELS_TEMP`"
-	/usr/sbin/sysadm-setup.pl smbconfig.setup
+	/usr/sbin/sysadm-setup.pl smbconfig
 	;;
 
     loglevel)
-	dialog --menu "Log level for /var/log/samba/log.smbd" 12 43 6 \
+	$ELS_DIALOG --menu "Log level for /var/log/samba/log.smbd" 13 43 6 \
 		"0" "none" \
 		"1" "normal" \
 		"2" "gives file open info" \
@@ -83,25 +102,59 @@ case "$1" in
 		2>$ELS_TEMP || return
 	CHOICE=`cat $ELS_TEMP`
 	case $CHOICE in
-	    3|4|9) dialog --msgbox "\
+	    3|4|9) $ELS_DIALOG --msgbox "\
 This log level produces huge log files. Please reset the\n\
 loglevel as soon as you resolved your problem, otherwise\n\
-your hard disk will overflow." 7 60 ;;
+your hard disk will overflow." 7 61 ;;
 	esac
 
         SetOpt SMB_DEBUGLEVEL "$CHOICE"
-	/usr/sbin/sysadm-setup.pl smbconfig.setup
+	/usr/sbin/sysadm-setup.pl smbconfig
+	;;
+
+    batch)
+	#Desc
+	# When you enabled the "Domain logon" feature at your clients,
+	# they will execute a batch directly after logon. While there
+	# comes one already preconfigured with SAMBA, you might want
+	# to add your own stuff there.
+	#
+	#Item Usage
+	#Edit
+	# @echo off
+	# echo Welcome to the Easy Linux Server !
+	# echo.
+	# net use F: \\LINUX\APP
+	# net use I: \\LINUX\DAT
+	# net use H: \\LINUX\HOME
+	#EditEnd
+	#Macro Editor
+	#DescEnd
+
+	# change special characters and change CRLF -> LF, remove Ctrl-Z
+	{
+	    dos2unix </var/samba/netlogon/logon.bat |
+		tr -d "\032"
+	}>$ELS_TEMP 2>/dev/null
+
+	EditFile "$ELS_TEMP" /var/samba/netlogon/logon.bat
+
+	# change special characters back and change LF -> CRLF, add Ctrl-Z
+	{
+	    unix2dos <$ELS_TEMP
+	    echo -en "\032"
+	} >/var/samba/netlogon/logon.bat 
 	;;
 
     errors)
-	/usr/sbin/sysadm-setup.pl smbconfig.setup
+	/usr/sbin/sysadm-setup.pl smbconfig
 	testparm -s 2>&1 | sed -e " s/	/    /
 					s/Press enter to see a dump of your service definitions//" >$ELS_TEMP
-	dialog --title "Please check the setup" --textbox $ELS_TEMP 23 76
+	$ELS_DIALOG --title "Please check the setup" --textbox $ELS_TEMP 23 76
 	;;
 
     reload)
-	/usr/sbin/sysadm-setup.pl smbconfig.setup
+	/usr/sbin/sysadm-setup.pl smbconfig
         killall -HUP nmbd smbd
         ;;
 
@@ -116,7 +169,7 @@ your hard disk will overflow." 7 60 ;;
 
 	Question "Make sure that no one is using SAMBA. Do you want to restart SAMBA now?" || return
 	cls
-	/usr/sbin/sysadm-setup.pl smbconfig.setup
+	/usr/sbin/sysadm-setup.pl smbconfig
 	/etc/rc.d/init.d/smb restart
 	;;
 

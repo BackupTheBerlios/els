@@ -1,6 +1,6 @@
 function SelectShare ()
 {
-    echo -n "dialog --menu \"Select a share $1\" 23 65 15 " >$ELS_TEMP.dialog
+    echo -n "$ELS_DIALOG --menu \"Select a share $1\" 23 65 15 " >$ELS_TEMP.dialog
     sysadm-samba.pl --listshares >>$ELS_TEMP.dialog
     { . $ELS_TEMP.dialog; } 2>$ELS_TEMP
     CHOICE=`cat $ELS_TEMP`
@@ -12,16 +12,16 @@ case "$1" in
     Query)
 	Title "Network" "Samba" "Setup SAMBA file server"
 	Option "Who"      "Display users connected to SAMBA"
-	Option "Batch"    "For experts: edit domain logon batch file"
 	Option "List"     "Display list of shares"
-	Option "Add"      "Add a new share"
-	Option "Delete"   "Delete a share"
-	Option "Modify"   "Modify a share"
-	Option "Setup"    "For experts: setup internal SAMBA parameters"
 	[ -s /var/log/samba/log.smbd ] &&
 	Option "Log"      "Displays the samba SMB log file"
 	[ -s /var/log/samba/log.nmbd ] &&
 	Option "Netbios"  "Displays the samba NMB (Netbios) log file"
+	Option "Add"      "Add a new share"
+	Option "Delete"   "Delete a share"
+	Option "Modify"   "Modify a share"
+	Option "Setup"    "For experts: setup internal SAMBA parameters"
+	Option "Reload"   "Reload SAMBA"
 	;;
 
 	#Desc
@@ -40,41 +40,7 @@ case "$1" in
 	#DescEnd
 
 	sysadm-samba.pl --users >$ELS_TEMP
-	dialog --title "Who is using SAMBA?" --textbox $ELS_TEMP 23 76
-	;;
-
-    batch)
-	#Desc
-	# When you enabled the "Domain logon" feature at your clients,
-	# they will execute a batch directly after logon. While there
-	# comes one already preconfigured with SAMBA, you might want
-	# to add your own stuff there.
-	#
-	#Item Usage
-	#Edit
-	# @echo off
-	# echo Welcome to the Easy Linux Server !
-	# echo.
-	# net use F: \\LINUX\APP
-	# net use I: \\LINUX\DAT
-	# net use H: \\LINUX\HOME
-	#EditEnd
-	#Macro Editor
-	#DescEnd
-
-	# change special characters and change CRLF -> LF, remove Ctrl-Z
-	{
-	    recode IBM-PC:latin1 </usr/samba/netlogon/logon.bat |
-		tr -d "\032"
-	}>$ELS_TEMP 2>/dev/null
-
-	EditFile "$ELS_TEMP" /usr/samba/netlogon/logon.bat
-
-	# change special characters back and change LF -> CRLF, add Ctrl-Z
-	{
-	    recode latin1:IBM-PC <$ELS_TEMP
-	    echo -en "\032"
-	} >/usr/samba/netlogon/logon.bat 
+	$ELS_DIALOG --title "Who is using SAMBA?" --textbox $ELS_TEMP 23 76
 	;;
 
     list)
@@ -89,12 +55,12 @@ case "$1" in
 	#
 	#TextBox
 	# APP              Server based applications
-	#   Server path    /usr/samba/app
+	#   Server path    /var/samba/app
 	#   Read only      yes
 	#   Write list     root
 	# 
 	# ARC              Software archive
-	#   Server path    /usr/samba/arc
+	#   Server path    /var/samba/arc
 	#   Read only      yes
 	#   Write list     root
 	# 
@@ -104,13 +70,45 @@ case "$1" in
 	#   Read only      yes
 	# 
 	# DAT              Users and workgroups
-	#   Server path    /usr/samba/dat
+	#   Server path    /var/samba/dat
 	#TextBoxEnd.
 	#Macro TextBox
 	#DescEnd
 
 	/usr/sbin/sysadm-samba.pl --shares >$ELS_TEMP
-	dialog --title "Available shares" --textbox $ELS_TEMP 23 76
+	$ELS_DIALOG --title "Available shares" --textbox $ELS_TEMP 23 76
+	;;
+
+    log)
+	#Desc
+	# Displays the log file of the SAMBA file server process.
+	#
+	#TextBox
+	# 1998/08/14 14:17:26 test (192.168.1.99) connect to service netlogon as user holger (uid=100,gid=101) (pid 1190)
+	# 1998/08/14 14:21:11 test (192.168.1.99) closed connection to service netlogon
+	# 1998/08/14 14:27:31 test (192.168.1.99) closed connection to service app
+	# 1998/08/14 14:27:31 test (192.168.1.99) closed connection to service holger
+	# 1998/08/14 14:27:31 test (192.168.1.99) closed connection to service dat
+	# 1998/08/14 15:55:40 test (192.168.1.99) connect to service cdrom as user holger (uid=100,gid=101) (pid 2142)
+	#TextBoxEnd
+	#Item Usage
+	#Macro Textbox
+	#DescEnd
+
+	$ELS_DIALOG --textbox /var/log/samba/log.smbd 23 76
+	;;
+
+    netbios\
+	)
+	#Desc
+	# Displays the name bios resolving actions of your SAMBA file
+	# server.
+	#
+	#Item Usage
+	#Macro Textbox
+	#DescEnd
+
+	$ELS_DIALOG --textbox /var/log/samba/log.nmbd 23 76
 	;;
 
     add)
@@ -140,7 +138,7 @@ case "$1" in
 	export SMB_SHARE=`echo $CHOICE | tr a-z A-Z`
 	SHARE=`echo $CHOICE | tr A-Z a-z`
 	test -f /etc/samba.d/$SHARE.smb && {
-	    dialog --title "Can't create" --msgbox "\nSorry, the $SMB_SHARE share does already exists." 7 50
+	    $ELS_DIALOG --title "Can't create" --msgbox "\nSorry, the $SMB_SHARE share does already exists." 7 50
 	    return
 	}
 	export SMB_COMMENT=""
@@ -186,7 +184,7 @@ case "$1" in
 	/usr/sbin/sysadm-samba.pl --getshare $CHOICE >$ELS_TEMP
 	. $ELS_TEMP
 	test "$SMB_PRINTABLE" = "yes" && {
-	    dialog --title "Can't remove" --msgbox "\nThe $SMB_SHARE share is a printer.\n\nUse  sysadm -> Hardware -> Printer  to remove this printer." 9 70
+	    $ELS_DIALOG --title "Can't remove" --msgbox "\nThe $SMB_SHARE share is a printer.\n\nUse  sysadm -> Hardware -> Printer  to remove this printer." 9 70
 	    return
 	}
 
@@ -195,8 +193,8 @@ case "$1" in
 
 	# remove the share
 	rm -f /etc/samba.d/$CHOICE.smb
-	/usr/sbin/sysadm-setup.pl smbconfig.setup
-	dialog --msgbox "Share is gone after the next restart of SAMBA." 5 50 
+	/usr/sbin/sysadm-setup.pl smbconfig
+	$ELS_DIALOG --msgbox "Share is gone after the next restart of SAMBA." 5 50 
 	;;
 
     modify)
@@ -234,38 +232,6 @@ case "$1" in
 	$0 sambamod
 	;;
 
-    log)
-	#Desc
-	# Displays the log file of the SAMBA file server process.
-	#
-	#TextBox
-	# 1998/08/14 14:17:26 test (192.168.1.99) connect to service netlogon as user holger (uid=100,gid=101) (pid 1190)
-	# 1998/08/14 14:21:11 test (192.168.1.99) closed connection to service netlogon
-	# 1998/08/14 14:27:31 test (192.168.1.99) closed connection to service app
-	# 1998/08/14 14:27:31 test (192.168.1.99) closed connection to service holger
-	# 1998/08/14 14:27:31 test (192.168.1.99) closed connection to service dat
-	# 1998/08/14 15:55:40 test (192.168.1.99) connect to service cdrom as user holger (uid=100,gid=101) (pid 2142)
-	#TextBoxEnd
-	#Item Usage
-	#Macro Textbox
-	#DescEnd
-
-	dialog --textbox /var/log/samba/log.smbd 23 76
-	;;
-
-    netbios\
-	)
-	#Desc
-	# Displays the name bios resolving actions of your SAMBA file
-	# server.
-	#
-	#Item Usage
-	#Macro Textbox
-	#DescEnd
-
-	dialog --textbox /var/log/samba/log.nmbd 23 76
-	;;
-
     setup)
 	#Desc
 	# You might want to change some global SAMBA parameter. This is
@@ -276,7 +242,13 @@ case "$1" in
 	# <A HREF="sambaset.htm">sysadm -&gt; Network -&gt; Samba -&gt;
 	# Setup</A> menu.
 	#DescEnd
+
 	$0 sambasetup
 	;;
+
+    reload)
+	/usr/sbin/sysadm-setup.pl smbconfig
+        killall -HUP nmbd smbd
+        ;;
 
 esac
