@@ -16,15 +16,17 @@
   <TH>Status</TH>
   <TH><FONT SIZE="-1">Intro</FONT></TH>
   <TH><FONT SIZE="-1">Usage</FONT></TH>
-  <TH><FONT SIZE="-1">FAQ</FONT></TH>
   <TH><FONT SIZE="-1">Install</FONT></TH>
+  <TH><FONT SIZE="-1">FAQ</FONT></TH>
   <TH><FONT SIZE="-1">Internal</FONT></TH>
 </TR><TR>
   <TD>els-base</TD>
   <TD>The basis for all other modules</TD>
   <TD CLASS="small"><A HREF="stages.shtml#a">Alpha</A><BR>the CVS-version works</TD>
   <TD><A HREF="els-base/index.shtml">Intro</A></TD>
-  <TD COLSPAN=4 ALIGN="center">to be written</TD>
+  <TD><A HREF="els-base/usage.shtml">Usage</A></TD>
+  <TD><A HREF="els-base/install.shtml">Install</A></TD>
+  <TD COLSPAN=2 ALIGN="center">to be written</TD>
 </TR><TR>
   <TD>els-samba</TD>
   <TD>File server</TD>
@@ -43,7 +45,13 @@
   <TD><A HREF="els-backup/index.shtml">Intro</A></TD>
   <TD COLSPAN=4 ALIGN="center">to be written</TD>
 </TR>
-</TABLE>
+</TABLE><P>
+  You can download these modules
+  <A HREF="http://developer.berlios.de/project/filelist.php?group_id=204" TARGET="_new">here</A>,
+  but currently you are adviced to get the
+  <A HREF="http://developer.berlios.de/cvs/?group_id=204" TARGET="_new">CVS</A>
+  version and create the modules for yourself.
+</P>
 
 
 <H2>Additional modules</H2>
@@ -58,8 +66,8 @@
   <TH>Status</TH>
   <TH><FONT SIZE="-1">Intro</FONT></TH>
   <TH><FONT SIZE="-1">Usage</FONT></TH>
-  <TH><FONT SIZE="-1">FAQ</FONT></TH>
   <TH><FONT SIZE="-1">Install</FONT></TH>
+  <TH><FONT SIZE="-1">FAQ</FONT></TH>
   <TH><FONT SIZE="-1">Internal</FONT></TH>
 </TR><TR>
   <TD>els-dialin</TD>
