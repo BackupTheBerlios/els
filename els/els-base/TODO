@@ -1,14 +1,15 @@
 Sysadm:
   check all *.mnu files
   write menu for sysadm-setup.pl
-  add help texts
+  check URL paths in help texts
 
 Setup:
   check description texts
-  generate tool for auto-documentation for the setup scripts
-  generate sysadm menu
+  generate documentation for the setup scripts
+  generate sysadm menu around sysadm-setup.pl
   decide on mandatory scripts
 
-General:
+Editor:
   is there a better editor as the joe-based q?
   fix the help texts in 'qrc'
+  Consider e3 as an editor instead of q
