@@ -1,7 +1,7 @@
 %define name els-base
-%define vers 2.0
+%define vers 1.95
 %define rel  1
-%define withdoc 0
+%define withdoc 1
 %define withjoe 1
 
 Summary: Easy Linux Server base module
@@ -33,7 +33,7 @@ easy-to-administer and easy-to-enhance Linux server system.
 cd -
 rm -rf html
 mkdir html
-../utilities/sysadmdoc.pl --destdir=html/ --srcdir=.
+./sysadm-makedoc.pl --destdir=html/ --srcdir=. *.mnu
 %endif
 
 

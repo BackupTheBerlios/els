@@ -1,7 +1,7 @@
 %define name els-backup
-%define vers 2.0
+%define vers 1.95
 %define rel  1
-%define withdoc 0
+%define withdoc 1
 
 Summary: Easy Linux Server backup module
 Name: %{name}
@@ -27,7 +27,7 @@ Contains some sysadm menues for interactive and background backups.
 cd -
 rm -rf html
 mkdir html
-../utilities/sysadmdoc.pl --destdir=html/ --srcdir=.
+../els-base/sysadm-makedoc.pl --destdir=html/ --srcdir=. *.mnu
 %endif
 
 

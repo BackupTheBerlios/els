@@ -1,7 +1,7 @@
 %define name els-samba
-%define vers 2.0
+%define vers 1.95
 %define rel  1
-%define withdoc 0
+%define withdoc 1
 
 Summary: Easy Linux Server SAMBA module
 Name: %{name}
@@ -95,5 +95,5 @@ rm -rf $RPM_BUILD_ROOT
 
 # DOCUMENTATION
 %if %{withdoc}
-%doc html/*
+%doc $OLDPWD/html/*
 %endif
