@@ -10,7 +10,7 @@
 <A TARGET="_new" CLASS="menus" HREF="http://cvs.els.berlios.de/cgi-bin/cvsweb.cgi/?cvsroot=els">CVSWeb</a><BR>
 <A TARGET="_new" CLASS="menus" HREF="http://developer.berlios.de/mail/?group_id=204">Mailing list</A><BR>
 <A TARGET="_new" CLASS="menus" HREF="http://developer.berlios.de/bugs/?group_id=204">Bugs</A><BR>
-<A TARGET="_new" CLASS="menus" HREF="http://developer.berlios.de/patch/?group_id=204">Submit patches</A><BR>
+<A CLASS="menus" HREF="patches.shtml">Submit patches</A><BR>
 </TD>
 </TR></TABLE>
 
