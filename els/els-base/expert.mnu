@@ -3,12 +3,10 @@ case "$1" in
     Query)
         Title "" "Expert" "For the experts only :-)"
 
-	. /etc/sysconfig/rc.sysadm
-	PROCESS_WATCHER=${PROCESS_WATCHER:-no}
+	. /etc/els.conf
 	EXPERTMODE=${EXPERTMODE:-no}
 
 	Option "ExpertMode"     "Toggle expert mode     (now $EXPERTMODE)"
-	Option "ProcessWatcher" "Toggle process watcher (now $PROCESS_WATCHER)" 
         ;;
 
      expertmode)
@@ -24,19 +22,6 @@ case "$1" in
 	    SetOpt "EXPERTMODE" "yes"
 	else
 	    SetOpt "EXPERTMODE" "no"
-	fi
-	;;
-
-     processwatcher)
-	#Desc
-	# Toggles the process watcher that checks every hour if all the main
-	# system processes are still running.
-	#DescEnd
-
-	if [ "$PROCESS_WATCHER" = "no" ]; then
-	    SetOpt "PROCESS_WATCHER" "yes"
-	else
-	    SetOpt "PROCESS_WATCHER" "no"
 	fi
 	;;
 
