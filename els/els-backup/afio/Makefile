@@ -5,14 +5,15 @@ ALL = afio.spec afio.patch \
       /usr/src/redhat/SOURCES/afio.patch \
       /usr/src/redhat/SOURCES/afio-2.4.7.tgz
 
-rpms:: .rpm
+rpms:: .rpms
 
 
 
 
-.rpm: $(ALL)
+.rpms: $(ALL)
 	rm -f /usr/src/redhat/RPMS/i386/afio*.rpm
-	rpm -bb afio.spec && touch .rpm
+	rpm -bb afio.spec
+	touch .rpms
 
 /usr/src/redhat/SOURCES/afio.patch: afio.patch
 	cp -p afio.patch /usr/src/redhat/SOURCES/afio.patch
