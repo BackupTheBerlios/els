@@ -1,10 +1,10 @@
 #Title Enable nscd
 #Author Holger Schurig
-#NeedFile /etc/init.d/nscd
+#Group els-base
 #Desc
 # Red Hat 7.2 erraneously doesn't install nscd correctly, this script fixes this.
 #DescEnd
-#Id $Id: nscd.setup,v 1.2 2001/11/26 13:11:02 holgerschurig Exp $
+#Id $Id: nscd.setup,v 1.3 2001/11/30 15:21:03 holgerschurig Exp $
 
 
 if (-f '/etc/init.d/nscd') {

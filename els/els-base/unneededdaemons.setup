@@ -1,10 +1,11 @@
 #Title Stop unneeded daemons
 #Author Holger Schurig
+#Group els-base
 #Desc
 # This disables several daemons (background processes) that are not really
 # needed for a file server:
 #DescEnd
-#Id $Id: unneededdaemons.setup,v 1.2 2001/11/26 13:11:02 holgerschurig Exp $
+#Id $Id: unneededdaemons.setup,v 1.3 2001/11/30 15:21:03 holgerschurig Exp $
 
 
 open CHKCONFIG, "chkconfig --list|";
@@ -20,5 +21,6 @@ foreach (@lines) {
       logit "/etc/init.d/kudzu: autostart disabled\n";
   }
 }
+
 
 1;
