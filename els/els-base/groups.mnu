@@ -34,7 +34,7 @@ case "$1" in
 
 	#Desc
 	# Each user has one private group as his primary group (see
-	# "<A HREF="../upg.htm">User Private Groups</A>" for more
+	# "<A HREF="../upg.html">User Private Groups</A>" for more
 	# information). Additionally, a user can be in up to 16 secondary
 	# groups, e.g. to control access to data directories.
 	#DescEnd
