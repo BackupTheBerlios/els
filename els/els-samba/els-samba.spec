@@ -11,6 +11,7 @@ Copyright: GPL
 Vendor: Easy Linux Server
 Group: Applications/System
 Requires: els-base, samba-common, samba, /etc/init.d/smb
+Requires: dos2unix, unix2dos
 BuildRoot: /var/tmp/%{name}-%{vers}-%{rel}
 
 
@@ -43,20 +44,8 @@ mkdir -p $RPM_BUILD_ROOT/usr/doc/%{name}-%{vers}
 rm -rf $RPM_BUILD_ROOT
 
 
-%pre
-#if ps ax | grep -q "[0-9] smbd " ; then
-#    echo -e "\nShutting SAMBA down:"
-#    test -x /etc/init.d/smb && /etc/init.d/smb stop
-#    sleep 2
-#    echo
-#fi
-
-
 %post
-echo -e "\nCreating initial samba configuration ..."
-/usr/sbin/sysadm-setup.pl --verbose smbconfig.setup smbpasswd.setup smbhomedirs.setup
-#test -x /etc//init.d/smb  && chkconfig --add smb
-echo
+/usr/sbin/sysadm-setup.pl smbconfig smbpasswd smbhomedirs
 
 
 %files
@@ -89,7 +78,7 @@ echo
 %attr(0600,root,root) %config(noreplace) /etc/samba/linux.smb
 %attr(0600,root,root) %config(noreplace) /etc/samba/printers.smb
 %attr(0600,root,root) %config(noreplace) /etc/samba/netlogon.smb
-%attr(0644,root,root) %config(noreplace) /usr/samba/netlogon/logon.bat
+%attr(0644,root,root) %config(noreplace) /var/samba/netlogon/logon.bat
 
 # CONFIG FILE CHANGER
 %attr(0600,root,root) /usr/lib/els/smbconfig.setup
