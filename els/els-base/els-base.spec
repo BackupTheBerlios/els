@@ -83,6 +83,7 @@ echo "Run 'sysadm-setup.pl' or 'sysadm-setup.pl --all' to get a nice environment
 %attr(0600,root,root) /usr/lib/els/moveopt.setup
 %attr(0600,root,root) /usr/lib/els/rclocal.setup
 %attr(0600,root,root) /usr/lib/els/rootbashrc.setup
+%attr(0600,root,root) /usr/lib/els/sshrootlogin.setup
 %attr(0600,root,root) /usr/lib/els/syslog.setup
 %attr(0600,root,root) /usr/lib/els/tcptimestamps.setup
 %attr(0600,root,root) /usr/lib/els/tcpwrappers.setup
