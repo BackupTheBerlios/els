@@ -9,11 +9,14 @@ my $srcdir    = './';
 my $destdir   = './';
 my $verbose   = 0;
 my $textmode  = 0;
+my $shtml     = 0;
 my $tablemode = 1;
 GetOptions('verbose!'  => \$verbose,
            'destdir=s' => \$destdir,
            'srcdir=s'  => \$srcdir,
-           'text'      => \$textmode  );
+           'text'      => \$textmode,
+           'shtml'     => \$shtml,
+          );
 chdir $srcdir;
 
 
@@ -43,7 +46,7 @@ sub MakeShortFilename ($)
 
    $fn =~ s/\.mnu$//;
    $fn =~ s/\.html$//;
-   $fn =  $fn . ".html";
+   $fn =  $fn . ($shtml ? '.shtml' : '.html');
 
    return $fn;
 }
@@ -206,18 +209,25 @@ sub FileBegin ()
     return if $FileStatus eq "in";
 
     unless ($textmode) {
-        html "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">";
-        html "<HTML>";
-        html "<HEAD>";
-        html "<TITLE>sysadm - $Name</TITLE>";
-        html "<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=iso-8859-1\">";
-        html "</HEAD>";
-        html "<BODY BGCOLOR=\"#ffffff\">";
-        html "<TABLE CELLPADDING=10 WIDTH=\"100%\"><TR><TD BGCOLOR=\"#FFFFCC\" ALIGN=\"CENTER\">";
-        html "<H1>Easy Linux Server</H1>";
-        html "<H2>sysadm - $Name</H2>";
-        html "</TD></TR></TABLE>";
-        html "<P>";
+	if ($shtml) {
+	    html "<!--#set var=\"title\" value=\"ELS sysadm - $Name\"-->";
+	    html '<!--#include file="top.inc"-->';
+	    html '<!--#include file="admins.inc"-->';
+	    html '<!--#include file="logos.inc"-->';
+        } else {
+            html "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">";
+            html "<HTML>";
+            html "<HEAD>";
+            html "<TITLE>sysadm - $Name</TITLE>";
+            html "<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=iso-8859-1\">";
+            html "</HEAD>";
+            html "<BODY BGCOLOR=\"#ffffff\">";
+            html "<TABLE CELLPADDING=10 WIDTH=\"100%\"><TR><TD BGCOLOR=\"#FFFFCC\" ALIGN=\"CENTER\">";
+            html "<H1>Easy Linux Server</H1>";
+            html "<H2>sysadm - $Name</H2>";
+            html "</TD></TR></TABLE>";
+            html "<P>";
+        }
     } 
     $FileStatus = "in";
 }
@@ -225,7 +235,11 @@ sub FileBegin ()
 sub FileEnd ()
 {
     unless ($textmode) {
-        html "</BODY></HTML>";
+	if ($shtml) {
+	    html '<!--#include file="bottom.inc"-->';
+        } else {
+            html "</BODY></HTML>";
+        }
     } 
     $FileStatus = "after";
 }
@@ -924,6 +938,7 @@ sub ProcessMenuFile ($)
     unless ($textmode) {
         $HTMLFile = MakeShortFilename $FileName;
         $HTMLFile = "index.html" if $HTMLFile eq "main.html";
+        $HTMLFile = "index.shtml" if $HTMLFile eq "main.shtml";
         print "Write $destdir$HTMLFile\n" if $verbose;
         open HTML, ">$destdir$HTMLFile" or die "$!\n";
     }
@@ -970,11 +985,15 @@ sub ProcessMenuFile ($)
         FileEnd;
     } else {
         html '<P>';
-        html '<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="10" WIDTH="100%" BGCOLOR="#FFFFCC">';
-        html '<TR><TD>';
-        html "File automatically generated from \"<TT>$FileName</TT>\".";
-        html '</TD></TR>';
-        html '</TABLE>';
+	if ($shtml) {
+            html '<!--#include file="bottom.inc"-->' if $shtml;
+        } else {
+            html '<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="10" WIDTH="100%" BGCOLOR="#FFFFCC">';
+            html '<TR><TD>';
+            html "File automatically generated from \"<TT>$FileName</TT>\".";
+            html '</TD></TR>';
+            html '</TABLE>';
+        }
         close HTML;
     }
 
