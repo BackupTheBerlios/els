@@ -4,8 +4,6 @@ SGML_CATALOG_FILES=../utilities/sgml/HTML4.cat
 REDHAT_CD ?= /u1/redhat72
 export SGML_CATALOG_FILES
 
-help::
-
 all::
 
 rpms::

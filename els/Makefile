@@ -1,4 +1,9 @@
-SUBDIRS = els-base els-backup utilities website
+ROOT    = .
+SUBDIRS = utilities els-base els-backup website
+
+# Trick so that not 'all::' is the default target but 'help::'
+help::
+
 include Makefile.inc
 
 
@@ -14,4 +19,4 @@ help::
 	@echo
 
 all rpms docs check clean install upload::
-	@for i in $(SUBDIRS); do echo "Entering $$i"; make -C $$i $@ ROOT=$(ROOT)/.. || break; echo "Leaving $$i"; done
+	@for i in $(SUBDIRS); do echo "Entering $$i"; make -C $$i $@ || break; echo "Leaving $$i"; done

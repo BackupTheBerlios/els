@@ -1,12 +1,9 @@
+ROOT    = ..
+SUBDIRS = sysadm
 include $(ROOT)/Makefile.inc
 
-# SHTML -> HTML transformation
 ALL = $(patsubst %.shtml,%.html,$(wildcard *.shtml))
 
-
-
-%.html:	%.shtml top.inc logos.inc bottom.inc admins.inc developers.inc
-	../utilities/makehtml.pl $< >$@
 
 
 all:: docs
@@ -21,3 +18,9 @@ clean::
 
 upload:: all
 	scp *.html holgerschurig@els.berlios.de:/home/groups/els/htdocs/
+
+
+
+
+%.html:	%.shtml top.inc logos.inc bottom.inc admins.inc developers.inc
+	../utilities/makehtml.pl $< >$@

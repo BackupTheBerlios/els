@@ -1,3 +1,4 @@
+ROOT = ..
 include $(ROOT)/Makefile.inc
 
 ALL = *.pl *.sh *.mnu *.setup *.els-base \

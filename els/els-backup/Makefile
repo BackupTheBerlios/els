@@ -1,4 +1,5 @@
-SUBDIRS=afio
+ROOT    = ..
+SUBDIRS = afio
 include $(ROOT)/Makefile.inc
 
 ALL = *.mnu *.setup *.pl *.spec \
