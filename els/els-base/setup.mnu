@@ -1,0 +1,28 @@
+function SelectScript ()
+{
+    echo -n "$ELS_DIALOG --menu \"Select script $1\" 23 65 15 " >$ELS_TEMP.dialog
+    sysadm-user.pl --listscripts $2 $3 >>$ELS_TEMP.dialog
+    { . $ELS_TEMP.dialog; } 2>$ELS_TEMP
+    CHOICE=`cat $ELS_TEMP`
+}
+
+
+case "$1" in
+
+    Query)
+        Title "System" "Setup" "Fine tune system setup"
+	Option "Info"  "Info on available setup scripts"
+	Option "Run"   "Run specific setup script"
+	Option "All"   "Run all existing setup script"
+	Option "Rerun" "Run all existing setup script that have run once"
+	;;
+
+     info)
+	SelectScript "to get info about"
+	test -z "$CHOICE" && return
+
+	sysadm-user.pl --scriptinfo "$CHOICE" >$ELS_TEMP
+	$ELS_DIALOG --textbox $ELS_TEMP 23 76
+	;;
+
+esac
