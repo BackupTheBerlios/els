@@ -30,12 +30,14 @@
 <TR BGCOLOR="#000000">
 <TD ALIGN="center">
 <IMG SRC="images/blank.gif" HEIGHT="1" WIDTH="135" BORDER=0 ALT=""><BR>
-<A HREF="index.shtml" CLASS="menubar"><FONT COLOR="#ffffff">General</FONT></A></TD>
+<SPAN CLASS="titlebar"><FONT COLOR="#ffffff">General</FONT></SPAN></TD>
 </TR>
 <TR ALIGN="right" BGCOLOR="#FFCC33"><TD>
-<A CLASS="menus" HREF="history.shtml">History</a><BR>
+<A CLASS="menus" HREF="index.shtml">Home</A><BR>
 <A CLASS="menus" HREF="news.shtml">News</A><BR>
 <A CLASS="menus" HREF="download.shtml">Download</A><BR>
+<A CLASS="menus" HREF="http://developer.berlios.de/mail/?group_id=204" TARGET="_new">Mailing list</A><BR>
+<A CLASS="menus" HREF="history.shtml">History</a><BR>
 </TD>
 </TR></TABLE>
 
@@ -43,7 +45,7 @@
 <TR BGCOLOR="#000000">
 <TD ALIGN="center">
 <IMG SRC="images/blank.gif" HEIGHT="1" WIDTH="135" BORDER=0 ALT=""><BR>
-<A HREF="audience.shtml" CLASS="menubar"><FONT COLOR="#ffffff">Audience</FONT></A></TD>
+<SPAN CLASS="titlebar"><FONT COLOR="#ffffff">Audience</FONT></SPAN></TD>
 </TR>
 <TR ALIGN="right" BGCOLOR="#FFCC33"><TD>
 <A CLASS="menus" HREF="admins.shtml">Admins</A><BR>

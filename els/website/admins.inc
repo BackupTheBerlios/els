@@ -2,7 +2,7 @@
 <TR BGCOLOR="#000000">
 <TD ALIGN="center">
 <IMG SRC="images/blank.gif" HEIGHT="1" WIDTH="135" BORDER=0 ALT=""><BR>
-<A HREF="admins.shtml" CLASS="menubar"><FONT COLOR="#ffffff">Adminstration</FONT></A></TD>
+<SPAN CLASS="titlebar"><FONT COLOR="#ffffff">Adminstration</FONT></SPAN></TD>
 </TR>
 <TR ALIGN="right" BGCOLOR="#FFCC33"><TD>
 <A CLASS="menus" HREF="download.shtml">Download</A><BR>
