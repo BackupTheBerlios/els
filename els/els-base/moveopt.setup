@@ -9,7 +9,7 @@
 #
 # Therefore we move files from /opt to /usr and create a symlink.
 #DescEnd
-#Id $Id: moveopt.setup,v 1.1 2002/03/04 07:57:16 holgerschurig Exp $
+#Id $Id: moveopt.setup,v 1.2 2002/05/06 14:32:55 holgerschurig Exp $
 
 
 if (-d '/opt' && -f '/etc/fstab' && !-l '/opt' && (`mount | grep /opt` eq "")) {
@@ -19,10 +19,7 @@ if (-d '/opt' && -f '/etc/fstab' && !-l '/opt' && (`mount | grep /opt` eq "")) {
 }
 if (!-l '/opt' && -f '/etc/fstab' && (`mount | grep /opt` eq "")) {
     system 'ln', '-s', '/usr', '/opt';
-
-    # Set default for new users
-    #system '/usr/sbin/useradd', '-D', '-b', '/var/home';
-    logit "/home moved to /var/home\n";
+    logit "/opt moved to /usr/opt\n";
 }
 
 
