@@ -1,23 +1,22 @@
 The following are the still-in-development modules for Red Hat 7.2:
 
 els-base/*
+els-dialin/*
+els-backup/*
+
 
 
 The following are modules that are designed for Red Hat 6.2, they
 are here for reference only.
 
-old/els-backup
-old/els-base
-old/els-dns
-old/els-lpr
-old/els-mundn
-old/els-postfix
+old/*
 
 
 
 The web site at http://els.berlios.de is stored here:
 
 website/*
+
 
 
 I need some utilities for the creation of the *.rpm files
