@@ -1,0 +1,9 @@
+This is the basic module that all others depend on.
+
+It provides (or will provide)
+
+- standard environment (mostly for developers of els-* modules)
+- sysadm menu (mostly for users and other modules)
+
+
+$Id: README,v 1.1 2001/11/22 09:38:16 holgerschurig Exp $
