@@ -1,5 +1,5 @@
 ROOT    = ..
-SUBDIRS = sysadm
+SUBDIRS = sysadm els-base
 
 docs::
 
@@ -51,4 +51,5 @@ install.shtml: ../INSTALL
 # Dependencies:
 developers.html patches.html structure.html:: developers.inc
 admins.html download.html faq.html install.html installation.html:: admins.inc
-modules.html sysadm.html:: admins.inc
+modules.html sysadm.html stages.shtml:: admins.inc
+modules.html:: modules.inc
