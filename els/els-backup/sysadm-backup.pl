@@ -11,7 +11,7 @@ use Getopt::Long;
 # Constants
 #
 $SETDIR    = '/etc/backup.d';			# directory that hold backup sets
-$RCSYSADM  = '/etc/sysconfig/rc.sysadm';	# system configuration file
+$RCSYSADM  = '/etc/els.conf';			# system configuration file
 $FILELIST  = '/var/tmp/sysadm.filelist';	# list of all files in one backup set
 $BACKUPLOG = '/var/tmp/sysadm.backuplog';	# file to keep the output of this script
 
@@ -51,7 +51,7 @@ $Subject     = 'sysadm-backup run';             # subject to be used for e-mail
 
 
 #
-# Default values if entries in /etc/sysconfig/rc.sysadm do not exist
+# Default values if entries in /etc/els.conf do not exist
 #
 $Def_TAPE_STATUS = 'mt status';			# Command to get status of tape
 $Def_TAPE_REWIND = 'mt rewind';			# Command to rewind tape
