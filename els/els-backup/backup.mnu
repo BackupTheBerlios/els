@@ -27,15 +27,13 @@ case "$1" in
             Option "Automatic" "Schedule automatic backups in the night"
             Option "Exclude"   "For experts: define files/directories to exclude"
 
-            #include Backup sysadm -> Backup
-            perl -nw - $ELS_MENULIB/*.mnu 2>/dev/null >>$ELS_TEMP. <<-"EOF"
-	    	if ( /^\s+Title\s+"Backup"\s+"(.*)"\s+"(.*)"/ ) {
-		    print "\"$1\" \"$2\" ";
-	    	}
+            #include Network sysadm -> Backup
+            perl -nw - $ELS_MENULIB/*.mnu 2>/dev/null >>$ELS_TEMP.dialog <<-"EOF"
+		print "\"$1\" \"$2\" " if /^\s+Title\s+"Backup"\s+"(.*)"\s+"(.*)"/;
 		EOF
 
         else
-	    $ELS_DIALOG --msgbox "Define tape type first." 5 30
+	    $ELS_DIALOG --msgbox "Define tape type first." 5 31
 	    ExitMenu
 	fi
         ;;
@@ -77,7 +75,7 @@ case "$1" in
 
 	/usr/sbin/sysadm-backup.pl --mail --backup -- $CHOICE &
 
-	$ELS_DIALOG --msgbox "Backup is running now. An email with results will be sent to the operator." 6 41
+	$ELS_DIALOG --msgbox "Backup is running now. An email with results will be sent to the operator." 6 42
 	;;
 
     automatic)
@@ -96,7 +94,7 @@ case "$1" in
         #Menu Select time for backup
         # a 20:00
         # b 21:00
-        # c 22:00 (best time)
+        # c 22:00
         # d 23:00
         # e 00:00
         # f 01:00
@@ -116,24 +114,12 @@ case "$1" in
 	# backup. If a user modifies a file while it is backed up, the
 	# data integrity will be broken. So if the backup starts too
 	# early, it is very likely that people are still logged in.
-	#
-	# Several maintenance jobs (e.g. cleaning old log files etc) are
-	# executed in the night. There are daily, weekly and monthly
-	# tasks to be done. These tasks are launched at 04:00.
-	# If one of this tasks is still running while
-	# the backup is active data integrity would be voided, too.
-	#
-	# Therefore, 22:00 is a good time: it is not too early, but still
-	# it gives us 6 hours till the next background task. But
-	# the best time is in the morning at 04:00. The likelihood that a
-	# user works at this time is also small. No background tasks
-	# are running either.
 	#DescEnd
 
         $ELS_DIALOG --menu "Select time for backup" 18 40 11 \
 		"a" "20:00" \
 		"b" "21:00" \
-		"c" "22:00 (best time)" \
+		"c" "22:00" \
 		"d" "23:00" \
 		"e" "00:00" \
 		"f" "01:00" \
