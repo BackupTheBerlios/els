@@ -5,13 +5,14 @@
 # Note that each user can have his own, private directory
 # aliases in ~/.diralias
 #
-# $Id: els-base.dirs,v 1.1 2001/11/26 13:12:05 holgerschurig Exp $
+# $Id: els-base.dirs,v 1.2 2001/12/13 09:34:56 holgerschurig Exp $
 #
 
 # often needed for module developers:
 local specs=/usr/src/redhat/SPECS
 local build=/usr/src/redhat/BUILD
 local rpms=/usr/src/redhat/RPMS/i386
+local noarch=/usr/src/redhat/RPMS/noarch
 local srpms=/usr/src/redhat/SRPMS
 local sources=/usr/src/redhat/SOURCES
 local els=/usr/lib/els
