@@ -1,11 +1,12 @@
 #Title update samba configuraton
 #Author Holger Schurig
 #Group els-samba
+#Group Mandatory
+#Group Internal
 #Desc
-# This creates from environment variables and the files in /etc/samba/*.smb
-# an /etc/samba/smb.conf that can be read and understood by samba.
+# This setup script re-creates the /etc/smb.conf file.
 #DescEnd
-#Id $Id: smbconfig.setup,v 1.3 2001/11/30 15:26:33 holgerschurig Exp $
+#Id $Id: smbconfig.setup,v 1.4 2001/12/06 11:24:30 holgerschurig Exp $
 
 
 my %ENV;

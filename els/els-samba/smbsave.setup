@@ -1,9 +1,13 @@
 #Title Save original smb.conf
 #Author Holger Schurig
 #Group els-samba
+#Group Mandatory
+#Group Internal
 #Desc
+# This setup script makes a backup copy of the original smb.conf file
+# that came with Red Hat.
 #DescEnd
-#Id $Id: smbsave.setup,v 1.1 2001/11/30 15:27:49 holgerschurig Exp $
+#Id $Id: smbsave.setup,v 1.2 2001/12/06 11:24:30 holgerschurig Exp $
 
 
 loadfile '/etc/samba/smb.conf';
