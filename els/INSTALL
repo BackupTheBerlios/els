@@ -1,26 +1,60 @@
 Installation
 ============
 
-When you read this file you seem already have been able to get the CVS.
-Fine.
+When you read this file you seem already have been able to get the
+CVS. Fine.
 
-Getting additional modules
---------------------------
-ELS depends on some RPMs that are not part of Red Hat 7.2, e.g. on
-postfix. When you do a "make all" or "make rpms" the system will try
-to automatically download this modules. Therefore you should be online
-...
+
+Quickstart
+----------
+Try
+
+   make rpms
+
+At least on Red Hat 7.2 you don't need to be root for this. By the way:
+you should be online while doing this. That's because we have ...
+
+
+Dependencies
+------------
+Some Easy Linux Server modules depend on software that does not come
+with Red Hat 7.2:
+
+* els-backup depends on afio
+* els-postfix depends on postfix
+
+When you enter 'make rpms' the Makefile system will find out if you
+already got this additional software and downloads them automatically.
+
+
 
 Installation of the modules
 ---------------------------
-If everything goes well, you should have all ELS rpms (as well as
-/some auxiliary rpms) in /usr/src/redhat/RPMS/i386. Install the modules
-/that you like by doing something like
+After you've run 'make rpms' all RPMs are found in the following
+two directories:
 
-   $ cd /usr/src/redhat/RPMS/i386
+   /usr/src/redhat/RPMS/i386
+   /usr/src/redhat/RPMS/noarch
+
+If everything goes well, you should have all ELS rpms (as well as
+some auxiliary rpms) in /usr/src/redhat/RPMS/i386. Install the modules
+you like by doing something like
+
+   $ cd /usr/src/redhat/RPMS/noarch
    $ rpm -Uhv els-base*.rpm
    $ rpm -Uhv els-samba*.rpm
 
+
+Get runnung
+-----------
 Now you should start the sysadm menu and get used to it:
 
    $ sysadm
+
+I will really soon (tm) have pages up that describe the configuration
+in more detail. For now, go into the "Users" menu, select "Add" and
+create a new user. Assign the user a password.
+
+Now go to your windows workstation and logon to your newly create
+Linux server by using the just created user, password and "ELS" as
+workgroup.
