@@ -4,6 +4,7 @@ case "$1" in
         Title "System" "Messages" "Display system messages"
         Option "System"  "Display general system messages"
         Option "Kernel"    "Display kernel startup messages"
+	test -s /var/log/cron -o -s /var/log/cron/info &&
         Option "Cron"      "Display log of cron task scheduler"
         Option "Security"  "Display all security warning messages"
 	Option "Boot" "Display boot time and service restart messages"
@@ -87,7 +88,11 @@ case "$1" in
 	#Macro Textbox
 	#DescEnd
 
-	$ELS_DIALOG --textbox /var/log/cron 23 78
+	if [ -f /var/log/cron ]; then
+	    $ELS_DIALOG --textbox /var/log/cron 23 78
+	else
+	    $ELS_DIALOG --textbox /var/log/cron/info 23 78
+	fi
         ;;
 
     security)
