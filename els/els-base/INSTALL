@@ -1,0 +1,40 @@
+Install from the command line
+=============================
+
+Download (see http://developer.berlios.de/project/filelist.php?group_id=204)
+the module <B>els-base-*.rpm</B> and copy it onto a floppy disc.
+
+Log in as root and go into a temporary directory. Then install the RPM:
+
+   [root@server root]# cd /var/tmp
+   [root@server tmp]# mcopy a:els-base*.rpm .
+   [root@server tmp]# rpm -Uv els-base.rpm
+
+Now enter "sysadm -> System -> Setup" (see website/sysadm/setup.html) and
+run the installation scripts of your choice. You can also simply
+
+   [root@server tmp]# sysadm-setup.pl --all
+   /etc/inittab: keep console 1 contents after booting
+   /etc/inittab: halt system on Ctrl-Alt-Del, don't reboot
+   /etc/DIR_COLORS: force readable output
+   /etc/inputrc: history search for the readline library
+   /etc/issue: changed
+   /etc/issue.net: changed
+   /etc/mnt/*: created default mount points
+   /etc/init.d/nscd: autostart enabled
+   /etc/rc.d/rc.local: allow local startup scripts
+   /etc/syslog.conf: output to console 12
+   /etc/sysctl.conf: disabled tcp timestamps
+   /etc/hosts.deny: initialized tcp_wrappers
+   /etc/hosts.allow: initialized tcp_wrappers
+   /etc/init.d/kudzu: autostart disabled
+   /etc/init.d/xfs: autostart disabled
+
+run all scripts. Now log out and log in again. Your prompt now looks
+different:
+
+   server:~# cd tmp
+   server:/var/tmp# rm els-base*.rpm
+
+
+$Id: INSTALL,v 1.1 2001/12/05 14:50:38 holgerschurig Exp $
