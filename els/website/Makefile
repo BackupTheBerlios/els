@@ -31,7 +31,7 @@ lint:: .docs
 	touch .docs
 
 %.html:	%.shtml top.inc logos.inc bottom.inc
-	$(ROOT)/utilities/makehtml.pl $< >$@
+	$(ROOT)/utilities/shtml2html.pl $< >$@
 
 index.shtml: ../README
 	echo '<!--#set var="title" value="Easy Linux Server"-->' >$@

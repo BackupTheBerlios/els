@@ -17,7 +17,7 @@ clean::
 
 .docs: .files $(INC)
 	$(ROOT)/els-base/sysadm-makedoc.pl --shtml *.mnu
-	for i in *.shtml; do $(ROOT)/utilities/makehtml.pl $$i >$${i%%.shtml}.html; done
+	for i in *.shtml; do $(ROOT)/utilities/shtml2html.pl $$i >$${i%%.shtml}.html; done
 	touch .docs
 
 .files:

@@ -27,7 +27,7 @@ case "$1" in
 	#TextBox
 	#   7:24pm  up  1:37,  4 users,  load average: 0.00, 0.02, 0.01
 	# USER     TTY      FROM              LOGIN@  IDLE   JCPU   PCPU  WHAT
-	# root     tty1                       5:47pm  5:28   0.36s  0.17s  q makehtml.pl
+	# root     tty1                       5:47pm  5:28   0.36s  0.17s  vmstat
 	# holger   tty2                       5:48pm  0.00s  0.29s  0.03s  w
  	#TextBoxEnd
 	#Macro Textbox

@@ -1,15 +1,32 @@
 #!/usr/bin/perl -w
 
-#
-# I wrote the web site manually, by hand. I only use the *.inc and *.shtml files
-# for contents. A local running Apache handles the server-site-include scripts,
-# so I can directly view the files from the browser.
-#
-# However, most web-servers don't have server-site include scripts enabled. So
-# a little tool 'makehtml.pl' takes the *.shtml files, executes a limited set
-# of SSI commands (#include, #set and #echo) and omits the result. These *.html
-# files are then sent to the webserver.
-#
+=head1 NAME
+
+shtml2html.pl - convert *.shtml files into *.html
+
+=head1 SYNOPSIS
+
+B<shtml2html.pl> shtml-files ..
+
+=head1 DESCRIPTION
+
+I mostly write web-site manually, by hand. So I like simple HTML code, that
+a user can understand. Yet I also like nice and nifty headers, trailers and
+sidebars. So I ended up with server-site includes (SSI), also known as SHTML.
+
+Unfortunately, many web servers are not configured to execute SSI files.
+So I wrote this little tool that understands a subset of SSI, namely
+
+  #include file="somefile"
+  #set var="somevar" value="somevalue"
+  #echo var="somevar"
+  
+It expects shtml file names on the command line, processes them and write
+html files with the same name but .html as extension. These files are then
+uploaded to the web server.
+
+=cut
+
 
 use vars qw(%vars %files);
 
