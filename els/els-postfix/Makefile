@@ -2,9 +2,11 @@ ROOT    = ..
 SUBDIRS = postfix
 include $(ROOT)/Makefile.inc
 
-ALL = *.mnu *.setup *.els-postfix main.* \
-      bodychecks relocated transport els-postfix.spec
+ALL = Makefile *.spec *.setup *.mnu *.els-postfix \
+      main.* bodychecks relocated transport
 
+
+all:: rpms
 
 rpms:: .rpms
 
@@ -12,13 +14,8 @@ docs:: .docs
 
 check:: .docs
 
-clean::
-	rm -f *.html
-
 install:: .rpms
 	cp /usr/src/redhat/RPMS/noarch/els-postfix*.rpm $(RPM_DEST)
-
-
 
 
 
@@ -28,4 +25,5 @@ install:: .rpms
 	touch .rpms
 
 .docs: $(wildcard *.mnu)
-	../els-base/sysadm-makedoc.pl --verbose *.mnu && touch .docs
+	../els-base/sysadm-makedoc.pl --verbose *.mnu
+	touch .docs

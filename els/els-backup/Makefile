@@ -2,19 +2,17 @@ ROOT    = ..
 SUBDIRS = afio
 include $(ROOT)/Makefile.inc
 
-ALL = *.mnu *.setup *.pl *.spec \
-      default.exclude rc.els-backup
+ALL = Makefile *.spec *.setup *.mnu *.pl default.exclude rc.els-backup
 
 
+
+all:: rpms
 
 rpms:: .rpms
 
 docs:: .docs
 
 check:: .docs
-
-clean::
-	rm -rf html
 
 install:: .rpms
 	cp /usr/src/redhat/RPMS/noarch/els-backup*.rpm $(RPM_DEST)
@@ -27,4 +25,5 @@ install:: .rpms
 	touch .rpms
 
 .docs: $(wildcard *.mnu)
-	../els-base/sysadm-makedoc.pl --verbose *.mnu && touch .docs
+	../els-base/sysadm-makedoc.pl --verbose *.mnu
+	touch .docs

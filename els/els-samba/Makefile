@@ -1,9 +1,12 @@
 ROOT = ..
 include $(ROOT)/Makefile.inc
 
-ALL = *.pl *.mnu *.setup *.smb *.els-samba \
-      els-samba.dirs els-samba.spec
 
+ALL = Makefile *.sh *.spec *.setup *.mnu *.pl *.dirs *.els-samba *.smb
+
+
+
+all:: rpms
 
 rpms:: .rpms
 
@@ -11,13 +14,8 @@ docs:: .docs
 
 check:: .docs
 
-clean::
-	rm -f *.html q
-
 install:: .rpms
 	cp /usr/src/redhat/RPMS/noarch/els-samba*.rpm $(RPM_DEST)
-
-
 
 
 
@@ -27,7 +25,5 @@ install:: .rpms
 	touch .rpms
 
 .docs: $(wildcard *.mnu)
-	../els-samba/sysadm-makedoc.pl --verbose *.mnu && touch .docs
-
-q:
-	ln -s /usr/bin/joe q
+	../els-base/sysadm-makedoc.pl --verbose *.mnu
+	touch .docs

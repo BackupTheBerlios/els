@@ -14,7 +14,7 @@ check:: docs
 	nsgmls -s -wall -B *.html
 
 clean::
-	rm -f a .rpms .docs
+	rm -rf html a .rpms .docs *.html
 
 install::
 
