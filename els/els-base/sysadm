@@ -1,25 +1,25 @@
 #!/bin/bash
 
 # set defaults
-export MENU=main
-export MENULIB=${MENULIB:-/usr/lib/els}
-export RCFILE=/etc/els.conf
-export TMPFILE=${TMP:-/var/tmp}/sysadm.$$
-export EDITOR=${EDITOR:-vi}
+export ELS_MENU=main
+export ELS_MENULIB=${ELS_MENULIB:-/usr/lib/els}
+export ELS_CONF=/etc/els.conf
+export ELS_TEMP=${TMP:-/var/tmp}/sysadm.$$
 export EXPERTMODE=${EXPERTMODE:-no}
-export DIALOG=/usr/bin/dialog
-#
+export EDITOR=${EDITOR:-vi}
+export ELS_DIALOG=/usr/bin/dialog
+
 # Pity, whiptail is soooooo ugly!
 # If it were prettier, it would be nice, because the redhat console based
 # tools use the newt toolkit, too.
-#test -x /usr/bin/whiptail && DIALOG=/usr/bin/whiptail
+#test -x /usr/bin/whiptail && ELS_DIALOG=/usr/bin/whiptail
 
 
 # remember if we are the first instance of sysadm
-if [ -z "$SYSADM_INSTANCE" ]; then
-    export SYSADM_INSTANCE=1
+if [ -z "$ELS_INSTANCE" ]; then
+    export ELS_INSTANCE=1
 else
-    SYSADM_INSTANCE=$[SYSADM_INSTANCE+1]
+    ELS_INSTANCE=$[ELS_INSTANCE+1]
 fi
 
 
@@ -27,21 +27,21 @@ fi
 # use it for some nice GREPing in dynamic menus
 function Title ()
 {
-    MENUNAME=$3
+    ELS_MENUNAME="$3"
 }
 
 
 # emit option and description in a form that is nice for sysadm
 function Option ()
 {
-    echo -n "\"$1\" \"$2\" " >>$TMPFILE.dialog
+    echo -n "\"$1\" \"$2\" " >>$ELS_TEMP.dialog
 }
 
 # exit from menu and delete any leftover temporary files
 function ExitMenu ()
 {
-    rm -f $TMPFILE*
-    if [ "$SYSADM_INSTANCE" = "1" ]; then
+    rm -f "$ELS_TEMP*"
+    if [ "$ELS_INSTANCE" = "1" ]; then
 	echo
 	echo
     fi
@@ -53,16 +53,16 @@ function ExitMenu ()
 # Question "What?" || action
 function Question ()
 {
-    $DIALOG --yesno "$1" 7 70
+    $ELS_DIALOG --yesno "$1" 7 70
 }
 
 
 # ask user for a string to be entered
 function InputString ()
 {
-    $DIALOG --inputbox "$1" 9 70 2>$TMPFILE
+    $ELS_DIALOG --inputbox "$1" 9 70 2>$ELS_TEMP
     local result=$?
-    CHOICE=`cat $TMPFILE`
+    CHOICE=`cat $ELS_TEMP`
     return $result
 }
 
@@ -71,9 +71,9 @@ function InputString ()
 # the user can also select cancel to bail out.
 function InputYesNo ()
 {
-    $DIALOG --menu "$1" 10 70 2 "yes" "" "no"  "" 2>$TMPFILE
-    local result=$?
-    CHOICE=`cat $TMPFILE`
+    $ELS_DIALOG --menu "$1" 10 70 2 "yes" "" "no"  "" 2>$ELS_TEMP
+    local result="$?"
+    CHOICE=`cat $ELS_TEMP`
     return $result
 }
 
@@ -81,7 +81,7 @@ function InputYesNo ()
 # Displays the specified file
 function ShowFile ()
 {
-    $DIALOG --textbox "$1" 23 76
+    $ELS_DIALOG --textbox "$1" 23 76
 }
 
 
@@ -96,20 +96,20 @@ function GetUsers ()
 # edit a file
 function EditFile ()
 {
-    local FILE=$2
-    test -z "$FILE" && FILE=$1
+    local FILE="$2"
+    test -z "$FILE" && FILE="$1"
 
     # silently copy the sample if the main file doesn't exist
-    test -f ${FILE}.sample -a ! -f $FILE && cp ${FILE}.sample $FILE
+    test -f "${FILE}.sample" -a ! -f "$FILE" && cp "${FILE}.sample" "$FILE"
 
     # ask if we should copy the newer sample
-    test -f $FILE -a -f $1 -a ${FILE}.sample -nt $FILE && {
+    test -f "$FILE" -a -f "$1" -a "${FILE}.sample" -nt "$FILE" && {
 	Question "'${FILE}.sample' is newer than\n'$FILE'. Do you want to use the newer file?" && {
-	    cp ${FILE}.sample $FILE
+	    cp "${FILE}.sample" "$FILE"
 	}
     }
-    test -z "$EXPORTMODE" && test "$EXPERTMODE" != "yes" && EditorHints
-    $EDITOR $1
+    test "$EXPERTMODE" = "no" && EditorHints
+    $EDITOR "$1"
 }
 
 
@@ -131,7 +131,7 @@ function MountFloppy ()
 }
 
 
-# set an option in /etc/els.conf
+# set an option in $ELS_CONF
 #
 # Option 1:  variable
 # Option 2:  new contents
@@ -139,33 +139,33 @@ function MountFloppy ()
 # Option 4:  don't embed contents in " " if present
 #
 function SetOpt {
-    local FILE=${3-$RCFILE}
+    local FILE="${3-$ELS_CONF}"
 
-    test ! -f $FILE && cp --preserve $FILE.sample $FILE
-    test ! -f $FILE && touch $FILE
-    if [ ! -w $FILE ]; then
-	$DIALOG --msgbox "You cannot change system parameters" 5 50
+    test ! -f "$FILE" && cp --preserve "$FILE.sample" "$FILE"
+    test ! -f "$FILE" && touch "$FILE"
+    if [ ! -w "$FILE" ]; then
+	$ELS_DIALOG --msgbox "You cannot change system parameters" 5 50
 	return	
     fi
 
     # delete old value
-    fgrep -s -v $1= $FILE >$TMPFILE
-    mv -f $TMPFILE $FILE
+    fgrep -s -v $1= "$FILE" >$ELS_TEMP
+    mv -f $ELS_TEMP "$FILE"
     # now add the new value
     if [ -z "$4" ]; then
-	echo "$1=\"$2\"" >>$FILE
+	echo "$1=\"$2\"" >>"$FILE"
     else
-	echo "$1=$2" >>$FILE
+	echo "$1=$2" >>"$FILE"
     fi
     # and source the result to update my variables
-    . $FILE
+    . "$FILE"
 }
 
 
 function ExpertWarning
 {
     test "$EXPERTMODE" = "yes" && return
-    $DIALOG --yesno "\
+    $ELS_DIALOG --yesno "\
 \
 WARNING:\n\
 \n\
@@ -183,7 +183,7 @@ function EditorHints
 {
     case "$EDITOR" in
 
-    q)  $DIALOG --msgbox "\
+    q)  $ELS_DIALOG --msgbox "\
 \
 Hints to use the editor:\n\
 \n\
@@ -193,7 +193,7 @@ Alt X      to exit and save\
 " 9 41
 	;;
 
-    vi)  $DIALOG --msgbox "\
+    vi)  $ELS_DIALOG --msgbox "\
 \
 Hints to use the editor:\n\
 \n\
@@ -211,56 +211,62 @@ ESC        back into command mode\n\n\
 
 
 # load all settings into environment variables
-test -r $RCFILE && . $RCFILE
+test -r $ELS_CONF && . $ELS_CONF
 
 # look into what menu we want to go, default is "main"
-MENU=${1-main}
+ELS_MENU="${1-main}"
 
 
-cd $MENULIB
+cd $ELS_MENULIB
 while [ true ]; do
 
-    if [ -f $MENU.mnu ]; then
-	# put all menu options into $TMPFILE.dialog
-	rm -f $TMPFILE.dialog 2>/dev/null
+    if [ -f "$ELS_MENU.mnu" ]; then
+	# put all menu options into $ELS_TEMP.dialog
+	rm -f $ELS_TEMP.dialog 2>/dev/null
 	if [ -z "$2" ]; then
-	    . $MENU.mnu Query
+	    . "$ELS_MENU.mnu" Query
 	else
-	    . $MENU.mnu $2
-	    rm -f $TMPFILE*
+	    . "$ELS_MENU.mnu" $2
+	    rm -f $ELS_TEMP*
 	    exit 0
 	fi
 
-	# Add Help item at bottom of menu, if suitable help file exists
-	HELPFILE=`find /usr/share/doc/els-* -name "$MENU.txt" 2>/dev/null`
-        [ "$MENU" = "main" ] && HELPFILE=`find /usr/share/doc/els-base* -name "index.txt" 2>/dev/null`
-	[ -n "$HELPFILE" ] && echo -n '"Help" "Help for $MENU menu"'>>$TMPFILE.dialog  
+	if [ ! -s $ELS_TEMP.dialog ]; then
+	    $ELS_DIALOG --msgbox "The '$ELS_MENUNAME' menu is empty, it will be populated when you install additional ELS modules." 7 50
+	    ExitMenu
+	else
 
-	# prepend this with the dialog command
-	echo -n "$DIALOG --menu \"$MENUNAME\" 21 76 13 " >$TMPFILE.exec
-	test -f $TMPFILE.dialog || break
-	cat $TMPFILE.dialog >>$TMPFILE.exec
+            # Add Help item at bottom of menu, if suitable help file exists
+            HELPFILE=`find /usr/share/doc/els-* -name "$ELS_MENU.txt" 2>/dev/null`
+            test "$ELS_MENU" = "main" && HELPFILE=`find /usr/share/doc/els-base* -name "index.txt" 2>/dev/null`
+            test -n "$HELPFILE" && echo -n '"Help" "Help for $ELS_MENU menu"'>>$ELS_TEMP.dialog  
 
-	# execute the created script
-	. $TMPFILE.exec 2>$TMPFILE
+            # prepend this with the dialog command
+            echo -n "$ELS_DIALOG --menu \"$ELS_MENUNAME\" 21 76 13 " >$ELS_TEMP.exec
+            test -f $ELS_TEMP.dialog || break
+            cat $ELS_TEMP.dialog >>$ELS_TEMP.exec
 
-	# test for cancel error and exit immediately
-	test ! $? = 0 && ExitMenu
+            # execute the created script
+            . $ELS_TEMP.exec 2>$ELS_TEMP
 
-	# Test for help request and display it. 
-	# Then relaunch same menu, by pretending that 'option' Query was chosen
-	ANSWER=`cat $TMPFILE`
-	if [ "$ANSWER" = "Help" ];then
-	    lynx -child $HELPFILE
-	    . $MENU.mnu Query
-	else    
-	    # translate the result into lower case and call the menu file with the
-  	    # selected option
-	    . $MENU.mnu `cat $TMPFILE | tr A-Z a-z | tr -d " "`
+            # test for cancel error and exit immediately
+            test ! $? = 0 && ExitMenu
+
+            # Test for help request and display it. 
+            # Then relaunch same menu, by pretending that 'option' Query was chosen
+            ANSWER=`cat $ELS_TEMP`
+            if [ "$ANSWER" = "Help" ];then
+                lynx -child $HELPFILE
+                . $ELS_MENU.mnu Query
+            else    
+                # translate the result into lower case and call the menu file with the
+                  # selected option
+                . "$ELS_MENU.mnu" `cat $ELS_TEMP | tr A-Z a-z | tr -d " "`
+            fi
 	fi
     else
-	$DIALOG --msgbox " Sorry, there is no menu file \"$MENULIB/$MENU.mnu\"." 6 40
-	ExitMenu
+        $ELS_DIALOG --msgbox " Sorry, there is no menu file \"$ELS_MENULIB/$ELS_MENU.mnu\"." 6 40
+        ExitMenu
     fi
 
 done
