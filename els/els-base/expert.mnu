@@ -1,7 +1,7 @@
 case "$1" in
 
     Query)
-        Title "" "Expert" "For the experts only :-)"
+        Title "internal" "Expert" "For the experts only :-)"
 
 	test -f $ELS_CONF && . $ELS_CONF
 	EXPERTMODE=${EXPERTMODE:-no}
