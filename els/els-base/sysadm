@@ -7,7 +7,7 @@ export ELS_CONF=/etc/els.conf
 export ELS_TEMP=${TMP:-/var/tmp}/sysadm.$$
 export EXPERTMODE=${EXPERTMODE:-no}
 export EDITOR=${EDITOR:-vi}
-export ELS_DIALOG=/usr/bin/dialog
+export ELS_DIALOG="/usr/bin/dialog --cr-wrap"
 
 # Pity, whiptail is soooooo ugly!
 # If it were prettier, it would be nice, because the redhat console based
@@ -40,7 +40,7 @@ function Option ()
 # exit from menu and delete any leftover temporary files
 function ExitMenu ()
 {
-    rm -f "$ELS_TEMP*"
+    rm -f $ELS_TEMP*
     if [ "$ELS_INSTANCE" = "1" ]; then
 	echo
 	echo
@@ -232,6 +232,7 @@ while [ true ]; do
 	fi
 
 	if [ ! -s $ELS_TEMP.dialog ]; then
+	    sleep 2
 	    $ELS_DIALOG --msgbox "The '$ELS_MENU' menu is empty, it will be populated when you install additional ELS modules." 7 50
 	    ExitMenu
 	else
@@ -243,7 +244,10 @@ while [ true ]; do
 
             # prepend this with the dialog command
             echo -n "$ELS_DIALOG --menu \"$ELS_MENUNAME\" 21 76 13 " >$ELS_TEMP.exec
-            test -f $ELS_TEMP.dialog || break
+            if [ ! -s $ELS_TEMP.dialog ]; then
+		rm -f $ELS_TEMP*
+		break
+	    fi
             cat $ELS_TEMP.dialog >>$ELS_TEMP.exec
 
             # execute the created script
