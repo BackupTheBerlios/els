@@ -1,5 +1,5 @@
 %define name els-backup
-%define vers 1.95
+%define vers 1.96
 %define rel  1
 %define withdoc 1
 
@@ -43,7 +43,7 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %post
-/usr/sbin/sysadm-setup.pl detecttape backupsets
+/usr/sbin/sysadm-setup.pl --quiet detecttape backupsets
 
 
 %files
