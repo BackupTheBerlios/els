@@ -1,0 +1,22 @@
+#Desc Fixes flaw in xterm setup
+#Author Holger Schurig
+#Group els-base
+#Desc
+# Mandrake 8.2 contains an xterm entry that is incompatible with
+# KDE's konsole. This script fixes this by removing the 'cbt' entry.
+#DescEnd
+
+
+my $lines = `infocmp xterm`;
+if ($lines =~ s/cbt=.*, //) {
+   my $fn = "/var/tmp/sysadm-setup.$$";
+   open FILE, ">$fn";
+   print FILE $lines;
+   close FILE;
+   system('/usr/bin/tic', $fn);
+   unlink $fn;
+   logit "fixed terminfo entry for 'xterm'\n";
+}
+
+
+1;

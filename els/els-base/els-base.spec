@@ -10,7 +10,7 @@ Version: %{vers}
 Release: %{rel}
 Copyright: GPL
 Vendor: Easy Linux Server
-Requires: redhat-release => 7.2, dialog, findutils, grep, gawk, textutils
+Requires: redhat-release => 7.2, findutils, grep, gawk, textutils
 Requires: util-linux, mtools, e2fsprogs, shadow-utils, perl
 %if %{withjoe}
 Requires: joe
@@ -20,6 +20,7 @@ Group: System/Base
 # Get this from Cooker
 Requires: cdialog >= 0.9a-8mdk
 %else
+Requires: dialog
 Group: System Environment/Base
 %endif
 Provides: sysadm
@@ -91,6 +92,7 @@ lesskey -o .less lesskey
 %attr(0600,root,root) /usr/lib/els/tcptimestamps.setup
 %attr(0600,root,root) /usr/lib/els/tcpwrappers.setup
 %attr(0600,root,root) /usr/lib/els/unneededdaemons.setup
+%attr(0600,root,root) /usr/lib/els/xterm.setup
 %if "%{_vendor}" != "MandrakeSoft"
 %attr(0600,root,root) /usr/lib/els/less.setup
 %endif
