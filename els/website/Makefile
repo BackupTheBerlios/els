@@ -1,5 +1,8 @@
 ROOT    = ..
 SUBDIRS = sysadm
+
+docs::
+
 include $(ROOT)/Makefile.inc
 
 
