@@ -16,7 +16,7 @@ clean::
 	rm -rf html q
 
 install:: .rpms
-	cp -v /usr/src/redhat/RPMS/i386/els-base*.rpm $(REDHAT_CD)/RedHat/RPMS
+	cp -v /usr/src/redhat/RPMS/i386/els-base*.rpm $(RPM_DEST)
 
 
 

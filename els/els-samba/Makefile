@@ -15,7 +15,7 @@ clean::
 	rm -f *.html q
 
 install:: .rpms
-	cp -v /usr/src/redhat/RPMS/i386/els-samba*.rpm $(REDHAT_CD)/RedHat/RPMS
+	cp -v /usr/src/redhat/RPMS/i386/els-samba*.rpm $(RPM_DEST)
 
 
 

@@ -1,7 +1,7 @@
 ROOT ?= .
 
 SGML_CATALOG_FILES=$(ROOT)/utilities/sgml/HTML4.cat
-REDHAT_CD ?= /u1/redhat72
+RPM_DEST ?= /usr/src/redhat/RPMS/i386
 export SGML_CATALOG_FILES
 
 all::

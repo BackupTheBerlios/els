@@ -16,7 +16,7 @@ clean::
 	rm -f *.html
 
 install:: .rpms
-	cp -v /usr/src/redhat/RPMS/i386/els-postfix*.rpm $(REDHAT_CD)/RedHat/RPMS
+	cp -v /usr/src/redhat/RPMS/i386/els-postfix*.rpm $(RPM_DEST)
 
 
 

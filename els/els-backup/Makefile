@@ -18,7 +18,7 @@ clean::
 
 install:: .rpms
 	rm -f $(REDHAT_CD)/els-backup*.rpm
-	cp -v /usr/src/redhat/RPMS/i386/els-backup*.rpm $(REDHAT_CD)/RedHat/RPMS
+	cp -v /usr/src/redhat/RPMS/i386/els-backup*.rpm $(RPM_DEST)
 
 
 
