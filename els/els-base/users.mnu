@@ -91,7 +91,7 @@ case "$1" in
 	sleep 1
 
 	# call the "Modify User" sub-menu
-        #$0 usermod
+        $0 usermod
         ;;
 
     delete)
