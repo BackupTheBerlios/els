@@ -2,5 +2,6 @@ a
 *.html
 *.shtml
 *.mnu
+*.inc
 .docs
 .files
