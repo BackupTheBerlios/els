@@ -11,7 +11,7 @@ H6 { font-size: xx-small; font-family: verdana,arial,helvetica,sans-serif; }
 
 PRE,TT { font-family: courier,sans-serif }
 
-A { text-decoration: none; color #6666FF; }
+A { text-decoration: none; color: #6666FF; }
 A:visited { text-decoration: none; color: #6666AA; }
 A:link { text-decoration: none; color: #6666AA; }
 A:active { text-decoration: none; color: #6666AA; }

@@ -1,6 +1,6 @@
 <!-- end content -->
 <P>&nbsp;</P></TD>
-<TD WIDTH="9" BGCOLOR="#FFFFFF"><IMG SRC="/images/blank.gif" HEIGHT="1" WIDTH="10" BORDER=0 ALT=""></TD>
+<TD WIDTH="9" BGCOLOR="#FFFFFF"><IMG SRC="images/blank.gif" HEIGHT="1" WIDTH="10" BORDER=0 ALT=""></TD>
 </TR></TABLE>
 
 <!-- footer table -->
