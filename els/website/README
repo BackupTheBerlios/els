@@ -1,0 +1,38 @@
+STRUCTURE
+---------
+I write the web site manually, by hand. I only use the *.inc and *.shtml files
+for contents. A local running Apache handles the server-site-include scripts,
+so I can directly view the files from the browser.
+
+However, most web-servers don't have server-site include scripts enabled. So
+a little tool 'makehtml.pl' takes the *.shtml files, executes a limited set
+of SSI commands (#include, #set and #echo) and omits the result. These *.html
+files are then sent to the webserver.
+
+All of this is handled by the 'Makefile'
+
+
+HTML 4.01 checks
+----------------
+I believe in syntactically correct HTML files. The fact that browsers
+accept all kind of sluggish code is what makes browser development hard
+and clumsy and the resulting browser slow and memory-intensive.
+
+End of sermon :-)
+
+If you want to check for HTML validity then you need first the strict
+SGML checker 'nsgmls'. On Red Hat 7.2 that's part of the openjade RPM.
+You also need the HTML 4.01 document type definitions from www.w3c.org.
+I use these files:
+
+/usr/lib/sgml/html401/
+/usr/lib/sgml/html401/HTML4.cat
+/usr/lib/sgml/html401/HTML4.decl
+/usr/lib/sgml/html401/HTMLlat1.ent
+/usr/lib/sgml/html401/HTMLspecial.ent
+/usr/lib/sgml/html401/HTMLsymbol.ent
+/usr/lib/sgml/html401/loose.dtd
+/usr/lib/sgml/html401/strict.dtd
+/usr/lib/sgml/html401/frameset.dtd
+
+Now you can do a a 'make check' and validate your HTML code.
