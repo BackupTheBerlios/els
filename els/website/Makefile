@@ -7,7 +7,9 @@ include $(ROOT)/Makefile.inc
 
 
 SRC = $(wildcard *.shtml) ../README
-DST = $(patsubst %.shtml,%.html,$(wildcard *.shtml)) index.shtml index.html
+DST = $(patsubst %.shtml,%.html,$(wildcard *.shtml)) \
+      index.shtml   index.html \
+      install.shtml install.html
 
 
 
@@ -32,6 +34,14 @@ upload:: all
 index.shtml: ../README
 	echo '<!--#set var="title" value="Easy Linux Server"-->' >$@
 	echo '<!--#include file="top.inc"-->' >>$@
+	echo '<!--#include file="logos.inc"-->' >>$@
+	$(ROOT)/utilities/text2shtml.pl $< >>$@
+	echo '<!--#include file="bottom.inc"-->' >>$@
+
+install.shtml: ../INSTALL
+	echo '<!--#set var="title" value="Easy Linux Server"-->' >$@
+	echo '<!--#include file="top.inc"-->' >>$@
+	echo '<!--#include file="admins.inc"-->' >>$@
 	echo '<!--#include file="logos.inc"-->' >>$@
 	$(ROOT)/utilities/text2shtml.pl $< >>$@
 	echo '<!--#include file="bottom.inc"-->' >>$@
